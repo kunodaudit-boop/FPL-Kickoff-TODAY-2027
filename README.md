@@ -1,30 +1,34 @@
-# FPL Kickoff Today 2027 — League Dashboard
+# FPL Kickoff Today 2027 — Website
 
-Next.js dashboard for the private FPL league **FPL Kickoff Today 2027**.
+Final redesign prepared through GW5.
 
-## Weekly update — easiest method
+## Website structure
 
-For a new Gameweek, edit only `app/league-data.js`.
+- Home dashboard — bright Samut Prakan / stadium visual direction
+- Competitions — six clearly separated competitions
+  1. Full Season
+  2. Gameweek
+  3. First Chance
+  4. Second Chance
+  5. Lucky Game
+  6. Mini Game
+- Gallery — GW1 to GW5 season stories
+- Official Rules Archive
+- Finance — separate from competitions
 
-1. Copy the previous Gameweek block inside `gameweeks`.
-2. Change the key to the new GW number, e.g. `6:`.
-3. Replace the 11 rows with the new official ranking order and points.
-4. Commit the change to `main`.
-5. Vercel redeploys automatically.
+The league is closed. No league code or Join League / Invite Friends CTA is displayed.
 
-The website automatically updates:
-- latest GW label
-- GW tabs
-- latest GW winner
-- cumulative points
-- season leader
-- number of GW wins
-- Gameweek Statement
+## Weekly score update
 
-If a Mini Game Save is used, add it to `miniGameSaves` in the same file.
+Edit only `app/league-data.js` when a new GW is finished.
 
-## Finance
+Add a new block under `gameweeks`, for example GW6, with all 11 managers in official ranking order. The Home page, Full Season table, latest GW winner, and Gameweek tabs update automatically.
 
-`Manager Financial` is intentionally separate from weekly score automation because it includes Lucky Pool, Mini Game and Lucky Game amounts that cannot be inferred safely from FPL points alone. Update `financialThroughGw` and the `financial` rows only when those figures have been reconciled.
+## Adding gallery images
 
-Bank account numbers, bank names and payment-channel details are intentionally excluded from the public dashboard.
+1. Add the image to `public/gallery/gwX/`.
+2. Add its filename and title to `gallery` in `app/content-data.js`.
+
+## Deployment
+
+Upload the project contents to the existing GitHub repository root and commit. Vercel will redeploy automatically.
