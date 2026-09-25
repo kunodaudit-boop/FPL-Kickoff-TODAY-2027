@@ -1,9 +1,9 @@
 import './globals.css'
-import './theme-v2.css'
+import './theme-v3.css'
 
 export const metadata = {
   title: 'FPL Kickoff Today 2027',
-  description: 'Private league dashboard, competitions, live FPL statistics, rules, finance and season gallery.'
+  description: 'Private FPL league dashboard, live statistics, competitions, rules, finance and season gallery.'
 }
 
 export default function RootLayout({ children }) {

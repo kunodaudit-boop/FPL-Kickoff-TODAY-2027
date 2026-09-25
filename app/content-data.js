@@ -96,7 +96,7 @@ export const miniWinners = [
 export const luckyConditions = [
   {id:1,label:'Team total 123',claimed:false},
   {id:2,label:'Team total 99',claimed:false},
-  {id:3,label:'Player score −1',claimed:true},
+  {id:3,label:'Player score −1',claimed:true,winner:'Best',gw:4,detail:'Matty Cash −1'},
   {id:4,label:'Red card',claimed:false},
-  {id:5,label:'Own goal',claimed:true},
+  {id:5,label:'Own goal',claimed:true,winner:'Oat',detail:'Own Goal'},
 ]

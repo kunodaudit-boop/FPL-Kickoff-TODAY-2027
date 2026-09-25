@@ -1,245 +1,258 @@
 import { NextResponse } from 'next/server'
-import { members } from '../../league-data'
 
-export const revalidate = 300
-
-const LEAGUE_ID = 606037
 const FPL_BASE = 'https://fantasy.premierleague.com/api'
+const FPL_LEAGUE_ID = 606037
 const LOCKED_THROUGH_GW = 5
 
-function normalizeTeam(value = '') {
+const CANONICAL = [
+  { name:'Kun', team:'IREN & NEBIUS FC' },
+  { name:'Amp', team:'amplongdo' },
+  { name:'Ohm', team:"Wasuwit's Team" },
+  { name:'Pee', team:'B3RLIN' },
+  { name:'Fluk', team:'3ERLIN' },
+  { name:'Oat', team:'KaisungVAT' },
+  { name:'Arm', team:'Arm' },
+  { name:'Deer', team:'ทีมของวิทยา' },
+  { name:'Guide', team:"G9inez's Team" },
+  { name:'Jimmy', team:'xROTzx' },
+  { name:'Best', team:'USO BEST' },
+]
+
+function norm(value=''){
   return String(value)
-    .normalize('NFKC')
+    .normalize('NFKD')
     .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9ก-๙]+/gi, '')
+    .replace(/[’']/g,'')
+    .replace(/[^\p{L}\p{N}]+/gu,'')
 }
 
-async function fetchFpl(path, revalidateSeconds = 300) {
-  const response = await fetch(`${FPL_BASE}${path}`, {
-    headers: {
-      accept: 'application/json',
-      'user-agent': 'FPL-Kickoff-Today-2027/2.0',
-    },
-    next: { revalidate: revalidateSeconds },
+async function fplFetch(path, revalidate=300){
+  const res = await fetch(`${FPL_BASE}${path}`, {
+    next:{ revalidate },
+    headers:{ 'Accept':'application/json', 'User-Agent':'FPL-Kickoff-Today-2027/1.0' }
+  })
+  if(!res.ok) throw new Error(`FPL ${path} -> ${res.status}`)
+  return res.json()
+}
+
+function mapLeagueEntries(results=[]){
+  const byTeam = new Map(CANONICAL.map(m=>[norm(m.team),m]))
+  const matched=[]
+  const unmatched=[]
+
+  for(const row of results){
+    const canonical = byTeam.get(norm(row.entry_name))
+    if(canonical){
+      matched.push({
+        ...canonical,
+        entryId:row.entry,
+        playerName:row.player_name,
+        fplTeam:row.entry_name,
+        fplTotal:row.total,
+        fplRank:row.rank,
+        lastRank:row.last_rank,
+      })
+    }else{
+      unmatched.push({entryId:row.entry,team:row.entry_name,playerName:row.player_name})
+    }
+  }
+  return {matched,unmatched}
+}
+
+function playerName(element, elementMap){
+  const p=elementMap.get(element)
+  return p?.web_name || p?.second_name || `Player ${element}`
+}
+
+function pct(count,total){
+  if(!total) return 0
+  return Math.round((count/total)*100)
+}
+
+async function getBase(){
+  const [standings,bootstrap] = await Promise.all([
+    fplFetch(`/leagues-classic/${FPL_LEAGUE_ID}/standings/?page_standings=1`,120),
+    fplFetch('/bootstrap-static/',1800),
+  ])
+  const {matched,unmatched}=mapLeagueEntries(standings?.standings?.results || [])
+  const elementMap=new Map((bootstrap?.elements || []).map(p=>[p.id,p]))
+  return {standings,bootstrap,matched,unmatched,elementMap}
+}
+
+async function buildSummary(){
+  const {standings,bootstrap,matched,unmatched}=await getBase()
+  const histories = await Promise.all(matched.map(async m=>{
+    try{
+      const history=await fplFetch(`/entry/${m.entryId}/history/`,300)
+      return {m,history}
+    }catch{
+      return {m,history:{current:[],chips:[]}}
+    }
+  }))
+
+  const overviewExtras = histories.map(({m,history})=>{
+    const current=history.current || []
+    const transfers=current.reduce((sum,r)=>sum+(r.event_transfers||0),0)
+    const transferCost=current.reduce((sum,r)=>sum+(r.event_transfers_cost||0),0)
+    return {
+      name:m.name,
+      team:m.team,
+      entryId:m.entryId,
+      transfers,
+      transferCost,
+      chips:(history.chips||[]).map(c=>({name:c.name,event:c.event})),
+      fplTotal:m.fplTotal,
+      fplRank:m.fplRank,
+    }
   })
 
-  if (!response.ok) {
-    throw new Error(`FPL ${response.status} for ${path}`)
+  const allEvents = new Set()
+  for(const {history} of histories){
+    for(const row of history.current || []) allEvents.add(row.event)
   }
-  return response.json()
-}
-
-async function safeFetch(path, revalidateSeconds = 300) {
-  try {
-    return await fetchFpl(path, revalidateSeconds)
-  } catch {
-    return null
-  }
-}
-
-async function getLeagueStandings() {
-  let page = 1
-  let league = null
-  const results = []
-
-  while (page <= 5) {
-    const data = await fetchFpl(`/leagues-classic/${LEAGUE_ID}/standings/?page_standings=${page}`, 300)
-    if (!league) league = data.league || null
-    results.push(...(data.standings?.results || []))
-    if (!data.standings?.has_next) break
-    page += 1
-  }
-
-  return { league, results }
-}
-
-function buildFutureGameweeks(historyRows, canAutoScore) {
-  if (!canAutoScore) return {}
-
-  const memberIndex = new Map(members.map(([name], index) => [name, index]))
-  const byGw = new Map()
-
-  for (const manager of historyRows) {
-    for (const row of manager.history?.current || []) {
-      if (row.event <= LOCKED_THROUGH_GW) continue
-      if (!byGw.has(row.event)) byGw.set(row.event, [])
-      byGw.get(row.event).push([
-        manager.name,
-        manager.team,
-        Number(row.points || 0),
-        Number(row.rank || 0),
-      ])
+  const futureGameweeks={}
+  const missingByGw={}
+  for(const gw of [...allEvents].sort((a,b)=>a-b)){
+    if(gw<=LOCKED_THROUGH_GW) continue
+    const rows=[]
+    const missing=[]
+    for(const {m,history} of histories){
+      const row=(history.current||[]).find(x=>x.event===gw)
+      if(row) rows.push([m.name,m.team,row.points])
+      else missing.push(m.name)
+    }
+    if(rows.length===CANONICAL.length){
+      rows.sort((a,b)=>b[2]-a[2])
+      futureGameweeks[gw]=rows
+    }else if(rows.length){
+      missingByGw[gw]=missing
     }
   }
 
-  const output = {}
-  for (const [gw, rows] of byGw.entries()) {
-    if (rows.length !== members.length) continue
-    rows.sort((a, b) => b[2] - a[2] || a[3] - b[3] || (memberIndex.get(a[0]) ?? 99) - (memberIndex.get(b[0]) ?? 99))
-    output[gw] = rows.map(([name, team, points]) => [name, team, points])
-  }
-  return output
-}
-
-function topCounts(countMap, elementMap, livePoints, managerCount, limit = 8) {
-  return [...countMap.entries()]
-    .map(([id, count]) => {
-      const element = elementMap.get(Number(id))
-      return {
-        id: Number(id),
-        player: element?.web_name || `Player ${id}`,
-        count,
-        pct: managerCount ? Math.round((count / managerCount) * 100) : 0,
-        points: livePoints.get(Number(id)) || 0,
-      }
-    })
-    .sort((a, b) => b.count - a.count || b.points - a.points || a.player.localeCompare(b.player))
-    .slice(0, limit)
-}
-
-async function buildStatistics({ matched, bootstrap, historyRows }) {
-  const events = bootstrap.events || []
-  const currentEvent = events.find((event) => event.is_current)
-  const finishedEvents = events.filter((event) => event.finished || event.data_checked)
-  const lastHistoryEvent = Math.max(
-    0,
-    ...historyRows.flatMap((manager) => (manager.history?.current || []).map((row) => Number(row.event || 0)))
-  )
-  const statGw = currentEvent?.id || finishedEvents.at(-1)?.id || lastHistoryEvent
-
-  if (!statGw || matched.length === 0) {
-    return { gw: statGw || null, available: false, managerStats: [], mostOwned: [], captainPopularity: [], differentials: [] }
-  }
-
-  const [live, ...picksPayloads] = await Promise.all([
-    safeFetch(`/event/${statGw}/live/`, 120),
-    ...matched.map((manager) => safeFetch(`/entry/${manager.entry}/event/${statGw}/picks/`, 180)),
-  ])
-
-  const elementMap = new Map((bootstrap.elements || []).map((element) => [element.id, element]))
-  const livePoints = new Map((live?.elements || []).map((element) => [element.id, Number(element.stats?.total_points || 0)]))
-  const ownership = new Map()
-  const captains = new Map()
-  const managerStats = []
-
-  matched.forEach((manager, index) => {
-    const payload = picksPayloads[index]
-    if (!payload?.picks) return
-
-    payload.picks.forEach((pick) => ownership.set(pick.element, (ownership.get(pick.element) || 0) + 1))
-    const captainPick = payload.picks.find((pick) => pick.is_captain)
-    const vicePick = payload.picks.find((pick) => pick.is_vice_captain)
-    if (captainPick) captains.set(captainPick.element, (captains.get(captainPick.element) || 0) + 1)
-
-    const captain = captainPick ? elementMap.get(captainPick.element) : null
-    const vice = vicePick ? elementMap.get(vicePick.element) : null
-    const captainBasePoints = captainPick ? (livePoints.get(captainPick.element) || 0) : 0
-    const captainMultiplier = Number(captainPick?.multiplier || 0)
-
-    managerStats.push({
-      name: manager.name,
-      team: manager.team,
-      entry: manager.entry,
-      points: Number(payload.entry_history?.points || 0),
-      captain: captain?.web_name || '—',
-      vice: vice?.web_name || '—',
-      captainPoints: captainBasePoints * captainMultiplier,
-      benchPoints: Number(payload.entry_history?.points_on_bench || 0),
-      transfers: Number(payload.entry_history?.event_transfers || 0),
-      transferCost: Number(payload.entry_history?.event_transfers_cost || 0),
-      chip: payload.active_chip || null,
-    })
-  })
-
-  const managerCount = managerStats.length
-  const differentials = [...ownership.entries()]
-    .map(([id, count]) => ({
-      id: Number(id),
-      player: elementMap.get(Number(id))?.web_name || `Player ${id}`,
-      count,
-      pct: managerCount ? Math.round((count / managerCount) * 100) : 0,
-      points: livePoints.get(Number(id)) || 0,
-    }))
-    .filter((item) => item.count <= 2)
-    .sort((a, b) => b.points - a.points || a.count - b.count)
-    .slice(0, 6)
+  const latestHistoryGw=Math.max(0,...histories.flatMap(({history})=>(history.current||[]).map(r=>r.event)))
+  const bootstrapCurrent=(bootstrap.events||[]).find(e=>e.is_current)?.id || 0
+  const latestFplGw=Math.max(latestHistoryGw,bootstrapCurrent)
 
   return {
-    gw: statGw,
-    available: managerStats.length > 0,
-    managerCount,
-    managerStats: managerStats.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name)),
-    mostOwned: topCounts(ownership, elementMap, livePoints, managerCount, 6),
-    captainPopularity: topCounts(captains, elementMap, livePoints, managerCount, 6),
-    differentials,
+    ok:true,
+    leagueId:FPL_LEAGUE_ID,
+    leagueName:standings?.league?.name || 'FPL Kickoff Today 2027',
+    matchedCount:matched.length,
+    unmatched,
+    canAutoScore:matched.length===CANONICAL.length,
+    futureGameweeks,
+    missingByGw,
+    latestFplGw,
+    overviewExtras,
+    generatedAt:new Date().toISOString(),
   }
 }
 
-export async function GET() {
-  try {
-    const [{ league, results: standings }, bootstrap] = await Promise.all([
-      getLeagueStandings(),
-      fetchFpl('/bootstrap-static/', 900),
-    ])
+async function buildGameweek(gw){
+  const {matched,unmatched,elementMap}=await getBase()
+  if(!matched.length){
+    return {ok:false,available:false,gw,matchedCount:0,unmatched}
+  }
 
-    const fixedByTeam = new Map(
-      members.map(([name, team]) => [normalizeTeam(team), { name, team }])
-    )
+  const [live,picksRows] = await Promise.all([
+    fplFetch(`/event/${gw}/live/`, gw>=6?120:86400).catch(()=>({elements:[]})),
+    Promise.all(matched.map(async m=>{
+      try{
+        const picks=await fplFetch(`/entry/${m.entryId}/event/${gw}/picks/`,gw>=6?180:86400)
+        return {m,picks}
+      }catch{
+        return {m,picks:null}
+      }
+    }))
+  ])
 
-    const matched = standings
-      .map((row) => {
-        const fixed = fixedByTeam.get(normalizeTeam(row.entry_name))
-        if (!fixed) return null
-        return {
-          ...fixed,
-          entry: Number(row.entry),
-          fplTeam: row.entry_name,
-          playerName: row.player_name,
-          fplRank: Number(row.rank || 0),
-          fplTotal: Number(row.total || 0),
-          fplEventTotal: Number(row.event_total || 0),
-        }
-      })
-      .filter(Boolean)
+  const livePoints=new Map((live.elements||[]).map(x=>[x.id,x.stats?.total_points||0]))
+  const owned=new Map()
+  const captains=new Map()
+  const managerStats=[]
 
-    const unmatched = standings
-      .filter((row) => !fixedByTeam.has(normalizeTeam(row.entry_name)))
-      .map((row) => ({ entry: row.entry, team: row.entry_name, playerName: row.player_name }))
-
-    const historyRows = await Promise.all(
-      matched.map(async (manager) => ({
-        ...manager,
-        history: await safeFetch(`/entry/${manager.entry}/history/`, 300),
-      }))
-    )
-
-    const canAutoScore = matched.length === members.length && historyRows.every((manager) => manager.history)
-    const futureGameweeks = buildFutureGameweeks(historyRows, canAutoScore)
-    const stats = await buildStatistics({ matched, bootstrap, historyRows })
-
-    return NextResponse.json({
-      ok: true,
-      leagueId: LEAGUE_ID,
-      leagueName: league?.name || 'FPL Kickoff Today 2027',
-      lockedThroughGw: LOCKED_THROUGH_GW,
-      matchedCount: matched.length,
-      expectedCount: members.length,
-      canAutoScore,
-      unmatched,
-      futureGameweeks,
-      stats,
-      generatedAt: new Date().toISOString(),
-    }, {
-      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
+  for(const {m,picks} of picksRows){
+    if(!picks?.picks?.length) continue
+    for(const pick of picks.picks){
+      owned.set(pick.element,(owned.get(pick.element)||0)+1)
+      if(pick.is_captain) captains.set(pick.element,(captains.get(pick.element)||0)+1)
+    }
+    const captain=picks.picks.find(p=>p.is_captain)
+    const bench=picks.picks.filter(p=>p.position>11)
+    const benchPoints=bench.reduce((sum,p)=>sum+(livePoints.get(p.element)||0),0)
+    const captainRaw=captain ? (livePoints.get(captain.element)||0) : 0
+    const captainReturn=captain ? captainRaw*(captain.multiplier||1) : 0
+    managerStats.push({
+      name:m.name,
+      team:m.team,
+      points:picks.entry_history?.points ?? null,
+      captain:captain ? playerName(captain.element,elementMap) : '—',
+      captainPoints:captainReturn,
+      captainRaw,
+      benchPoints,
+      transfers:picks.entry_history?.event_transfers || 0,
+      transferCost:picks.entry_history?.event_transfers_cost || 0,
+      chip:picks.active_chip || null,
     })
-  } catch (error) {
+  }
+  managerStats.sort((a,b)=>(b.points??-999)-(a.points??-999))
+
+  const managerCount=managerStats.length
+  const mostOwned=[...owned.entries()]
+    .map(([id,count])=>({id,player:playerName(id,elementMap),count,pct:pct(count,managerCount)}))
+    .sort((a,b)=>b.count-a.count || a.player.localeCompare(b.player))
+    .slice(0,6)
+  const captainPopularity=[...captains.entries()]
+    .map(([id,count])=>({id,player:playerName(id,elementMap),count,pct:pct(count,managerCount)}))
+    .sort((a,b)=>b.count-a.count || a.player.localeCompare(b.player))
+    .slice(0,6)
+  const differentials=[...owned.entries()]
+    .filter(([,count])=>count<=2)
+    .map(([id,count])=>({id,player:playerName(id,elementMap),count,points:livePoints.get(id)||0}))
+    .sort((a,b)=>b.points-a.points || a.count-b.count)
+    .slice(0,8)
+
+  const scores=managerStats.map(r=>r.points).filter(Number.isFinite)
+  const average=scores.length?Math.round((scores.reduce((a,b)=>a+b,0)/scores.length)*10)/10:null
+
+  return {
+    ok:true,
+    available:managerStats.length>0,
+    gw,
+    matchedCount:matched.length,
+    unmatched,
+    managerCount,
+    mostOwned,
+    captainPopularity,
+    differentials,
+    managerStats,
+    headline:{
+      highest:managerStats[0] || null,
+      lowest:managerStats.at(-1) || null,
+      average,
+      chipsUsed:managerStats.filter(r=>r.chip).length,
+    },
+    generatedAt:new Date().toISOString(),
+  }
+}
+
+export async function GET(request){
+  try{
+    const url=new URL(request.url)
+    const gwRaw=url.searchParams.get('gw')
+    if(gwRaw){
+      const gw=Number(gwRaw)
+      if(!Number.isInteger(gw)||gw<1||gw>38){
+        return NextResponse.json({ok:false,error:'Invalid gameweek'},{status:400})
+      }
+      return NextResponse.json(await buildGameweek(gw))
+    }
+    return NextResponse.json(await buildSummary())
+  }catch(error){
     return NextResponse.json({
-      ok: false,
-      leagueId: LEAGUE_ID,
-      lockedThroughGw: LOCKED_THROUGH_GW,
-      error: error instanceof Error ? error.message : 'Unable to reach FPL data',
-      generatedAt: new Date().toISOString(),
-    }, { status: 200 })
+      ok:false,
+      error:'FPL data is temporarily unavailable',
+      detail:process.env.NODE_ENV==='development'?String(error?.message||error):undefined,
+    },{status:200})
   }
 }
