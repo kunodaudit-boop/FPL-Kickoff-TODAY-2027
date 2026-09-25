@@ -1,0 +1,90 @@
+/* FPL Kickoff Today 2027 — v2 visual layer
+   Keeps the existing component system, but makes the homepage calmer and gives
+   each major area its own subtle colour identity. */
+
+.heroV2{
+  min-height:760px;
+  padding-top:62px;
+  background:
+    radial-gradient(circle at 77% 13%,rgba(255,255,255,.78) 0 4%,transparent 4.3%),
+    linear-gradient(180deg,#36a9ff 0%,#8cd7ff 46%,#dff5ff 46.2%,#76bd63 66%,#2f7a3b 100%);
+}
+.heroV2:before{opacity:.5;border-top-width:8px}
+.heroV2:after{height:185px;opacity:.85}
+.heroV2 .heroText{max-width:720px}
+.heroV2 .heroText h1{transform:scale(.92);transform-origin:left top}
+.heroV2 .heroSlogan{box-shadow:none;border:2px solid rgba(17,52,101,.15)}
+.heroV2 .heroTrophy{font-size:126px;top:250px;right:max(80px,calc((100vw - 1420px)/2 + 110px));opacity:.95}
+.heroV2 .heroBottom{margin-top:26px}
+.heroV2 .latestCard,.heroV2 .dashboardCard{box-shadow:0 12px 24px rgba(0,35,84,.18);border-width:2px}
+.heroV2 .quickTiles a{box-shadow:0 8px 16px rgba(0,35,84,.13);border-width:2px}
+
+.cardSource{margin-top:10px}
+.sourceBadge{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:6px 9px;border-radius:999px;font-size:9px;font-weight:1000;letter-spacing:.06em;white-space:nowrap}
+.sourceBadge.locked{background:#edf1f7;color:#4d6079;border:1px solid #d3dce9}
+.sourceBadge.live{background:#d9f9e3;color:#117b39;border:1px solid #a8e8ba}
+.sourceBadge.waiting{background:#fff2cf;color:#8f6300;border:1px solid #edd48e}
+.detailHeading>div:last-child{display:flex;flex-direction:column;align-items:flex-end}
+
+.competitionSection{background:linear-gradient(180deg,#f7fbff,#eef7ff);max-width:none;padding-left:max(28px,calc((100vw - 1420px)/2));padding-right:max(28px,calc((100vw - 1420px)/2))}
+.competitionCard{box-shadow:0 8px 18px rgba(29,53,92,.06)}
+.competitionCard:hover{box-shadow:0 12px 24px rgba(29,53,92,.1)}
+
+.themeFull{background:linear-gradient(135deg,#fffdf5,#fff7d8);border-color:#efd78a}
+.themeFull .sectionKicker{color:#9c7000}
+.themeGw{background:linear-gradient(135deg,#f4f9ff,#e6f2ff);border-color:#9fc8f7}
+.themeGw .sectionKicker{color:#176cbc}
+.themeLucky{background:linear-gradient(135deg,#f4fff7,#e8faee);border-color:#a9e8b7}
+.themeLucky .sectionKicker{color:#168642}
+.themeMini{background:linear-gradient(135deg,#fbf8ff,#f1ebff);border-color:#d5c1ff}
+.themeMini .sectionKicker{color:#7346c2}
+.themeGallery{background:linear-gradient(180deg,#fff8ed,#fff3df)}
+.themeGallery .sectionKicker{color:#b45b13}
+.themeRules{background:linear-gradient(180deg,#f4fffe,#e9f8f7)}
+.themeRules .sectionKicker{color:#167c78}
+
+.dataPolicy{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-6px 0 20px;padding:10px 12px;border-radius:13px;background:rgba(255,255,255,.75);border:1px solid rgba(27,55,92,.1);font-size:11px;color:#52617a}
+.dataPolicy b{color:#172a4e;font-size:10px;letter-spacing:.08em}
+.dataPolicy span{font-weight:900;background:#f3f6fa;padding:6px 9px;border-radius:999px}
+.dataPolicy i{font-style:normal;font-weight:1000;color:#8090a8}
+
+.statsSection{max-width:none;padding-left:max(28px,calc((100vw - 1420px)/2));padding-right:max(28px,calc((100vw - 1420px)/2));background:linear-gradient(145deg,#eef1ff 0%,#f7f4ff 50%,#eef7ff 100%);border-top:1px solid #d8def8;border-bottom:1px solid #d8def8}
+.statsSection .sectionKicker{color:#6740b7}
+.apiBadge{min-width:180px;padding:13px 16px;border-radius:16px;display:flex;flex-direction:column;text-align:center;border:1px solid #cfd7eb;background:#fff}
+.apiBadge b{font-size:11px;letter-spacing:.07em}.apiBadge span{font-size:10px;color:#73809a;margin-top:4px}
+.apiBadge.ready{border-color:#a9e1ba;background:#f2fff6}.apiBadge.ready b{color:#16813e}
+.apiBadge.loading{border-color:#c8d7f4;background:#f6f9ff}.apiBadge.loading b{color:#3d66a5}
+.apiBadge.fallback{border-color:#efd49f;background:#fffaf0}.apiBadge.fallback b{color:#9b6713}
+.statsPolicy{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.statsPolicy>div{background:rgba(255,255,255,.83);border:1px solid #dfe5f5;border-radius:16px;padding:15px;display:grid;grid-template-columns:38px 1fr;grid-template-rows:auto auto;gap:2px 9px;box-shadow:0 7px 16px rgba(55,71,124,.05)}
+.statsPolicy span{grid-row:1/3;font-size:27px}.statsPolicy b{font-size:13px}.statsPolicy small{font-size:10px;color:#75809a;line-height:1.35}
+.statsHeadline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.statsHeadline>div{background:#101c4a;color:#fff;border-radius:15px;padding:14px 15px;min-height:88px;display:flex;flex-direction:column;justify-content:center}
+.statsHeadline small{font-size:9px;color:#9db0df;letter-spacing:.08em;font-weight:900}.statsHeadline strong{font-size:22px;margin-top:5px}.statsHeadline em{font-style:normal;color:#ffd23f;font-size:15px}
+.statsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.statsCard{background:#fff;border:1px solid #dfe5f2;border-radius:18px;padding:15px;box-shadow:0 9px 20px rgba(51,60,112,.06)}
+.statsCard.owned{border-top:5px solid #2359c8}.statsCard.captain{border-top:5px solid #7a4be3}.statsCard.diff{border-top:5px solid #f4a73c}
+.statsCardHead{display:flex;gap:10px;align-items:center;margin-bottom:13px}.statsCardHead>span{width:38px;height:38px;border-radius:12px;background:#f0f3ff;display:grid;place-items:center;font-size:20px}.statsCardHead div{display:flex;flex-direction:column}.statsCardHead b{font-size:15px}.statsCardHead small{font-size:9px;color:#77829a}
+.barList{display:grid;gap:10px}.barRow{display:grid;grid-template-columns:1.1fr 1fr 48px;gap:8px;align-items:center}.barName{display:flex;flex-direction:column}.barName b{font-size:11px}.barName small{font-size:8px;color:#8390a5}.barTrack{height:7px;background:#edf1f8;border-radius:999px;overflow:hidden}.barTrack span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#365bc8,#8354df)}.barRow strong{font-size:10px;text-align:right;color:#31405e}.statsEmpty{padding:24px 10px;text-align:center;color:#8a93a5;font-size:11px}
+.managerStatsWrap{margin-top:14px;border:1px solid #d9e0ef;border-radius:17px;overflow:auto;background:#fff}.managerStatsHead,.managerStatsRow{min-width:820px;display:grid;grid-template-columns:1.35fr .55fr 1fr .55fr .65fr .65fr;gap:10px;align-items:center}.managerStatsHead{background:#162254;color:#b7c4e4;padding:10px 13px;font-size:9px;text-transform:uppercase;letter-spacing:.05em}.managerStatsRow{padding:10px 13px;border-top:1px solid #edf0f6;font-size:11px}.managerStatsRow>div{display:flex;flex-direction:column}.managerStatsRow b{font-size:12px}.managerStatsRow small{font-size:8px;color:#7d889e}.managerStatsRow>strong{font-size:16px;color:#17244f}.managerStatsRow>span small{display:block}.chipOn{font-size:9px;font-weight:900;color:#6737b8;background:#eee6ff;padding:6px 7px;border-radius:999px;text-align:center}.chipOff{color:#a0a8b6;text-align:center}.statsUnavailable{background:#fff;border:1px dashed #c8d1e7;border-radius:18px;padding:38px;text-align:center}.statsUnavailable b{font-size:20px}.statsUnavailable p{max-width:700px;margin:8px auto 0;color:#758097;font-size:12px}.matchWarning{margin-top:13px;padding:12px 14px;border-radius:13px;background:#fff6df;border:1px solid #efd69b;display:flex;gap:8px;flex-direction:column}.matchWarning b{font-size:12px;color:#8b5d00}.matchWarning span{font-size:10px;color:#876d37}
+
+/* Tone each destination differently without changing the shared design language. */
+#full-season .miniTableRow{border-left:3px solid #e8b736}
+#gameweek .weeklyTable{background:#0d3269}
+#lucky-game .luckyList>div{box-shadow:none}
+#mini-game .winnerGrid figure{border-top:4px solid #7c4dff}
+#gallery .galleryGrid figure{border-top:4px solid #f0a64c}
+#rules .rulesGrid figure{border-top:4px solid #39aaa2}
+
+@media(max-width:1000px){
+  .statsGrid{grid-template-columns:1fr 1fr}.statsCard.diff{grid-column:1/3}
+  .statsHeadline{grid-template-columns:1fr 1fr}
+  .statsPolicy{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .heroV2{padding-top:38px}.heroV2 .heroText h1{transform:scale(.94)}.heroV2 .heroTrophy{display:none}
+  .detailHeading>div:last-child{align-items:flex-start}
+  .statsGrid{grid-template-columns:1fr}.statsCard.diff{grid-column:auto}.statsHeadline{grid-template-columns:1fr 1fr}.apiBadge{width:100%}.statsSection{padding-left:14px;padding-right:14px}
+}
+@media(max-width:480px){
+  .statsHeadline{grid-template-columns:1fr}.barRow{grid-template-columns:1fr 70px}.barTrack{display:none}
+}
