@@ -67,12 +67,15 @@ function AccentCard({item}){
 
 function BarList({items,mode='ownership',total=11}){
   if(!items?.length) return <div className="statsEmpty">ยังไม่มีข้อมูลสำหรับ Gameweek นี้</div>
-  return <div className="barList">{items.map((item,i)=>{
+  return <div className={`barList ${mode}`}>{items.map((item,i)=>{
     const value=mode==='points'?item.points:item.pct
-    const width=mode==='points'?Math.min(100,Math.max(8,(item.points||0)*7)):Math.max(8,item.pct||0)
+    const width=mode==='points'?Math.min(100,Math.max(10,(item.points||0)*7)):Math.max(10,item.pct||0)
     return <div className="barRow" key={`${item.id}-${i}`}>
-      <div className="barName"><b>{item.player}</b><small>{item.count}/{total} managers</small></div>
-      <div className="barTrack"><span style={{width:`${width}%`}}/></div>
+      <span className="barRank">{i+1}</span>
+      <div className="barMain">
+        <div className="barName"><b>{item.player}</b><small>{item.count}/{total} managers</small></div>
+        <div className="barTrack"><span style={{width:`${width}%`}}/></div>
+      </div>
       <strong>{mode==='points'?`${value} pts`:`${value}%`}</strong>
     </div>
   })}</div>
@@ -260,19 +263,58 @@ export default function Home(){
     </section>
 
     <section className="section statsSectionV3" id="statistics">
-      <div className="sectionTitle"><div><p>📊 LEAGUE STATISTICS</p><h2>Stats & Insights</h2><span>ข้อมูล FPL League {FPL_LEAGUE_ID} + คะแนน Hybrid ของลีกเรา</span></div><div className={`apiPill ${fplStatus}`}>{fplStatus==='ready'?`⚡ ${fplSummary?.matchedCount||0}/11 CONNECTED`:fplStatus==='loading'?'CONNECTING…':'FALLBACK MODE'}</div></div>
-      <div className="statsMode"><button className={statsMode==='gw'?'active':''} onClick={()=>setStatsMode('gw')}>GAMEWEEK</button><button className={statsMode==='season'?'active':''} onClick={()=>setStatsMode('season')}>SEASON OVERVIEW</button></div>
+      <div className="sectionTitle statsTitleV4"><div><p>📊 LEAGUE STATISTICS</p><h2>Stats & Insights</h2><span>ข้อมูล FPL League {FPL_LEAGUE_ID} + คะแนน Hybrid ของลีกเรา</span></div><div className={`apiPill ${fplStatus}`}>{fplStatus==='ready'?`⚡ ${fplSummary?.matchedCount||0}/11 CONNECTED`:fplStatus==='loading'?'CONNECTING…':'FALLBACK MODE'}</div></div>
+
+      <div className="statsToolbar">
+        <div className="statsMode"><button className={statsMode==='gw'?'active':''} onClick={()=>setStatsMode('gw')}><span>📅</span> GAMEWEEK</button><button className={statsMode==='season'?'active':''} onClick={()=>setStatsMode('season')}><span>📈</span> SEASON OVERVIEW</button></div>
+        {statsMode==='gw' && <div className="statsSelector"><span>เลือก Gameweek</span><div className="gwTabs v3Tabs statsGwTabs">{statsGwOptions.map(n=><button key={n} className={statsGw===n?'active':''} onClick={()=>setStatsGw(n)}>GW{n}</button>)}</div></div>}
+      </div>
 
       {statsMode==='gw' ? <>
-        <div className="statsSelector"><span>เลือก Gameweek</span><div className="gwTabs v3Tabs">{statsGwOptions.map(n=><button key={n} className={statsGw===n?'active':''} onClick={()=>setStatsGw(n)}>GW{n}</button>)}</div></div>
         {statsLoading?<div className="statsEmpty big">กำลังโหลดข้อมูล FPL ของ GW{statsGw}…</div>:gwStats?.available?<>
-          <div className="statKpis"><article><small>TOP SCORE</small><b>{displayManagerStats[0]?.name||'—'}</b><strong>{displayManagerStats[0]?.points??'—'}</strong></article><article><small>LEAGUE AVG</small><b>GW{statsGw}</b><strong>{gwAverage??'—'}</strong></article><article><small>LOW SCORE</small><b>{displayManagerStats.at(-1)?.name||'—'}</b><strong>{displayManagerStats.at(-1)?.points??'—'}</strong></article><article><small>CHIPS USED</small><b>GW{statsGw}</b><strong>{gwStats.headline?.chipsUsed??0}</strong></article></div>
-          <div className="statsGridV3"><article><h3>👥 Most Owned</h3><BarList items={gwStats.mostOwned} total={gwStats.managerCount}/></article><article><h3>© Captain Popularity</h3><BarList items={gwStats.captainPopularity} total={gwStats.managerCount}/></article><article><h3>💎 Differential Watch</h3><BarList items={gwStats.differentials} mode="points" total={gwStats.managerCount}/></article></div>
-          <div className="managerStatsWrap"><div className="managerStatsHead"><span>Manager</span><span>GW Pts</span><span>Captain</span><span>Bench</span><span>Transfers</span><span>Chip</span></div>{displayManagerStats.map(row=><div className="managerStatsRow" key={row.name}><div><b>{row.name}</b><small>{row.team}</small></div><strong>{row.points}</strong><span>{row.captain}<small>{row.captainPoints?` • ${row.captainPoints} pts`:''}</small></span><span>{row.benchPoints}</span><span>{row.transfers}{row.transferCost?` (-${row.transferCost})`:''}</span><span className={row.chip?'chipOn':'chipOff'}>{row.chip||'—'}</span></div>)}</div>
+          <div className="statKpis statKpisV4">
+            <article className="kpiTop"><span className="kpiIcon">🏅</span><div><small>TOP SCORE</small><b>{displayManagerStats[0]?.name||'—'}</b></div><strong>{displayManagerStats[0]?.points??'—'}<em>pts</em></strong></article>
+            <article className="kpiAvg"><span className="kpiIcon">📊</span><div><small>LEAGUE AVG</small><b>GW{statsGw}</b></div><strong>{gwAverage??'—'}<em>pts</em></strong></article>
+            <article className="kpiLow"><span className="kpiIcon">🧊</span><div><small>LOW SCORE</small><b>{displayManagerStats.at(-1)?.name||'—'}</b></div><strong>{displayManagerStats.at(-1)?.points??'—'}<em>pts</em></strong></article>
+            <article className="kpiChip"><span className="kpiIcon">🎴</span><div><small>CHIPS USED</small><b>GW{statsGw}</b></div><strong>{gwStats.headline?.chipsUsed??0}<em>used</em></strong></article>
+          </div>
+
+          <div className="statsGridV3 statsInsightGrid">
+            <article className="insightCard owned"><div className="insightHead"><span>👥</span><div><h3>Most Owned</h3><small>นักเตะที่มีคนถือมากที่สุดในลีก</small></div></div><BarList items={gwStats.mostOwned} total={gwStats.managerCount}/></article>
+            <article className="insightCard captain"><div className="insightHead"><span>©</span><div><h3>Captain Popularity</h3><small>ตัวเลือกกัปตันของผู้จัดการ 11 คน</small></div></div><BarList items={gwStats.captainPopularity} total={gwStats.managerCount}/></article>
+            <article className="insightCard differential"><div className="insightHead"><span>💎</span><div><h3>Differential Watch</h3><small>คนน้อยถือ แต่ทำแต้มได้เด่น</small></div></div><BarList items={gwStats.differentials} mode="points" total={gwStats.managerCount}/></article>
+          </div>
+
+          <div className="managerStatsPanel">
+            <div className="managerStatsTitle"><div><small>MANAGER BREAKDOWN</small><h3>GW{statsGw} Performance</h3></div><span>{displayManagerStats.length} managers</span></div>
+            <div className="managerStatsWrap">
+              <div className="managerStatsHead"><span># / Manager</span><span>GW Pts</span><span>Captain</span><span>Bench</span><span>Transfers</span><span>Chip</span></div>
+              {displayManagerStats.map((row,i)=><div className="managerStatsRow" key={row.name}>
+                <div className="managerIdentity"><i>{i+1}</i><div><b>{row.name}</b><small>{row.team}</small></div></div>
+                <strong className="managerPoints">{row.points}<small>PTS</small></strong>
+                <span className="managerMetric captainMetric"><em>Captain</em><b>{row.captain||'—'}</b><small>{row.captainPoints?`${row.captainPoints} pts`:''}</small></span>
+                <span className="managerMetric"><em>Bench</em><b>{row.benchPoints??'—'}</b><small>pts</small></span>
+                <span className="managerMetric"><em>Transfers</em><b>{row.transfers??'—'}</b><small>{row.transferCost?`−${row.transferCost} hit`:'No hit'}</small></span>
+                <span className={`chipBadge ${row.chip?'chipOn':'chipOff'}`}><em>Chip</em><b>{row.chip||'—'}</b></span>
+              </div>)}
+            </div>
+          </div>
         </>:<div className="statsEmpty big">ยังดึง FPL Statistics ของ GW{statsGw} ไม่ได้ แต่คะแนน GW1–GW5 และข้อมูลหลักของเว็บยังอยู่ครบ</div>}
       </> : <>
-        <div className="seasonKpis"><article><small>SEASON LEADER</small><b>{league.seasonLeader.name}</b><strong>{league.seasonLeader.pts}</strong></article><article><small>MOST GW WINS</small><b>{mostWins?.[0]||'—'}</b><strong>{mostWins?.[1]||0}</strong></article><article><small>MOST CONSISTENT</small><b>{mostConsistent?.name||'—'}</b><strong>σ {mostConsistent?.consistency??'—'}</strong></article><article><small>SEASON PROGRESS</small><b>Completed</b><strong>{league.latestGw}/38</strong></article></div>
-        <div className="seasonStatsTable"><div className="seasonStatsHead"><span>Manager</span><span>Total</span><span>Avg</span><span>Best</span><span>Worst</span><span>Wins</span><span>Form</span><span>Transfers / Hit</span></div>{seasonStats.map((r,i)=><div className="seasonStatsRow" key={r.name}><div><b>#{i+1} {r.name}</b><small>{r.team}</small></div><strong>{r.total}</strong><span>{r.avg}</span><span>{r.best} <small>GW{r.bestGw}</small></span><span>{r.worst} <small>GW{r.worstGw}</small></span><span>{r.wins}</span><span>{r.form}</span><span>{r.transfers} / {r.hit}</span></div>)}</div>
+        <div className="seasonKpis seasonKpisV4">
+          <article><span>👑</span><div><small>SEASON LEADER</small><b>{league.seasonLeader.name}</b></div><strong>{league.seasonLeader.pts}<em>pts</em></strong></article>
+          <article><span>🏆</span><div><small>MOST GW WINS</small><b>{mostWins?.[0]||'—'}</b></div><strong>{mostWins?.[1]||0}<em>wins</em></strong></article>
+          <article><span>🎯</span><div><small>MOST CONSISTENT</small><b>{mostConsistent?.name||'—'}</b></div><strong>{mostConsistent?.consistency??'—'}<em>σ</em></strong></article>
+          <article><span>🗓️</span><div><small>SEASON PROGRESS</small><b>Completed</b></div><strong>{league.latestGw}<em>/38</em></strong></article>
+        </div>
+
+        <div className="seasonOverviewPanel">
+          <div className="managerStatsTitle"><div><small>SEASON SNAPSHOT</small><h3>Manager Overview</h3></div><span>GW1–GW{league.latestGw}</span></div>
+          <div className="seasonCards">{seasonStats.map((r,i)=><article className="seasonManagerCard" key={r.name}>
+            <div className="seasonManagerTop"><span className="seasonRank">#{i+1}</span><div><b>{r.name}</b><small>{r.team}</small></div><strong>{r.total}<em>PTS</em></strong></div>
+            <div className="seasonMetricGrid"><span><small>AVG</small><b>{r.avg}</b></span><span><small>BEST</small><b>{r.best}</b><em>GW{r.bestGw}</em></span><span><small>WORST</small><b>{r.worst}</b><em>GW{r.worstGw}</em></span><span><small>GW WINS</small><b>{r.wins}</b></span><span><small>FORM</small><b>{r.form}</b><em>last 5</em></span><span><small>TRANSFERS / HIT</small><b>{r.transfers} / {r.hit}</b></span></div>
+          </article>)}</div>
+        </div>
         <p className="statsNote">Score-based stats ใช้ GW1–GW5 ที่ล็อกไว้ และ GW6+ จาก FPL; Transfers / Hits / Chips ดึงจาก FPL โดยตรงเมื่อเชื่อมได้</p>
       </>}
     </section>
