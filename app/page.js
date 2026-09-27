@@ -119,6 +119,85 @@ function ToyAccent({type,compact=false}){
   </div>
 }
 
+function ToyScene({type,compact=false,banner=false}){
+  const cls=`toyScene toyScene-${type} ${compact?'compact':''} ${banner?'banner':''}`
+  const common={viewBox:'0 0 360 180',role:'presentation','aria-hidden':'true'}
+  if(type==='woody') return <div className={cls}><svg {...common}>
+    <rect x="0" y="0" width="360" height="180" rx="24" fill="#f8df9d"/>
+    <path d="M0 132 C74 104 142 116 208 94 C270 74 318 84 360 66 V180 H0Z" fill="#d59a43" opacity=".52"/>
+    <path d="M230 27 C255 12 301 17 325 37 C312 44 300 48 281 49 C256 50 238 43 230 27Z" fill="#7c421f"/>
+    <path d="M251 29 C263 0 300 1 313 31 C296 38 269 38 251 29Z" fill="#9d5c2e"/>
+    <circle cx="285" cy="94" r="38" fill="none" stroke="#a96b2c" strokeWidth="8"/>
+    <path d="M285 56 C314 70 329 102 311 126" fill="none" stroke="#a96b2c" strokeWidth="7" strokeLinecap="round"/>
+    <g transform="translate(60 35)"><path d="M43 0 L54 25 L82 28 L61 47 L67 75 L43 61 L19 75 L25 47 L4 28 L32 25Z" fill="#ffd64e" stroke="#9a6700" strokeWidth="5"/><text x="43" y="43" textAnchor="middle" fontSize="12" fontWeight="900" fill="#7b5100">SHERIFF</text></g>
+    <g transform="translate(20 118)"><rect width="118" height="30" rx="8" fill="#fff1c9" stroke="#8a5321" strokeWidth="3"/><text x="59" y="20" textAnchor="middle" fontSize="13" fontWeight="900" fill="#6b3c18">SEASON TRAIL</text></g>
+  </svg></div>
+  if(type==='buzz') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#dff6ff"/><circle cx="300" cy="40" r="22" fill="#a874ef" opacity=".9"/>
+    <g opacity=".7" fill="#fff"><circle cx="56" cy="35" r="4"/><circle cx="94" cy="24" r="3"/><circle cx="329" cy="88" r="3"/><circle cx="265" cy="19" r="2"/></g>
+    <g transform="translate(95 18)"><path d="M84 8 C120 42 123 92 84 137 C45 92 48 42 84 8Z" fill="#fff" stroke="#7147c8" strokeWidth="6"/><path d="M84 13 C106 44 106 72 84 97 C62 72 62 44 84 13Z" fill="#91efb2"/><circle cx="84" cy="54" r="16" fill="#4b8bf6"/><path d="M57 70 L15 104 L61 105Z" fill="#8b5be0"/><path d="M111 70 L153 104 L107 105Z" fill="#8b5be0"/><path d="M67 134 L54 160 L78 149Z" fill="#59d978"/><path d="M101 134 L114 160 L90 149Z" fill="#59d978"/></g>
+    <path d="M25 140 C90 91 145 89 205 108 C250 122 298 116 338 81" fill="none" stroke="#7147c8" strokeWidth="4" strokeDasharray="8 8" opacity=".55"/>
+    <text x="24" y="38" fontSize="13" fontWeight="900" fill="#31587d">WEEKLY MISSION</text>
+  </svg></div>
+  if(type==='jessie') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="22" fill="#0c789c"/>
+    <path d="M208 35 C229 13 277 15 307 37 C292 49 266 57 231 51 C220 49 211 43 208 35Z" fill="#e53e37"/>
+    <path d="M230 37 C242 10 278 9 292 39 C273 46 248 47 230 37Z" fill="#f35b50"/>
+    <circle cx="280" cy="112" r="39" fill="none" stroke="#f7d36c" strokeWidth="7"/><path d="M280 73 C314 94 319 125 298 149" fill="none" stroke="#f7d36c" strokeWidth="6" strokeLinecap="round"/>
+    <g fill="#fff" opacity=".9"><path d="M22 33 h36 l-9 11 9 11H22Z"/><path d="M69 112 h44 l-9 12 9 12H69Z"/></g><text x="28" y="48" fontSize="13" fontWeight="900" fill="#082f44">FIRST RUN</text>
+  </svg></div>
+  if(type==='bopeep') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="22" fill="#5b2f87"/>
+    <g fill="#f6ecff"><circle cx="244" cy="100" r="26"/><circle cx="270" cy="93" r="24"/><circle cx="293" cy="106" r="25"/><circle cx="267" cy="116" r="28"/></g><circle cx="302" cy="113" r="15" fill="#d9baf7"/><circle cx="298" cy="109" r="2.8" fill="#523169"/><circle cx="307" cy="109" r="2.8" fill="#523169"/>
+    <path d="M85 31 V140 C85 154 70 158 59 148" fill="none" stroke="#d9baf7" strokeWidth="10" strokeLinecap="round"/><path d="M84 31 C114 31 112 57 93 64" fill="none" stroke="#d9baf7" strokeWidth="10" strokeLinecap="round"/>
+    <text x="127" y="47" fontSize="13" fontWeight="900" fill="#fff">SECOND JOURNEY</text>
+  </svg></div>
+  if(type==='potato') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#e8fff0"/>
+    <ellipse cx="238" cy="91" rx="68" ry="60" fill="#b9783f" stroke="#70451f" strokeWidth="5"/><ellipse cx="212" cy="72" rx="13" ry="16" fill="#fff"/><ellipse cx="258" cy="72" rx="13" ry="16" fill="#fff"/><circle cx="214" cy="76" r="5"/><circle cx="256" cy="76" r="5"/><path d="M212 112 C229 126 248 126 265 112" fill="none" stroke="#4b2b18" strokeWidth="7" strokeLinecap="round"/><path d="M222 98 C232 91 243 91 253 98" fill="none" stroke="#4b2b18" strokeWidth="8" strokeLinecap="round"/><path d="M182 72 C166 62 160 70 166 82" fill="#f0a27e"/><path d="M294 72 C310 62 316 70 310 82" fill="#f0a27e"/>
+    <g transform="translate(25 40)"><circle cx="32" cy="20" r="20" fill="#ffd83f"/><path d="M22 18 h20 M32 8 v20" stroke="#c49700" strokeWidth="4"/><text x="0" y="76" fontSize="13" fontWeight="900" fill="#17663b">LUCKY PARTS</text></g>
+  </svg></div>
+  if(type==='pizza') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#efe5ff"/>
+    <g transform="translate(80 28)"><path d="M95 9 V35" stroke="#3e8e40" strokeWidth="7" strokeLinecap="round"/><circle cx="95" cy="7" r="7" fill="#6ee56b"/><path d="M42 75 C42 31 148 31 148 75 C148 115 126 139 95 139 C64 139 42 115 42 75Z" fill="#76e06f" stroke="#3e8e40" strokeWidth="5"/><g fill="#fff" stroke="#3e8e40" strokeWidth="3"><circle cx="72" cy="77" r="13"/><circle cx="95" cy="67" r="13"/><circle cx="118" cy="77" r="13"/></g><g fill="#17461e"><circle cx="72" cy="77" r="5"/><circle cx="95" cy="67" r="5"/><circle cx="118" cy="77" r="5"/></g><path d="M78 106 C88 116 102 116 112 106" fill="none" stroke="#17461e" strokeWidth="5" strokeLinecap="round"/></g>
+    <g transform="translate(250 20)" stroke="#6b3bb7" strokeWidth="8" fill="none" strokeLinecap="round"><path d="M30 0 V60"/><path d="M8 54 C11 87 49 87 52 54"/><path d="M8 54 l-8 25 M52 54 l8 25"/></g>
+    <path d="M30 138 H118" stroke="#f4b125" strokeWidth="8" strokeLinecap="round"/><text x="32" y="125" fontSize="13" fontWeight="900" fill="#6532a8">THE CLAW</text>
+  </svg></div>
+  if(type==='army') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#efe4c8"/>
+    <path d="M0 146 C70 118 138 137 190 114 C242 92 312 109 360 83 V180 H0Z" fill="#b9c59c"/>
+    <g stroke="#bd4d35" strokeWidth="3" fill="none" opacity=".75"><path d="M35 50 C94 30 128 42 169 24 C220 5 269 22 318 14"/><path d="M64 92 C102 76 123 77 157 59"/></g>
+    <g transform="translate(132 24)"><ellipse cx="54" cy="22" rx="30" ry="12" fill="#456f3f"/><circle cx="54" cy="38" r="24" fill="#5f8956"/><rect x="41" y="58" width="26" height="58" rx="8" fill="#5f8956"/><path d="M45 67 L18 86 M63 67 L90 86" stroke="#4c7646" strokeWidth="10" strokeLinecap="round"/><path d="M47 114 L33 153 M61 114 L77 153" stroke="#4c7646" strokeWidth="10" strokeLinecap="round"/><rect x="7" y="151" width="88" height="11" rx="6" fill="#456f3f"/><g fill="#264829"><circle cx="39" cy="38" r="10"/><circle cx="69" cy="38" r="10"/></g><rect x="38" y="31" width="32" height="14" rx="5" fill="#284e2c"/></g>
+    <g transform="translate(33 85) scale(.72)"><circle cx="32" cy="20" r="18" fill="#648f59"/><rect x="24" y="36" width="16" height="42" rx="6" fill="#648f59"/><rect x="10" y="78" width="45" height="8" rx="4" fill="#456f3f"/></g>
+    <g transform="translate(278 85) scale(.72)"><circle cx="32" cy="20" r="18" fill="#648f59"/><rect x="24" y="36" width="16" height="42" rx="6" fill="#648f59"/><rect x="10" y="78" width="45" height="8" rx="4" fill="#456f3f"/></g>
+    <text x="20" y="28" fontSize="13" fontWeight="900" fill="#385a37">BATTLEFIELD INTELLIGENCE</text>
+  </svg></div>
+  if(type==='sid') return <div className={cls}><svg {...common}>
+    <defs><linearGradient id="sidBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#3b241c"/><stop offset="1" stopColor="#15151b"/></linearGradient></defs><rect width="360" height="180" rx="24" fill="url(#sidBg)"/>
+    <path d="M18 25 H342 M25 58 H333 M34 146 H326" stroke="#6d4535" strokeWidth="3" opacity=".55"/>
+    <text x="255" y="34" fontSize="27" fontWeight="900" fill="#a04a3f" transform="rotate(-5 255 34)">SID</text>
+    <g transform="translate(176 48)"><circle cx="52" cy="32" r="24" fill="#e8c5a8"/><circle cx="44" cy="29" r="4" fill="#38261e"/><circle cx="60" cy="29" r="4" fill="#38261e"/><path d="M44 44 C50 48 56 48 62 44" fill="none" stroke="#6a382b" strokeWidth="3"/><circle cx="52" cy="32" r="31" fill="none" stroke="#6f6f74" strokeWidth="5"/><g stroke="#77777e" strokeWidth="6" strokeLinecap="round"><path d="M29 55 L2 89"/><path d="M38 61 L22 105"/><path d="M65 61 L82 105"/><path d="M75 55 L103 89"/></g></g>
+    <g transform="translate(40 83)"><rect x="30" y="31" width="73" height="24" rx="8" fill="#d8513f"/><circle cx="41" cy="60" r="12" fill="#1f2026"/><circle cx="92" cy="60" r="12" fill="#1f2026"/><path d="M55 30 C48 8 69 0 81 17 C95 3 109 10 108 28" fill="none" stroke="#d7b54a" strokeWidth="8" strokeLinecap="round"/></g>
+    <path d="M18 157 h110" stroke="#f0c448" strokeWidth="6" strokeDasharray="10 8"/><text x="20" y="44" fontSize="12" fontWeight="900" fill="#f0c448">DATA WORKSHOP</text>
+  </svg></div>
+  if(type==='rex') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#fff0cf"/><path d="M0 150 C48 117 88 128 128 100 C181 62 233 88 278 61 C311 42 340 44 360 31 V180 H0Z" fill="#a9cf78"/>
+    <path d="M50 118 L88 49 L126 118Z" fill="#8e5e42"/><path d="M73 79 L88 49 L103 79Z" fill="#ef7948"/><path d="M87 49 C79 33 96 25 102 38 C108 24 126 34 117 49" fill="#f2aa49"/>
+    <g transform="translate(183 44)"><ellipse cx="63" cy="58" rx="58" ry="43" fill="#69b95d"/><circle cx="103" cy="43" r="29" fill="#69b95d"/><circle cx="112" cy="37" r="5" fill="#fff"/><circle cx="114" cy="38" r="2"/><path d="M104 55 C117 63 126 62 135 56" fill="none" stroke="#2f6e38" strokeWidth="4"/><path d="M13 57 C-18 51 -24 79 5 86" fill="none" stroke="#69b95d" strokeWidth="18" strokeLinecap="round"/><path d="M43 96 L34 133 M80 96 L88 133" stroke="#4e9b4f" strokeWidth="13" strokeLinecap="round"/></g>
+    <path d="M18 146 H322" stroke="#d3713e" strokeWidth="4" strokeDasharray="10 8"/><text x="20" y="33" fontSize="13" fontWeight="900" fill="#4f7d45">GW1 → NOW → FUTURE</text>
+  </svg></div>
+  if(type==='zurg') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#15122b"/><g opacity=".35" stroke="#8d6ac9"><path d="M20 35 H340 M20 72 H340 M20 109 H340 M20 146 H340"/></g>
+    <g transform="translate(185 17)"><path d="M75 0 L116 40 L107 133 H43 L34 40Z" fill="#5e37a1" stroke="#9d73e5" strokeWidth="5"/><path d="M49 57 H102 L92 86 H58Z" fill="#210f42"/><path d="M62 67 H74 M82 67 H94" stroke="#ff4054" strokeWidth="7" strokeLinecap="round"/><path d="M34 40 L12 21 M116 40 L138 21" stroke="#7b4fbd" strokeWidth="12" strokeLinecap="round"/></g><path d="M28 131 C91 110 133 103 180 82" fill="none" stroke="#ff4054" strokeWidth="5" strokeDasharray="7 8"/><text x="22" y="34" fontSize="13" fontWeight="900" fill="#c4a8ff">OFFICIAL ARCHIVE</text>
+  </svg></div>
+  if(type==='hamm') return <div className={cls}><svg {...common}>
+    <rect width="360" height="180" rx="24" fill="#102b5e"/>
+    <g transform="translate(135 32)"><ellipse cx="80" cy="71" rx="72" ry="52" fill="#f59abc" stroke="#c9618a" strokeWidth="5"/><circle cx="139" cy="63" r="20" fill="#f9a8c5"/><circle cx="146" cy="58" r="3.5" fill="#663146"/><circle cx="133" cy="58" r="3.5" fill="#663146"/><path d="M59 23 H104" stroke="#8f4664" strokeWidth="7" strokeLinecap="round"/><path d="M38 112 V135 M113 112 V135" stroke="#c9618a" strokeWidth="12" strokeLinecap="round"/><path d="M14 65 C-3 57 -7 73 7 80" fill="none" stroke="#c9618a" strokeWidth="7" strokeLinecap="round"/></g>
+    <g transform="translate(25 85)"><circle cx="24" cy="24" r="22" fill="#ffd04b" stroke="#bd8d16" strokeWidth="4"/><circle cx="58" cy="41" r="19" fill="#f0b72f" stroke="#bd8d16" strokeWidth="4"/><text x="24" y="30" textAnchor="middle" fontSize="15" fontWeight="900" fill="#815700">฿</text></g><text x="24" y="35" fontSize="13" fontWeight="900" fill="#ffb6d2">PIGGY BANK ZONE</text>
+  </svg></div>
+  return null
+}
+
 function avg(nums){return nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:0}
 function stdev(nums){
   if(nums.length<2) return 0
@@ -144,7 +223,7 @@ const XG_META={
     explain:'โอกาสที่ทีมจะเสียประตู'
   },
   defcon:{
-    label:'น้าผู้ใหญ่',valueLabel:'ค่าน้าผู้ใหญ่',tech:'DefCon',icon:'🛡️',per90:'defcon90',actual:'points',actualLabel:'FPL pts',tone:'green',
+    label:'น้าผู้ใหญ่',valueLabel:'ค่าน้าผู้ใหญ่',tech:'DefCon',icon:'🛡️',per90:'defcon90',actual:'minutes',actualLabel:'MIN',tone:'green',
     explain:'ค่าการมีส่วนร่วมเกมรับที่ FPL บันทึกจากจังหวะเคลียร์ บล็อก ตัดบอล และแท็กเกิล; MID รวม recovery ตามเกณฑ์ FPL'
   },
 }
@@ -446,12 +525,14 @@ export default function Home(){
 
     <section className="section detailSection toneGold toyWoodySection" id="full-season">
       <ToyAccent type="woody"/>
+      <ToyScene type="woody"/>
       <div className="sectionTitle"><div><p>🏆 FULL SEASON</p><h2>ศึกใหญ่ทั้งฤดูกาล</h2><span>คะแนน GW1–GW5 ล็อกตามข้อมูลที่กำหนดไว้ • ตั้งแต่ GW6 ต่อด้วย FPL อัตโนมัติ</span></div><strong>฿4,200</strong></div>
       <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/full-season.jpeg',alt:'Full season rules'})}><img className="ruleMedia" src="/rules/full-season.jpeg" alt="Full season rules"/></button><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
     </section>
 
     <section className="section detailSection toneBlue toyBuzzSection" id="gameweek">
       <ToyAccent type="buzz"/>
+      <ToyScene type="buzz"/>
       <div className="sectionTitle"><div><p>⚽ GAMEWEEK</p><h2>Weekly Battle</h2><span>เลือกดูผลราย Gameweek ได้ทุกสัปดาห์</span></div><strong>1st +120</strong></div>
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
@@ -463,11 +544,13 @@ export default function Home(){
     <section className="section chanceSection">
       <article className="chanceV3 first toyJessieSection" id="first-chance">
         <ToyAccent type="jessie" compact/>
+        <ToyScene type="jessie" compact/>
         <div className="chanceHead"><span>🎯</span><div><small>FIRST CHANCE</small><h2>GW1–GW19</h2></div><b>฿700</b></div>
         <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="First Chance rules"/></button><RuleChips phase="first"/></div></div>
       </article>
       <article className="chanceV3 second toyBoPeepSection" id="second-chance">
         <ToyAccent type="bopeep" compact/>
+        <ToyScene type="bopeep" compact/>
         <div className="chanceHead"><span>🔥</span><div><small>SECOND CHANCE</small><h2>GW20–GW38</h2></div><b>฿700</b></div>
         <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="Second Chance rules"/></button><RuleChips phase="second"/></div></div>
       </article>
@@ -475,6 +558,7 @@ export default function Home(){
 
     <section className="section detailSection toneGreen toyPotatoSection" id="lucky-game">
       <ToyAccent type="potato"/>
+      <ToyScene type="potato"/>
       <div className="sectionTitle"><div><p>🍀 LUCKY GAME</p><h2>Fortune & Fun</h2><span>5 เงื่อนไข • ใครเข้าเงื่อนไขก่อนรับรางวัลนั้น</span></div><strong>2 / 5 claimed</strong></div>
       <div className="luckyV3">
         <div className="luckyConditions">{luckyConditions.map(c=><div className={c.claimed?'claimed':''} key={c.id}><span>{c.id}</span><div><b>{c.label}</b>{c.claimed&&<small>{c.winner} • {c.detail}</small>}</div><em>{c.claimed?'CLAIMED':'AVAILABLE'}</em></div>)}</div>
@@ -484,6 +568,7 @@ export default function Home(){
 
     <section className="section detailSection tonePurple toyPizzaSection" id="mini-game">
       <ToyAccent type="pizza"/>
+      <ToyScene type="pizza"/>
       <div className="sectionTitle"><div><p>🎮 MINI GAME</p><h2>Different Game. Different Week.</h2><span>รูปแบบเปลี่ยนได้ตาม Gameweek — ไม่จำกัดว่าเป็นเกมช่วยผู้แพ้</span></div><strong>FORMAT CHANGES</strong></div>
       <div className="miniTimeline v3Timeline"><div><b>GW1–GW4</b><span>เกมปริศนาทายภาพ</span></div><i>→</i><div><b>GW5</b><span>The Differential</span></div><i>→</i><div><b>NEXT</b><span>New Format</span></div></div>
       <div className="winnerGrid">{miniWinners.map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}</div>
@@ -493,6 +578,11 @@ export default function Home(){
     <section className="section statsSectionV3 toyArmySection" id="statistics">
       <ToyAccent type="army"/>
       <div className="sectionTitle statsTitleV4"><div><p>📊 LEAGUE STATISTICS</p><h2>Stats & Insights</h2><span>ข้อมูล FPL League {FPL_LEAGUE_ID} + คะแนน Hybrid ของลีกเรา</span></div><div className={`apiPill ${fplStatus}`}>{fplStatus==='ready'?`⚡ ${fplSummary?.matchedCount||0}/11 CONNECTED`:fplStatus==='loading'?'CONNECTING…':'FALLBACK MODE'}</div></div>
+
+      <div className="statsBattlefieldBanner">
+        <ToyScene type="army" banner/>
+        <div className="statsBattlefieldCopy"><small>GREEN ARMY RECON</small><b>SCOUT • ANALYZE • PLAN</b><span>สมรภูมิข้อมูลของลีก — ใช้สถิติจริงเพื่ออ่านเกมก่อน Gameweek ถัดไป</span></div>
+      </div>
 
       <div className="statsToolbar">
         <div className="statsMode"><button className={statsMode==='gw'?'active':''} onClick={()=>setStatsMode('gw')}><span>📅</span> GAMEWEEK</button><button className={statsMode==='season'?'active':''} onClick={()=>setStatsMode('season')}><span>📈</span> SEASON OVERVIEW</button></div>
@@ -552,20 +642,13 @@ export default function Home(){
     </section>
 
     <section className="section xgLabSection toySidSection" id="admin-inside">
-      <ToyAccent type="sid"/>
       <div className="xgHero">
         <div className="xgHost">
-          <div className="kunPhotoFrame"><img src="/xg-lab/kun-host.jpeg" alt="Kun — ADMIN INSIDE host"/></div>
+          <div className="kunCutoutStage"><img src="/xg-lab/kun-host-crop.jpeg" alt="Kun — ADMIN INSIDE host"/></div>
           <div className="speechBubble">ก่อน <b>Transfer</b><br/>อย่าเผลอใจ</div>
         </div>
         <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>ADMIN</span> INSIDE</h2><strong>by Kun</strong><p>หลังบ้านของ Admin • ชำแหละข้อมูลก่อน Transfer</p></div>
-        <div className="xgLegend">
-          <span className="red">🎯 <b>ซีเล็ง</b><small>xG</small></span>
-          <span className="yellow">🎁 <b>หัวจ่าย</b><small>xA</small></span>
-          <span className="blue">⚡ <b>xGI</b><small>xGI</small></span>
-          <span className="purple">💥 <b>สลิ้งแตก</b><small>xGC</small></span>
-          <span className="green">🛡️ <b>น้าผู้ใหญ่</b><small>DefCon</small></span>
-        </div>
+        <div className="sidWorkshopScene"><ToyScene type="sid" banner/></div>
       </div>
 
       <div className="xgControls">
@@ -596,6 +679,7 @@ export default function Home(){
 
     <section className="section gallerySectionV3 toyRexSection" id="gallery">
       <ToyAccent type="rex"/>
+      <ToyScene type="rex"/>
       <div className="sectionTitle"><div><p>🖼️ GALLERY</p><h2>Season Story</h2><span>{totalGallery} artworks • เรื่องราวของแต่ละ Gameweek</span></div><strong>GW1–GW{latestGalleryGw}</strong></div>
       <div className="rexJourney" aria-hidden="true"><span>🌋<small>GW1 • PAST</small></span><i/><span className="rexNow">🦖<small>NOW • GW{galleryGw}</small></span><i/><span>✨<small>FUTURE • GW38</small></span></div>
       <div className="gwTabs v3Tabs">{galleryGws.map(n=><button key={n} className={galleryGw===n?'active':''} onClick={()=>setGalleryGw(n)}>GW{n}</button>)}</div>
@@ -604,12 +688,14 @@ export default function Home(){
 
     <section className="section rulesSectionV3 toyZurgSection" id="rules">
       <ToyAccent type="zurg"/>
+      <ToyScene type="zurg"/>
       <div className="sectionTitle"><div><p>📜 RULES & INFO</p><h2>Official Rules Archive</h2><span>กติกาเต็มของการแข่งขันทั้งหมด</span></div><strong>OFFICIAL</strong></div>
       <div className="rulesGrid"><figure><img src="/rules/official-overview.jpeg" alt="Overview"/><figcaption><b>Official Overview</b><span>ภาพรวมการแข่งขันและเงินรางวัล</span></figcaption></figure><figure><img src="/rules/gameweek.jpeg" alt="Gameweek"/><figcaption><b>Gameweek</b><span>Weekly payout</span></figcaption></figure><figure><img src="/rules/first-second-chance.jpeg" alt="Chance rules"/><figcaption><b>First / Second Chance</b><span>GW1–19 / GW20–38 + Reset</span></figcaption></figure><figure><img src="/rules/full-season.jpeg" alt="Full Season"/><figcaption><b>Full Season</b><span>End-of-season prize</span></figcaption></figure><figure><img src="/rules/mini-game-legacy.jpeg" alt="Mini Game"/><figcaption><b>Mini Game — Archive</b><span>GW1–GW4 original format</span></figcaption></figure><figure><img src="/rules/lucky-game-current.jpeg" alt="Lucky Game"/><figcaption><b>Lucky Game — Current</b><span>#3 & #5 claimed</span></figcaption></figure></div>
     </section>
 
     <section className="section financeSection toyHammSection" id="finance">
       <ToyAccent type="hamm"/>
+      <ToyScene type="hamm"/>
       <div className="sectionIntroRow"><div><p className="sectionKicker">💰 FINANCE</p><h2>Manager Financial</h2><p>ข้อมูลการเงินของเกม แยกจาก FPL และไม่เผยข้อมูลบัญชีส่วนบุคคล</p></div><div className="officialTag greenTag">THROUGH GW{financialThroughGw}</div></div>
       <div className="financeTop">{topFinancial.slice(0,4).map((p,i)=><article key={p.name}><span>#{i+1}</span><h3>{p.name}</h3><small>{p.team}</small><Money value={p.cash}/></article>)}</div>
       <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gwWon+p.gwLost}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>

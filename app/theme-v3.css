@@ -512,3 +512,203 @@
 .toySidSection>.toyAccent{min-width:auto;padding:5px;right:12px;top:12px;background:rgba(18,19,28,.56);border-color:rgba(255,255,255,.16);box-shadow:none}.toySidSection>.toyAccent .toyAccentCopy{display:none}.toySidSection>.toyAccent .toyAccentIcon{width:31px;height:31px;font-size:20px}
 .toyHammSection>.toyAccent{display:none}.toyHammSection:after{content:"🐷";position:absolute;right:max(18px,calc((100vw - 1380px)/2));top:108px;font-size:88px;opacity:.055;filter:grayscale(.05);pointer-events:none;z-index:1}
 @media(max-width:760px){.chanceV3>.toyAccent{right:68px;top:11px}.toySidSection>.toyAccent{right:8px;top:8px}.toyHammSection:after{right:8px;top:95px;font-size:58px;opacity:.045}}
+
+/* ============================================================
+   V3.5 — MOCKUP REALIZATION PASS
+   Goal: make the Toy Story-inspired visual language immediately visible,
+   while keeping the FPL data layer clean and dominant.
+   ============================================================ */
+
+/* The old emoji badges were too subtle. The new vector toy scenes carry the theme. */
+.toyAccent{display:none!important}
+
+.detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3,.financeSection,.chanceV3,.xgLabSection{isolation:isolate}
+.detailSection>*:not(.toyScene),.gallerySectionV3>*:not(.toyScene),.rulesSectionV3>*:not(.toyScene),.financeSection>*:not(.toyScene),.chanceV3>*:not(.toyScene){position:relative;z-index:2}
+
+.toyScene{position:absolute;right:18px;top:14px;width:300px;height:150px;z-index:1;pointer-events:none;filter:drop-shadow(0 14px 18px rgba(10,31,66,.16));transform:rotate(.6deg);opacity:.98}
+.toyScene svg{display:block;width:100%;height:100%;overflow:visible}
+.toyScene:before{content:"";position:absolute;inset:0;border-radius:24px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.48);pointer-events:none}
+.toyScene.compact{width:126px;height:72px;right:68px;top:7px;filter:drop-shadow(0 7px 9px rgba(0,0,0,.14));opacity:.94}
+.toyScene.banner{position:relative;inset:auto;width:100%;height:100%;transform:none;filter:none}
+
+/* Give each main section enough breathing room for its toy vignette. */
+.toyWoodySection>.sectionTitle,
+.toyBuzzSection>.sectionTitle,
+.toyPotatoSection>.sectionTitle,
+.toyPizzaSection>.sectionTitle,
+.toyRexSection>.sectionTitle,
+.toyZurgSection>.sectionTitle{padding-right:320px;min-height:132px;align-items:center}
+.toyHammSection .sectionIntroRow{padding-right:320px;min-height:136px}
+
+/* Full Season — western toy shelf, Sheriff energy. */
+.toyWoodySection{background:
+  linear-gradient(90deg,rgba(139,81,26,.055) 1px,transparent 1px) 0 0/30px 30px,
+  linear-gradient(rgba(139,81,26,.055) 1px,transparent 1px) 0 0/30px 30px,
+  radial-gradient(circle at 92% 13%,rgba(255,204,51,.28),transparent 24%),
+  linear-gradient(135deg,#fffaf0 0 62%,#f6d678 100%)!important}
+.toyWoodySection:before{content:"";position:absolute;left:-38px;bottom:-56px;width:210px;height:120px;background:repeating-linear-gradient(90deg,#c9904d 0 22px,#b57d40 22px 44px);opacity:.12;transform:rotate(-7deg);border-radius:18px}
+
+/* Weekly — mission control / space ranger cues. */
+.toyBuzzSection{background:
+  radial-gradient(circle at 8% 90%,rgba(98,211,132,.13),transparent 22%),
+  radial-gradient(circle at 91% 17%,rgba(122,76,207,.18),transparent 22%),
+  linear-gradient(135deg,#f6fbff 0 60%,#caecff 100%)!important}
+.toyBuzzSection:before{content:"MISSION GW";position:absolute;left:24px;bottom:18px;font:900 11px/1 'Mitr',sans-serif;letter-spacing:.16em;color:rgba(61,87,144,.15);transform:rotate(-3deg)}
+
+/* First / Second Chance — keep the cards readable, show the character motif as a corner toy. */
+.chanceV3>.toyScene.compact{z-index:1}
+.chanceV3 .chanceHead,.chanceV3 .chanceBody{position:relative;z-index:2}
+.toyJessieSection{background:linear-gradient(145deg,#065a90,#0d92b8 64%,#f0b738 150%)!important}
+.toyBoPeepSection{background:linear-gradient(145deg,#40206f,#7042a2 64%,#e6cffa 150%)!important}
+.toyJessieSection .chanceHead,.toyBoPeepSection .chanceHead{padding-right:115px}
+.toyJessieSection:before{content:"";position:absolute;right:120px;top:18px;width:46px;height:46px;border:5px dashed rgba(255,223,103,.36);border-radius:50%}
+.toyBoPeepSection:before{content:"";position:absolute;right:122px;top:17px;width:52px;height:30px;border-radius:40px;background:rgba(255,255,255,.08);box-shadow:20px 6px 0 rgba(255,255,255,.06),-16px 8px 0 rgba(255,255,255,.05)}
+
+/* Lucky — playful parts, but winner art still dominates. */
+.toyPotatoSection{background:
+  radial-gradient(circle at 10% 88%,rgba(255,213,56,.15),transparent 23%),
+  radial-gradient(circle at 92% 16%,rgba(239,75,91,.14),transparent 20%),
+  linear-gradient(135deg,#f7fff8 0 63%,#bff2ca 100%)!important}
+
+/* Mini Game — Pizza Planet arcade. */
+.toyPizzaSection{background:
+  radial-gradient(circle at 92% 14%,rgba(102,226,101,.2),transparent 21%),
+  repeating-linear-gradient(135deg,rgba(105,54,170,.055) 0 8px,transparent 8px 18px),
+  linear-gradient(135deg,#fbf7ff 0 64%,#d8c2fb 100%)!important}
+.toyPizzaSection:after{content:"";position:absolute;left:24px;bottom:18px;width:92px;height:8px;border-radius:999px;background:linear-gradient(90deg,#6edc68,#8a49c8,#f2b832);opacity:.22}
+
+/* Statistics — make the battlefield/recon concept unmistakable. */
+.statsSectionV3{background:
+  linear-gradient(90deg,rgba(74,103,63,.045) 1px,transparent 1px) 0 0/34px 34px,
+  linear-gradient(rgba(74,103,63,.045) 1px,transparent 1px) 0 0/34px 34px,
+  linear-gradient(145deg,#f9fbf5 0 66%,#dbe4d1 100%)!important;
+  border-color:#aebda2!important}
+.statsTitleV4{margin-bottom:14px}
+.statsBattlefieldBanner{position:relative;min-height:154px;margin:-2px 0 18px;border:3px solid #718366;border-radius:22px;overflow:hidden;background:linear-gradient(105deg,#f3e6c4 0 42%,#bdc99e 100%);box-shadow:0 7px 0 rgba(53,77,47,.12)}
+.statsBattlefieldBanner:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.88) 0 34%,rgba(255,255,255,.1) 58%,transparent 100%);z-index:1}
+.statsBattlefieldBanner .toyScene{position:absolute!important;right:0!important;top:0!important;width:62%!important;height:100%!important;z-index:0!important;opacity:1!important}
+.statsBattlefieldCopy{position:relative;z-index:2;width:min(380px,43%);padding:26px 0 22px 24px;display:flex;flex-direction:column;gap:4px;color:#31482f}
+.statsBattlefieldCopy small{font-size:9px;font-weight:1000;letter-spacing:.18em;color:#617559}
+.statsBattlefieldCopy b{font-family:'Titan One','Lilita One','Mitr',sans-serif;font-size:28px;line-height:1;color:#38573a}
+.statsBattlefieldCopy span{font-size:10px;line-height:1.5;font-weight:700;color:#526350;max-width:320px}
+.statsToolbar{border-color:#c4d0bc!important;background:rgba(255,255,255,.76)!important}
+.statsMode{background:#dde5d7!important}.statsMode button.active{background:#496d43!important}
+.statsInsightGrid .insightCard{border-color:#d0d9c9}.statsSubDivider{border-top-color:#aebca5!important}
+.lastPlayersPanel{border-color:#58734f!important}.lastPlayersHead{background:linear-gradient(100deg,#3f5e3a,#6d875d)!important}
+.lastPlayersHead:after{border-color:rgba(238,228,186,.25)!important}
+
+/* ADMIN INSIDE — rebuild the hero to match the latest Sid/workshop mockup. */
+.xgLabSection{border:4px solid #0b1223!important;background:#071529!important;box-shadow:0 10px 0 rgba(4,12,28,.18),0 26px 58px rgba(2,14,34,.24)!important}
+.xgHero{min-height:330px;grid-template-columns:285px minmax(330px,1fr) 390px!important;gap:18px!important;padding:18px 20px 16px!important;background:
+  radial-gradient(circle at 8% 8%,rgba(33,154,236,.34),transparent 22%),
+  linear-gradient(105deg,#118de3 0 21%,#0f315b 21.2% 49%,#1c1719 49.2% 100%)!important;
+  border-bottom:5px solid #111827}
+.xgHero:before{content:"";position:absolute;left:31%;top:0;bottom:0;width:6px;background:#fff;transform:skew(-18deg);opacity:.95;box-shadow:0 0 0 2px rgba(255,255,255,.18)}
+.xgHero:after{left:36%!important;right:35%!important;bottom:18px!important;height:8px!important;opacity:.36!important}
+.xgHost{height:290px!important;position:relative!important;display:block!important;overflow:visible!important}
+.kunCutoutStage{position:absolute;left:5px;bottom:0;width:250px;height:292px;overflow:hidden;clip-path:polygon(9% 3%,94% 0,100% 92%,17% 100%,0 20%);filter:drop-shadow(9px 12px 0 rgba(3,15,36,.82));background:#38a8ef;transform:rotate(-2deg)}
+.kunCutoutStage:before{content:"";position:absolute;inset:0;z-index:2;box-shadow:inset 0 0 0 4px rgba(255,255,255,.94);clip-path:inherit;pointer-events:none}
+.kunCutoutStage img{width:100%;height:100%;object-fit:cover;object-position:51% 18%;transform:scale(1.04);filter:saturate(.92) contrast(1.05)}
+.xgHost:before{left:0!important;bottom:7px!important;width:260px!important;height:250px!important;background:#ffd52e!important;clip-path:polygon(8% 11%,94% 0,100% 88%,14% 100%,0 23%)!important;transform:rotate(-4deg)!important;opacity:1!important}
+.xgHost:after{left:17px!important;bottom:0!important;width:240px!important;height:235px!important;background:#198fdf!important;clip-path:polygon(0 8%,100% 0,92% 100%,7% 87%)!important;transform:rotate(3deg)!important}
+.speechBubble{left:145px!important;top:2px!important;width:156px!important;background:#fff7e7!important;border-width:4px!important;box-shadow:6px 6px 0 #ffd52e!important;transform:rotate(1.5deg)!important}
+.xgBrand{align-self:center;padding:0 6px}
+.xgBrand>small{background:#111827!important}
+.xgBrand h2{font-size:72px!important;line-height:.84!important;margin-top:16px!important;transform:skew(-3deg)!important}
+.xgBrand h2 span{color:#ffd52e!important}
+.xgBrand p{font-size:9px!important;color:#d6e6ff!important}
+.sidWorkshopScene{height:260px;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;align-self:end}
+.sidWorkshopScene .toyScene{width:100%!important;height:240px!important;position:relative!important;opacity:1!important;filter:drop-shadow(0 10px 18px rgba(0,0,0,.32))!important}
+.sidWorkshopScene:after{content:"";position:absolute;left:5%;right:3%;bottom:3px;height:10px;background:repeating-linear-gradient(90deg,#d1a53a 0 18px,#1b1d23 18px 36px);opacity:.28}
+.xgControls{background:#071529!important;border-top:0!important;padding-top:14px!important}
+.xgStatTabs button{border-color:#020a18!important;box-shadow:0 5px 0 #020a18!important}
+.xgExplain{margin-top:4px!important}
+.xgRankingPanel{box-shadow:0 6px 0 #020a18!important}
+
+/* Gallery — Rex leads a toy-time journey from past to future. */
+.toyRexSection{background:
+  radial-gradient(circle at 9% 88%,rgba(240,112,65,.16),transparent 21%),
+  radial-gradient(circle at 93% 16%,rgba(103,187,95,.18),transparent 22%),
+  linear-gradient(145deg,#fff9ef 0 64%,#ffd1a7 100%)!important}
+.rexJourney{box-shadow:inset 0 0 0 1px rgba(84,120,72,.12);background:linear-gradient(90deg,#ffe5b4,#dff4c8 50%,#d9eaff)!important}
+
+/* Rules — Zurg sci-fi archive. */
+.toyZurgSection{background:
+  radial-gradient(circle at 92% 15%,rgba(114,62,177,.22),transparent 24%),
+  repeating-linear-gradient(135deg,rgba(89,52,135,.055) 0 8px,transparent 8px 20px),
+  linear-gradient(145deg,#f8ffff 0 65%,#d8cdf4 100%)!important}
+.toyZurgSection>.sectionTitle p{color:#6a3b9e!important}
+
+/* Finance — Hamm / piggy bank with coins, while money values stay first. */
+.toyHammSection{background:
+  radial-gradient(circle at 92% 12%,rgba(255,130,181,.16),transparent 23%),
+  radial-gradient(circle at 86% 24%,rgba(255,205,73,.08),transparent 17%),
+  linear-gradient(180deg,#0a2147,#071a39)!important}
+.toyHammSection>.toyScene{top:78px;right:max(20px,calc((100vw - 1320px)/2));width:290px;height:145px;opacity:.95}
+.toyHammSection .sectionIntroRow{position:relative;z-index:2}
+.toyHammSection .sectionKicker,.toyHammSection h2,.toyHammSection .sectionIntroRow p{position:relative;z-index:2}
+.toyHammSection .sectionIntroRow p{max-width:760px}
+
+/* Make the overall page feel closer to the chunky mockup, without crushing data density. */
+.sectionTitle h2,.sectionIntroRow h2{letter-spacing:-.025em!important}
+.sectionTitle>strong,.officialTag{box-shadow:0 4px 0 rgba(5,28,62,.12)}
+.weeklyRow,.miniTableRow,.playerPoolRow,.managerStatsRow,.financeRow{transition:transform .16s ease,background .16s ease}
+@media (hover:hover) and (pointer:fine){
+  .weeklyRow:hover,.miniTableRow:hover,.playerPoolRow:hover,.managerStatsRow:hover{transform:translateX(2px)}
+}
+
+@media(max-width:1100px){
+  .toyScene{width:235px;height:120px}
+  .toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{padding-right:250px;min-height:110px}
+  .toyHammSection .sectionIntroRow{padding-right:250px}
+  .xgHero{grid-template-columns:250px minmax(300px,1fr)!important}
+  .sidWorkshopScene{grid-column:1/3;height:170px;margin-top:-6px}
+  .sidWorkshopScene .toyScene{height:160px!important;width:min(620px,100%)!important}
+  .xgBrand h2{font-size:66px!important}
+  .kunCutoutStage{width:215px;height:255px}
+  .statsBattlefieldCopy{width:47%}.statsBattlefieldBanner .toyScene{width:58%!important}
+}
+
+@media(max-width:760px){
+  .toyScene{width:128px;height:70px;right:9px;top:8px;opacity:.88;filter:drop-shadow(0 7px 10px rgba(10,31,66,.12))}
+  .toyScene:before{border-radius:15px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.38)}
+  .toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{padding-right:128px;min-height:74px}
+  .toyWoodySection>.sectionTitle h2,.toyBuzzSection>.sectionTitle h2,.toyPotatoSection>.sectionTitle h2,.toyPizzaSection>.sectionTitle h2,.toyRexSection>.sectionTitle h2,.toyZurgSection>.sectionTitle h2{font-size:27px}
+  .toyWoodySection>.sectionTitle span,.toyBuzzSection>.sectionTitle span,.toyPotatoSection>.sectionTitle span,.toyPizzaSection>.sectionTitle span,.toyRexSection>.sectionTitle span,.toyZurgSection>.sectionTitle span{max-width:230px}
+  .toyScene.compact{width:92px;height:54px;right:8px;top:7px;opacity:.72}
+  .toyJessieSection .chanceHead,.toyBoPeepSection .chanceHead{padding-right:92px}
+
+  .statsBattlefieldBanner{min-height:132px;border-radius:17px;border-width:2px}
+  .statsBattlefieldBanner:before{background:linear-gradient(180deg,rgba(255,255,255,.92) 0 56%,rgba(255,255,255,.26) 74%,transparent 100%)}
+  .statsBattlefieldBanner .toyScene{width:100%!important;height:100%!important;opacity:.52!important}
+  .statsBattlefieldCopy{width:100%;padding:16px 14px 12px;gap:3px}.statsBattlefieldCopy b{font-size:22px}.statsBattlefieldCopy span{font-size:9px;max-width:280px}
+
+  .xgHero{grid-template-columns:1fr!important;min-height:0!important;padding:10px 12px 14px!important;background:linear-gradient(145deg,#0d88db 0 34%,#17151b 34.5% 100%)!important}
+  .xgHero:before{display:none}.xgHero:after{display:none}
+  .xgHost{height:230px!important;order:1}
+  .kunCutoutStage{left:50%;bottom:0;width:170px;height:216px;transform:translateX(-50%) rotate(-1.5deg)}
+  .xgHost:before{left:50%!important;transform:translateX(-52%) rotate(-4deg)!important;width:184px!important;height:190px!important}
+  .xgHost:after{left:50%!important;transform:translateX(-47%) rotate(3deg)!important;width:176px!important;height:178px!important}
+  .speechBubble{left:calc(50% + 42px)!important;top:5px!important;width:118px!important;font-size:9px!important;padding:8px!important}
+  .speechBubble b{font-size:12px!important}
+  .xgBrand{order:2;margin-top:-2px}.xgBrand h2{font-size:50px!important}.xgBrand p{font-size:8px!important}
+  .sidWorkshopScene{order:3;grid-column:auto!important;height:122px;margin:2px 0 0;overflow:hidden;border-radius:15px}
+  .sidWorkshopScene .toyScene{height:118px!important;width:100%!important;opacity:.9!important}
+
+  .toyHammSection .sectionIntroRow{padding-right:0;min-height:210px}
+  .toyHammSection>.toyScene{top:86px;right:8px;width:150px;height:78px;opacity:.74}
+}
+
+@media(max-width:480px){
+  .toyScene{width:106px;height:60px;opacity:.8}
+  .toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{padding-right:102px;min-height:66px}
+  .toyWoodySection>.sectionTitle span,.toyBuzzSection>.sectionTitle span,.toyPotatoSection>.sectionTitle span,.toyPizzaSection>.sectionTitle span,.toyRexSection>.sectionTitle span,.toyZurgSection>.sectionTitle span{display:none}
+  .toyScene.compact{width:80px;height:46px;right:7px;top:7px}
+  .toyJessieSection .chanceHead,.toyBoPeepSection .chanceHead{padding-right:78px}
+  .statsBattlefieldCopy b{font-size:19px}.statsBattlefieldCopy small{font-size:7px}.statsBattlefieldCopy span{font-size:8px}
+  .xgBrand h2{font-size:43px!important}
+  .kunCutoutStage{width:158px;height:205px}
+  .speechBubble{left:calc(50% + 37px)!important;width:108px!important}
+  .toyHammSection>.toyScene{width:126px;height:68px;top:98px}
+}
+.toyHammSection:after{display:none!important}
