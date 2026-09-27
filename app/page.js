@@ -95,6 +95,30 @@ function RuleChips({phase}){
   </div>
 }
 
+const TOY_ACCENTS={
+  woody:{icon:'🤠',label:'WOODY',detail:'★ SHERIFF'},
+  buzz:{icon:'🚀',label:'BUZZ',detail:'MISSION'},
+  jessie:{icon:'🤠',label:'JESSIE',detail:'YEE-HAW'},
+  bopeep:{icon:'🐑',label:'BO PEEP',detail:'SECOND RUN'},
+  potato:{icon:'🥔',label:'POTATO',detail:'LUCKY PARTS'},
+  pizza:{icon:'👽',label:'ALIEN',detail:'THE CLAW'},
+  army:{icon:'🪖',label:'GREEN ARMY',detail:'RECON'},
+  sid:{icon:'🧨',label:"SID'S TOYS",detail:'DATA WORKSHOP'},
+  rex:{icon:'🦖',label:'REX',detail:'TIME TRAIL'},
+  zurg:{icon:'👾',label:'ZURG',detail:'DARK ARCHIVE'},
+  hamm:{icon:'🐷',label:'HAMM',detail:'PIGGY BANK'},
+}
+
+function ToyAccent({type,compact=false}){
+  const item=TOY_ACCENTS[type]
+  if(!item) return null
+  return <div className={`toyAccent toy-${type} ${compact?'compact':''}`} aria-hidden="true">
+    <span className="toyAccentIcon">{item.icon}</span>
+    <span className="toyAccentCopy"><b>{item.label}</b><small>{item.detail}</small></span>
+    <i/><i/><i/>
+  </div>
+}
+
 function avg(nums){return nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:0}
 function stdev(nums){
   if(nums.length<2) return 0
@@ -118,6 +142,10 @@ const XG_META={
   xgc:{
     label:'สลิ้งแตก',valueLabel:'ค่าสลิ้งแตก',tech:'xGC',icon:'💥',per90:'xgc90',actual:'goalsConceded',actualLabel:'เสียจริง',tone:'purple',
     explain:'โอกาสที่ทีมจะเสียประตู'
+  },
+  defcon:{
+    label:'น้าผู้ใหญ่',valueLabel:'ค่าน้าผู้ใหญ่',tech:'DefCon',icon:'🛡️',per90:'defcon90',actual:'points',actualLabel:'FPL pts',tone:'green',
+    explain:'ค่าการมีส่วนร่วมเกมรับที่ FPL บันทึกจากจังหวะเคลียร์ บล็อก ตัดบอล และแท็กเกิล; MID รวม recovery ตามเกณฑ์ FPL'
   },
 }
 
@@ -157,24 +185,41 @@ function LastGwPlayers({data,loading}){
       <div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3><p>Unique squad list จาก Manager ทั้ง 11 คน</p></div>
       <strong>{data.allPlayers?.length||0}<em> UNIQUE PLAYERS</em></strong>
     </div>
-    <div className="playerPoolGrid">{(data.allPlayers||[]).map(player=><article className="playerPoolCard" key={player.id}>
-      <div className="playerPoolTop">
-        <b>{player.name}</b>
-        <span className={`positionTag ${String(player.position||'').toLowerCase()}`}>{player.position}</span>
-      </div>
-      <small>{player.team}</small>
-      <div className="playerOwners"><em>MANAGERS</em><span>{(player.managers||[]).join(' · ') || '—'}</span></div>
-    </article>)}</div>
+    <div className="playerPoolList">{(data.allPlayers||[]).map((player,index)=><div className="playerPoolRow" key={player.id}>
+      <span className="playerPoolIndex">{index+1}</span>
+      <div className="playerPoolIdentity"><b>{player.name}</b><small>{player.team}</small></div>
+      <span className={`positionTag ${String(player.position||'').toLowerCase()}`}>{player.position}</span>
+      <div className="playerOwners"><em>{player.managers?.length||0} MANAGER{player.managers?.length===1?'':'S'}</em><span>{(player.managers||[]).join(' · ') || '—'}</span></div>
+    </div>)}</div>
   </div>
 }
 
 function LabPlayerRow({player,index,mode='ppg'}){
-  const value = mode==='yellow' ? player.yellowCards : player.ppg
-  const suffix = mode==='yellow' ? 'ใบ' : 'pts/game'
-  return <div className="labMiniRow">
+  if(mode==='yellow'){
+    return <div className="labMiniRow yellowRow">
+      <span>{index+1}</span>
+      <div className="labPlayerCore"><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
+      <strong>🟨 {Number(player.yellowCards||0).toFixed(0)} <em>ใบ</em></strong>
+    </div>
+  }
+  const ga=(player.goals||0)+(player.assists||0)
+  const showDef=player.position==='DEF'
+  const showDefcon=['DEF','MID'].includes(player.position)
+  return <div className="labMiniRow labEvidenceRow">
     <span>{index+1}</span>
-    <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
-    <strong>{mode==='yellow'?'🟨 ':''}{Number(value||0).toFixed(mode==='yellow'?0:1)} <em>{suffix}</em></strong>
+    <div className="labPlayerCore">
+      <b>{player.name}</b>
+      <small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small>
+      <div className="labEvidence">
+        <i><em>MIN</em><b>{player.minutes||0}</b></i>
+        <i><em>PPG</em><b>{Number(player.ppg||0).toFixed(1)}</b></i>
+        <i><em>xGI</em><b>{Number(player.xgi||0).toFixed(2)}</b></i>
+        <i><em>G+A</em><b>{ga}</b></i>
+        {showDefcon&&<i><em>DefCon</em><b>{Number(player.defcon||0).toFixed(0)}</b></i>}
+        {showDef&&<><i><em>xGC</em><b>{Number(player.xgc||0).toFixed(2)}</b></i><i><em>CS</em><b>{player.cleanSheets||0}</b></i></>}
+      </div>
+    </div>
+    <strong>{Number(player.ppg||0).toFixed(1)} <em>PPG</em></strong>
   </div>
 }
 
@@ -324,7 +369,7 @@ export default function Home(){
   const mostConsistent=[...seasonStats].filter(x=>league.gwNumbers.length>=3).sort((a,b)=>a.consistency-b.consistency)[0]
 
   const expectedPlayers=xgData?.players||[]
-  const effectiveXgPosition=xgStat==='xgc'?'DEF':xgPosition
+  const effectiveXgPosition=xgStat==='xgc'?'DEF':xgStat==='defcon'?(xgPosition==='DEF'?'DEF':'MID'):xgPosition
   const xgTop20=useMemo(()=>expectedPlayers
     .filter(p=>p.position===effectiveXgPosition)
     .sort((a,b)=>(b[xgStat]||0)-(a[xgStat]||0) || (b.minutes||0)-(a.minutes||0))
@@ -337,8 +382,13 @@ export default function Home(){
     const isExpensive=(p)=>p.position==='DEF'?p.price>5.5:['MID','FWD'].includes(p.position)?p.price>7.5:false
     const expensive=regular.filter(isExpensive)
     const cheap=regular.filter(p=>!isExpensive(p))
-    const best=(arr)=>[...arr].sort((a,b)=>b.ppg-a.ppg || b.points-a.points || b.xgi90-a.xgi90).slice(0,3)
-    const worst=(arr)=>[...arr].sort((a,b)=>a.ppg-b.ppg || a.points-b.points || b.minutes-a.minutes).slice(0,3)
+    const impactScore=(p)=>{
+      const attacking=(p.xgi90||0)*2.6
+      const defensive=p.position==='DEF'?((p.defcon90||0)*.055 + (p.cleanSheets||0)*.12):p.position==='MID'?((p.defcon90||0)*.035):0
+      return (p.ppg||0)+attacking+defensive
+    }
+    const best=(arr)=>[...arr].sort((a,b)=>impactScore(b)-impactScore(a) || b.ppg-a.ppg || b.minutes-a.minutes).slice(0,3)
+    const worst=(arr)=>[...arr].sort((a,b)=>impactScore(a)-impactScore(b) || a.ppg-b.ppg || b.minutes-a.minutes).slice(0,3)
     const hurt=expectedPlayers
       .filter(p=>{
         const red=['i','s','u','n'].includes(p.status)||p.chanceNext===0
@@ -358,7 +408,7 @@ export default function Home(){
     <header className="siteHeader v3Header">
       <a className="logo v3Logo" href="#top"><span>♛</span><b>FPL KICKOFF <em>TODAY</em> 2027</b></a>
       <nav className="v3Nav">
-        <a className="active" href="#top">⌂ Home</a><a href="#gameweek">📅 GW</a><a href="#full-season">🏆 League</a><a href="#mini-game">🎮 Mini Game</a><a href="#statistics">▥ Statistics</a><a className="labNav" href="#xg-lab">🧪 xG LAB</a><a href="#gallery">▧ Gallery</a><a href="#rules">▤ Rules</a><a href="#finance">••• More</a>
+        <a className="active" href="#top">⌂ Home</a><a href="#gameweek">📅 GW</a><a href="#full-season">🏆 League</a><a href="#mini-game">🎮 Mini Game</a><a href="#statistics">▥ Statistics</a><a className="labNav" href="#admin-inside">🧨 ADMIN INSIDE</a><a href="#gallery">▧ Gallery</a><a href="#rules">▤ Rules</a><a href="#finance">••• More</a>
       </nav>
     </header>
 
@@ -388,18 +438,20 @@ export default function Home(){
       <div className="competitionStrip" id="competitions">{competitions.map(item=><AccentCard item={item} key={item.id}/>)}</div>
       <div className="secondaryStrip">
         <a className="secondaryCard stats" href="#statistics"><span>▥</span><div><b>STATS & INSIGHTS</b><small>Gameweek + Season + Last GW players</small></div><i>→</i></a>
-        <a className="secondaryCard lab" href="#xg-lab"><span>🧪</span><div><b>xG LAB</b><small>by กัญ วัดเล็ก</small></div><i>→</i></a>
+        <a className="secondaryCard lab" href="#admin-inside"><span>🧨</span><div><b>ADMIN INSIDE</b><small>FPL data • fun language</small></div><i>→</i></a>
         <a className="secondaryCard gallery" href="#gallery"><span>▧</span><div><b>GALLERY</b><small>GW1–GW{latestGalleryGw} stories</small></div><i>→</i></a>
         <a className="secondaryCard rules" href="#rules"><span>▤</span><div><b>RULES & INFO</b><small>Official rules + prize system</small></div><i>→</i></a>
       </div>
     </section>
 
-    <section className="section detailSection toneGold" id="full-season">
+    <section className="section detailSection toneGold toyWoodySection" id="full-season">
+      <ToyAccent type="woody"/>
       <div className="sectionTitle"><div><p>🏆 FULL SEASON</p><h2>ศึกใหญ่ทั้งฤดูกาล</h2><span>คะแนน GW1–GW5 ล็อกตามข้อมูลที่กำหนดไว้ • ตั้งแต่ GW6 ต่อด้วย FPL อัตโนมัติ</span></div><strong>฿4,200</strong></div>
       <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/full-season.jpeg',alt:'Full season rules'})}><img className="ruleMedia" src="/rules/full-season.jpeg" alt="Full season rules"/></button><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
     </section>
 
-    <section className="section detailSection toneBlue" id="gameweek">
+    <section className="section detailSection toneBlue toyBuzzSection" id="gameweek">
+      <ToyAccent type="buzz"/>
       <div className="sectionTitle"><div><p>⚽ GAMEWEEK</p><h2>Weekly Battle</h2><span>เลือกดูผลราย Gameweek ได้ทุกสัปดาห์</span></div><strong>1st +120</strong></div>
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
@@ -409,17 +461,20 @@ export default function Home(){
     </section>
 
     <section className="section chanceSection">
-      <article className="chanceV3 first" id="first-chance">
+      <article className="chanceV3 first toyJessieSection" id="first-chance">
+        <ToyAccent type="jessie" compact/>
         <div className="chanceHead"><span>🎯</span><div><small>FIRST CHANCE</small><h2>GW1–GW19</h2></div><b>฿700</b></div>
         <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="First Chance rules"/></button><RuleChips phase="first"/></div></div>
       </article>
-      <article className="chanceV3 second" id="second-chance">
+      <article className="chanceV3 second toyBoPeepSection" id="second-chance">
+        <ToyAccent type="bopeep" compact/>
         <div className="chanceHead"><span>🔥</span><div><small>SECOND CHANCE</small><h2>GW20–GW38</h2></div><b>฿700</b></div>
         <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="Second Chance rules"/></button><RuleChips phase="second"/></div></div>
       </article>
     </section>
 
-    <section className="section detailSection toneGreen" id="lucky-game">
+    <section className="section detailSection toneGreen toyPotatoSection" id="lucky-game">
+      <ToyAccent type="potato"/>
       <div className="sectionTitle"><div><p>🍀 LUCKY GAME</p><h2>Fortune & Fun</h2><span>5 เงื่อนไข • ใครเข้าเงื่อนไขก่อนรับรางวัลนั้น</span></div><strong>2 / 5 claimed</strong></div>
       <div className="luckyV3">
         <div className="luckyConditions">{luckyConditions.map(c=><div className={c.claimed?'claimed':''} key={c.id}><span>{c.id}</span><div><b>{c.label}</b>{c.claimed&&<small>{c.winner} • {c.detail}</small>}</div><em>{c.claimed?'CLAIMED':'AVAILABLE'}</em></div>)}</div>
@@ -427,14 +482,16 @@ export default function Home(){
       </div>
     </section>
 
-    <section className="section detailSection tonePurple" id="mini-game">
+    <section className="section detailSection tonePurple toyPizzaSection" id="mini-game">
+      <ToyAccent type="pizza"/>
       <div className="sectionTitle"><div><p>🎮 MINI GAME</p><h2>Different Game. Different Week.</h2><span>รูปแบบเปลี่ยนได้ตาม Gameweek — ไม่จำกัดว่าเป็นเกมช่วยผู้แพ้</span></div><strong>FORMAT CHANGES</strong></div>
       <div className="miniTimeline v3Timeline"><div><b>GW1–GW4</b><span>เกมปริศนาทายภาพ</span></div><i>→</i><div><b>GW5</b><span>The Differential</span></div><i>→</i><div><b>NEXT</b><span>New Format</span></div></div>
       <div className="winnerGrid">{miniWinners.map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}</div>
       <div className="diffResult"><img src="/games/the-diff-gw5.png" alt="The Differential GW5"/><div><small>GW5 • THE DIFFERENTIAL</small><h3>Jimmy 🤝 Guide</h3><p>Iwobi 5 pts vs Mykolenko 5 pts — Tie</p></div></div>
     </section>
 
-    <section className="section statsSectionV3" id="statistics">
+    <section className="section statsSectionV3 toyArmySection" id="statistics">
+      <ToyAccent type="army"/>
       <div className="sectionTitle statsTitleV4"><div><p>📊 LEAGUE STATISTICS</p><h2>Stats & Insights</h2><span>ข้อมูล FPL League {FPL_LEAGUE_ID} + คะแนน Hybrid ของลีกเรา</span></div><div className={`apiPill ${fplStatus}`}>{fplStatus==='ready'?`⚡ ${fplSummary?.matchedCount||0}/11 CONNECTED`:fplStatus==='loading'?'CONNECTING…':'FALLBACK MODE'}</div></div>
 
       <div className="statsToolbar">
@@ -494,24 +551,26 @@ export default function Home(){
       <LastGwPlayers data={lastGwData} loading={lastGwLoading}/>
     </section>
 
-    <section className="section xgLabSection" id="xg-lab">
+    <section className="section xgLabSection toySidSection" id="admin-inside">
+      <ToyAccent type="sid"/>
       <div className="xgHero">
         <div className="xgHost">
-          <div className="kunPhotoFrame"><img src="/xg-lab/kun-host.jpeg" alt="Kun — xG LAB host"/></div>
+          <div className="kunPhotoFrame"><img src="/xg-lab/kun-host.jpeg" alt="Kun — ADMIN INSIDE host"/></div>
           <div className="speechBubble">ก่อน <b>Transfer</b><br/>อย่าเผลอใจ</div>
         </div>
-        <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>xG</span> LAB</h2><strong>by กัญ วัดเล็ก</strong><p>ข้อมูลจริงจาก FPL • คำเรียกฉบับวัดเล็ก</p></div>
+        <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>ADMIN</span> INSIDE</h2><strong>by Kun</strong><p>หลังบ้านของ Admin • ชำแหละข้อมูลก่อน Transfer</p></div>
         <div className="xgLegend">
           <span className="red">🎯 <b>ซีเล็ง</b><small>xG</small></span>
           <span className="yellow">🎁 <b>หัวจ่าย</b><small>xA</small></span>
           <span className="blue">⚡ <b>xGI</b><small>xGI</small></span>
           <span className="purple">💥 <b>สลิ้งแตก</b><small>xGC</small></span>
+          <span className="green">🛡️ <b>น้าผู้ใหญ่</b><small>DefCon</small></span>
         </div>
       </div>
 
       <div className="xgControls">
-        <div className="xgStatTabs">{Object.entries(XG_META).map(([key,meta])=><button key={key} className={`${meta.tone} ${xgStat===key?'active':''}`} onClick={()=>{setXgStat(key);if(key==='xgc')setXgPosition('DEF')}}><span>{meta.icon}</span><b>{meta.label}</b><small>{meta.tech}</small></button>)}</div>
-        {xgStat==='xgc'?<div className="xgPositionTabs defOnly"><span>POSITION</span><b>DEF ONLY</b></div>:<div className="xgPositionTabs"><span>POSITION</span>{['FWD','MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>}
+        <div className="xgStatTabs">{Object.entries(XG_META).map(([key,meta])=><button key={key} className={`${meta.tone} ${xgStat===key?'active':''}`} onClick={()=>{setXgStat(key);if(key==='xgc')setXgPosition('DEF');if(key==='defcon'&&!['MID','DEF'].includes(xgPosition))setXgPosition('MID')}}><span>{meta.icon}</span><b>{meta.label}</b><small>{meta.tech}</small></button>)}</div>
+        {xgStat==='xgc'?<div className="xgPositionTabs defOnly"><span>POSITION</span><b>DEF ONLY</b></div>:xgStat==='defcon'?<div className="xgPositionTabs"><span>POSITION</span>{['MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>:<div className="xgPositionTabs"><span>POSITION</span>{['FWD','MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>}
       </div>
 
       <div className={`xgExplain ${XG_META[xgStat].tone}`}><span>{XG_META[xgStat].icon}</span><div><b>{XG_META[xgStat].valueLabel} ({XG_META[xgStat].tech})</b><p>{XG_META[xgStat].explain}</p></div></div>
@@ -522,7 +581,7 @@ export default function Home(){
       </div>
 
       <div className="labStatusBlock">
-        <div className="labStatusTitle"><div><small>WAT LEK STATUS</small><h3>ศัพท์ประจำ LAB</h3></div><span>อัปเดตตามข้อมูล FPL</span></div>
+        <div className="labStatusTitle"><div><small>ADMIN STATUS</small><h3>ศัพท์ประจำ ADMIN</h3></div><span>อัปเดตตามข้อมูล FPL</span></div>
         <div className="labRankGrid">
           <LabRankCard type="king" players={labRankings.king}/>
           <LabRankCard type="walk" players={labRankings.walk}/>
@@ -532,21 +591,25 @@ export default function Home(){
           <XavierCard players={labRankings.xavier}/>
         </div>
       </div>
-      <p className="xgFootnote">Expected Stats เป็น Season-to-date จาก FPL • ค่า /90 คำนวณจากนาทีที่ลงเล่น • ไม่รวม GK • กลุ่ม ตุ่ยดุ้ย ใช้เฉพาะนักเตะที่มีนาทีลงเล่นเพียงพอ</p>
+      <p className="xgFootnote">Stats เป็น Season-to-date จาก FPL • ค่า /90 คำนวณจากนาทีที่ลงเล่น • ไม่รวม GK • 4 ฉายาหลักใช้เฉพาะนักเตะที่มีนาทีลงเล่นเพียงพอ และแสดง Stat ประกอบว่าทำไมถึงติดอันดับ</p>
     </section>
 
-    <section className="section gallerySectionV3" id="gallery">
+    <section className="section gallerySectionV3 toyRexSection" id="gallery">
+      <ToyAccent type="rex"/>
       <div className="sectionTitle"><div><p>🖼️ GALLERY</p><h2>Season Story</h2><span>{totalGallery} artworks • เรื่องราวของแต่ละ Gameweek</span></div><strong>GW1–GW{latestGalleryGw}</strong></div>
+      <div className="rexJourney" aria-hidden="true"><span>🌋<small>GW1 • PAST</small></span><i/><span className="rexNow">🦖<small>NOW • GW{galleryGw}</small></span><i/><span>✨<small>FUTURE • GW38</small></span></div>
       <div className="gwTabs v3Tabs">{galleryGws.map(n=><button key={n} className={galleryGw===n?'active':''} onClick={()=>setGalleryGw(n)}>GW{n}</button>)}</div>
       <div className="galleryGrid">{gallery[galleryGw].map(([file,title])=><figure key={file}><img loading="lazy" src={`/gallery/gw${galleryGw}/${file}`} alt={title}/><figcaption><b>{title}</b><span>GW{galleryGw} • FPL Kickoff Today 2027</span></figcaption></figure>)}</div>
     </section>
 
-    <section className="section rulesSectionV3" id="rules">
+    <section className="section rulesSectionV3 toyZurgSection" id="rules">
+      <ToyAccent type="zurg"/>
       <div className="sectionTitle"><div><p>📜 RULES & INFO</p><h2>Official Rules Archive</h2><span>กติกาเต็มของการแข่งขันทั้งหมด</span></div><strong>OFFICIAL</strong></div>
       <div className="rulesGrid"><figure><img src="/rules/official-overview.jpeg" alt="Overview"/><figcaption><b>Official Overview</b><span>ภาพรวมการแข่งขันและเงินรางวัล</span></figcaption></figure><figure><img src="/rules/gameweek.jpeg" alt="Gameweek"/><figcaption><b>Gameweek</b><span>Weekly payout</span></figcaption></figure><figure><img src="/rules/first-second-chance.jpeg" alt="Chance rules"/><figcaption><b>First / Second Chance</b><span>GW1–19 / GW20–38 + Reset</span></figcaption></figure><figure><img src="/rules/full-season.jpeg" alt="Full Season"/><figcaption><b>Full Season</b><span>End-of-season prize</span></figcaption></figure><figure><img src="/rules/mini-game-legacy.jpeg" alt="Mini Game"/><figcaption><b>Mini Game — Archive</b><span>GW1–GW4 original format</span></figcaption></figure><figure><img src="/rules/lucky-game-current.jpeg" alt="Lucky Game"/><figcaption><b>Lucky Game — Current</b><span>#3 & #5 claimed</span></figcaption></figure></div>
     </section>
 
-    <section className="section financeSection" id="finance">
+    <section className="section financeSection toyHammSection" id="finance">
+      <ToyAccent type="hamm"/>
       <div className="sectionIntroRow"><div><p className="sectionKicker">💰 FINANCE</p><h2>Manager Financial</h2><p>ข้อมูลการเงินของเกม แยกจาก FPL และไม่เผยข้อมูลบัญชีส่วนบุคคล</p></div><div className="officialTag greenTag">THROUGH GW{financialThroughGw}</div></div>
       <div className="financeTop">{topFinancial.slice(0,4).map((p,i)=><article key={p.name}><span>#{i+1}</span><h3>{p.name}</h3><small>{p.team}</small><Money value={p.cash}/></article>)}</div>
       <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gwWon+p.gwLost}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>
