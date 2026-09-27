@@ -18,12 +18,27 @@ const CANONICAL = [
   { name:'Best', team:'USO BEST' },
 ]
 
+const POSITION = {1:'GK',2:'DEF',3:'MID',4:'FWD'}
+
 function norm(value=''){
   return String(value)
     .normalize('NFKD')
     .toLowerCase()
     .replace(/[’']/g,'')
     .replace(/[^\p{L}\p{N}]+/gu,'')
+}
+
+function num(value, fallback=0){
+  const n=Number.parseFloat(value)
+  return Number.isFinite(n)?n:fallback
+}
+
+function round2(value){
+  return Math.round((Number(value)||0)*100)/100
+}
+
+function per90(total,minutes){
+  return minutes>0?round2((total*90)/minutes):0
 }
 
 async function fplFetch(path, revalidate=300){
@@ -69,6 +84,10 @@ function pct(count,total){
   return Math.round((count/total)*100)
 }
 
+function getLatestFinishedGw(bootstrap){
+  return Math.max(0,...(bootstrap?.events||[]).filter(e=>e.finished).map(e=>e.id||0))
+}
+
 async function getBase(){
   const [standings,bootstrap] = await Promise.all([
     fplFetch(`/leagues-classic/${FPL_LEAGUE_ID}/standings/?page_standings=1`,120),
@@ -76,7 +95,8 @@ async function getBase(){
   ])
   const {matched,unmatched}=mapLeagueEntries(standings?.standings?.results || [])
   const elementMap=new Map((bootstrap?.elements || []).map(p=>[p.id,p]))
-  return {standings,bootstrap,matched,unmatched,elementMap}
+  const teamMap=new Map((bootstrap?.teams || []).map(t=>[t.id,t]))
+  return {standings,bootstrap,matched,unmatched,elementMap,teamMap}
 }
 
 async function buildSummary(){
@@ -132,6 +152,7 @@ async function buildSummary(){
   const latestHistoryGw=Math.max(0,...histories.flatMap(({history})=>(history.current||[]).map(r=>r.event)))
   const bootstrapCurrent=(bootstrap.events||[]).find(e=>e.is_current)?.id || 0
   const latestFplGw=Math.max(latestHistoryGw,bootstrapCurrent)
+  const latestFinishedGw=getLatestFinishedGw(bootstrap)
 
   return {
     ok:true,
@@ -143,13 +164,14 @@ async function buildSummary(){
     futureGameweeks,
     missingByGw,
     latestFplGw,
+    latestFinishedGw,
     overviewExtras,
     generatedAt:new Date().toISOString(),
   }
 }
 
 async function buildGameweek(gw){
-  const {matched,unmatched,elementMap}=await getBase()
+  const {matched,unmatched,elementMap,teamMap}=await getBase()
   if(!matched.length){
     return {ok:false,available:false,gw,matchedCount:0,unmatched}
   }
@@ -212,6 +234,17 @@ async function buildGameweek(gw){
     .sort((a,b)=>b.points-a.points || a.count-b.count)
     .slice(0,8)
 
+  const allPlayers=[...owned.keys()].map(id=>{
+    const p=elementMap.get(id)
+    const team=teamMap.get(p?.team)
+    return {
+      id,
+      name:playerName(id,elementMap),
+      position:POSITION[p?.element_type]||'',
+      team:team?.short_name || team?.name || '',
+    }
+  }).sort((a,b)=>a.name.localeCompare(b.name,'en'))
+
   const scores=managerStats.map(r=>r.points).filter(Number.isFinite)
   const average=scores.length?Math.round((scores.reduce((a,b)=>a+b,0)/scores.length)*10)/10:null
 
@@ -225,6 +258,7 @@ async function buildGameweek(gw){
     mostOwned,
     captainPopularity,
     differentials,
+    allPlayers,
     managerStats,
     headline:{
       highest:managerStats[0] || null,
@@ -236,9 +270,59 @@ async function buildGameweek(gw){
   }
 }
 
+async function buildExpectedStats(){
+  const bootstrap=await fplFetch('/bootstrap-static/',900)
+  const teamMap=new Map((bootstrap?.teams||[]).map(t=>[t.id,t]))
+  const players=(bootstrap?.elements||[])
+    .filter(p=>[2,3,4].includes(p.element_type))
+    .map(p=>{
+      const minutes=Number(p.minutes)||0
+      const xg=num(p.expected_goals)
+      const xa=num(p.expected_assists)
+      const xgi=num(p.expected_goal_involvements,xg+xa)
+      const xgc=num(p.expected_goals_conceded)
+      const team=teamMap.get(p.team)
+      return {
+        id:p.id,
+        name:p.web_name || p.second_name || `Player ${p.id}`,
+        team:team?.short_name || team?.name || '',
+        teamName:team?.name || '',
+        position:POSITION[p.element_type],
+        price:round2((Number(p.now_cost)||0)/10),
+        minutes,
+        points:Number(p.total_points)||0,
+        ppg:num(p.points_per_game),
+        goals:Number(p.goals_scored)||0,
+        assists:Number(p.assists)||0,
+        goalsConceded:Number(p.goals_conceded)||0,
+        xg:round2(xg),
+        xg90:per90(xg,minutes),
+        xa:round2(xa),
+        xa90:per90(xa,minutes),
+        xgi:round2(xgi),
+        xgi90:per90(xgi,minutes),
+        xgc:round2(xgc),
+        xgc90:per90(xgc,minutes),
+        status:p.status || 'a',
+        chanceNext:p.chance_of_playing_next_round,
+        news:p.news || '',
+      }
+    })
+
+  return {
+    ok:true,
+    latestFinishedGw:getLatestFinishedGw(bootstrap),
+    players,
+    generatedAt:new Date().toISOString(),
+  }
+}
+
 export async function GET(request){
   try{
     const url=new URL(request.url)
+    const mode=url.searchParams.get('mode')
+    if(mode==='xg') return NextResponse.json(await buildExpectedStats())
+
     const gwRaw=url.searchParams.get('gw')
     if(gwRaw){
       const gw=Number(gwRaw)

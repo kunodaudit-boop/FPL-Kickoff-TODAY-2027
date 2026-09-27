@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Mitr:wght@400;500;600;700&display=swap');
+
 /* ============================================================
    FPL KICKOFF TODAY 2027 — V3 MASTER UI
    Visual direction: approved bright Samut Prakan mockup,
@@ -90,4 +92,93 @@
 }
 @media(max-width:480px){
   .statsToolbar{padding:8px;border-radius:14px}.statsMode{grid-template-columns:1fr 1fr}.statsMode button{font-size:9px;padding:8px 5px}.statsMode button span{display:none}.statsSelector{gap:8px}.statsSelector>span{width:100%}.statKpisV4,.seasonKpisV4{grid-template-columns:1fr 1fr}.statsInsightGrid .insightHead{padding:11px 12px}.barList{padding:6px 10px 10px}.barRow{grid-template-columns:24px minmax(0,1fr) 46px;gap:7px}.barName b{font-size:10px}.barName small{font-size:7px}.managerStatsTitle{padding:12px}.managerStatsTitle h3{font-size:16px}.managerStatsRow{padding:10px}.seasonManagerTop{grid-template-columns:34px 1fr auto;padding:10px}.seasonMetricGrid>span{padding:8px;min-height:50px}
+}
+
+
+/* ============================================================
+   V3.2 — FUN CHUNKY REFRESH
+   Same FPL identity, stronger playful typography, sticker edges,
+   safer responsive media, Last GW player pool and xG LAB.
+   ============================================================ */
+
+.siteV3{font-family:'Mitr',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+  radial-gradient(circle at 8% 10%,rgba(40,173,255,.10),transparent 24%),
+  radial-gradient(circle at 93% 35%,rgba(124,53,232,.08),transparent 22%),#eef6ff}
+.v3Logo b,.featureHead b,.v3Competition b,.secondaryCard b,.sectionTitle h2,.chanceHead h2,.managerStatsTitle h3,.lastPlayersHead h3,.labStatusTitle h3{font-family:'Mitr',sans-serif;font-weight:700}
+.v3Logo b{letter-spacing:-.025em}.v3Nav a{font-family:'Mitr',sans-serif;font-weight:600}.v3Nav .labNav{background:#ffe02f;color:#082557!important;opacity:1;box-shadow:0 3px 0 #d29c00}
+.v3Nav .labNav:hover{background:#fff06b}
+.sectionTitle h2{letter-spacing:-.045em;text-shadow:0 2px 0 rgba(255,255,255,.7)}
+.sectionTitle p{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid rgba(30,60,100,.10)}
+.detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3{border-width:2px;box-shadow:0 10px 0 rgba(15,47,95,.055),0 22px 44px rgba(30,62,104,.08)}
+.featureCard{border-width:4px;box-shadow:0 7px 0 #041d45,0 16px 28px rgba(4,40,91,.18)}
+.featureHead b{letter-spacing:-.02em}.featureOverlay strong{font-family:'Mitr',sans-serif;font-weight:700;letter-spacing:-.025em}
+.v3Competition{border:3px solid rgba(255,255,255,.75);box-shadow:0 6px 0 rgba(6,42,88,.18),0 12px 24px rgba(0,35,80,.13);transform:rotate(-.15deg)}
+.v3Competition:nth-child(even){transform:rotate(.2deg)}.v3Competition:hover{transform:translateY(-3px) rotate(0deg)}
+.v3Competition b{font-size:15px;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.secondaryStrip{grid-template-columns:repeat(4,1fr)}
+.secondaryCard{border:2px solid #d2e0f2;box-shadow:0 5px 0 rgba(21,61,110,.08),0 12px 22px rgba(33,72,119,.08);transition:.18s}
+.secondaryCard:hover{transform:translateY(-3px);box-shadow:0 7px 0 rgba(21,61,110,.10),0 16px 28px rgba(33,72,119,.10)}
+.secondaryCard.lab{background:linear-gradient(135deg,#fff43d,#ffd22d);color:#111d3c;border-color:#efb900}.secondaryCard.lab small{color:#624f00}
+.secondaryCard b{font-size:15px;letter-spacing:-.02em}
+
+/* Rule images: never crop important infographics. */
+.compactRule{grid-template-columns:minmax(0,1.25fr) minmax(230px,.75fr);min-height:0;align-items:stretch}
+.ruleImageButton{appearance:none;border:0;padding:8px;margin:0;width:100%;background:#081a36;display:flex;align-items:center;justify-content:center;cursor:zoom-in;min-width:0}
+.ruleImageButton .ruleMedia,.compactRule .ruleMedia,.chanceRuleWrap .ruleMedia{width:100%;height:auto;max-height:none;object-fit:contain;object-position:center;background:#081a36}
+.compactRule>div{min-width:0}.chanceRuleWrap{grid-template-rows:auto auto}.chanceRuleWrap .ruleImageButton{padding:6px;background:rgba(3,23,60,.4)}
+.chanceRuleWrap img{height:auto!important;object-fit:contain!important;object-position:center!important}
+.rulesGrid img{height:auto!important;max-height:560px;object-fit:contain!important;background:#07162c;padding:8px}
+
+/* Last Gameweek — unique player names only. */
+.statsSubDivider{display:flex;align-items:center;gap:12px;margin:30px 0 12px;padding-top:24px;border-top:2px dashed #cbd7ea}.statsSubDivider>span{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:#102d66;color:#fff;font-size:22px;box-shadow:0 4px 0 #071c43}.statsSubDivider small{display:block;color:#6d7da0;font-size:9px;font-weight:900;letter-spacing:.12em}.statsSubDivider h3{margin:2px 0 0;font-size:22px;letter-spacing:-.035em}
+.lastPlayersPanel{background:#fff;border:2px solid #d5e1f0;border-radius:20px;overflow:hidden;box-shadow:0 7px 0 rgba(17,52,100,.06)}
+.lastPlayersHead{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 18px;background:linear-gradient(100deg,#0a2b65,#184f9b);color:#fff}.lastPlayersHead small{font-size:8px;letter-spacing:.14em;color:#9ec8ff;font-weight:900}.lastPlayersHead h3{font-size:20px;margin:2px 0 0}.lastPlayersHead>strong{font-family:'Lilita One','Mitr',sans-serif;font-size:28px;color:#ffe037;white-space:nowrap}.lastPlayersHead>strong em{font-family:'Mitr',sans-serif;font-style:normal;font-size:8px;color:#c7dbf5;letter-spacing:.08em}
+.playerNameCloud{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:14px}.playerNameCloud span{min-width:0;background:#f4f8fd;border:1px solid #dce7f4;border-radius:10px;padding:8px 10px;font-size:10px;font-weight:600;color:#233b66;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ============================================================
+   xG LAB by กัญ วัดเล็ก
+   Fun Chunky = chunky type + sticker borders + comic rhythm,
+   while the table stays clean enough to read 20 players.
+   ============================================================ */
+.xgLabSection{max-width:1320px;margin:22px auto 30px;padding:0 0 28px!important;border-radius:28px;overflow:hidden;position:relative;background:
+  radial-gradient(circle at 12px 12px,rgba(255,255,255,.08) 1.5px,transparent 1.6px) 0 0/24px 24px,
+  linear-gradient(145deg,#061a3e 0%,#071f49 54%,#0a1835 100%);border:4px solid #061630;box-shadow:0 9px 0 #020c1d,0 26px 55px rgba(8,31,69,.22);color:#fff}
+.xgLabSection:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 0 72%,rgba(255,221,26,.07) 72% 74%,transparent 74%);pointer-events:none}
+.xgHero{min-height:330px;display:grid;grid-template-columns:300px minmax(0,1fr) 260px;gap:22px;align-items:center;padding:24px 28px 18px;position:relative;background:
+  radial-gradient(circle at 77% 15%,rgba(255,225,39,.22),transparent 25%),
+  radial-gradient(circle at 45% 80%,rgba(255,46,87,.16),transparent 27%),
+  linear-gradient(120deg,#0b5fc0 0%,#0a92ea 31%,#f7f8ff 31.2%,#f7f8ff 31.9%,#0b4e98 32%,#071a3e 100%);border-bottom:4px solid #020f28}
+.xgHost{height:282px;position:relative;align-self:end}.xgHost>img{width:220px;height:280px;object-fit:cover;object-position:54% 30%;border:5px solid #fff;border-radius:26px 26px 18px 18px;box-shadow:8px 8px 0 #07162f,-6px 6px 0 #ffd928;filter:saturate(1.05) contrast(1.03);transform:rotate(-2deg)}
+.speechBubble{position:absolute;left:152px;top:8px;width:180px;background:#fff;color:#111a30;border:4px solid #07152e;border-radius:24px;padding:12px 12px;text-align:center;font-size:13px;font-weight:700;line-height:1.25;box-shadow:5px 5px 0 #ffd928;transform:rotate(2deg)}.speechBubble:after{content:"";position:absolute;left:-19px;bottom:31px;width:24px;height:20px;background:#fff;border-left:4px solid #07152e;border-bottom:4px solid #07152e;transform:skew(-27deg) rotate(18deg)}.speechBubble b{color:#ef2c3e;font-size:18px}
+.xgBrand{position:relative;z-index:2;text-align:center;min-width:0}.xgBrand>small{display:inline-block;background:#071a3e;color:#fff;border:2px solid #fff;border-radius:999px;padding:5px 10px;font-size:8px;font-weight:900;letter-spacing:.14em}.xgBrand h2{font-family:'Lilita One','Mitr',sans-serif;font-size:86px;line-height:.83;margin:18px 0 2px;letter-spacing:-.045em;transform:skew(-4deg);text-shadow:5px 5px 0 #020c1e}.xgBrand h2 span{color:#ffe027;-webkit-text-stroke:2px #121212;text-shadow:5px 5px 0 #ef2d3f}.xgBrand>strong{display:inline-block;background:#ef2d3f;padding:8px 24px;border:3px solid #fff;border-radius:8px;font-size:23px;line-height:1;transform:rotate(-1deg);box-shadow:5px 5px 0 #081631}.xgBrand p{margin:10px 0 0;color:#d3e8ff;font-size:10px;font-weight:600}
+.xgLegend{display:grid;gap:8px;position:relative;z-index:2}.xgLegend>span{display:grid;grid-template-columns:1fr auto;align-items:center;min-height:52px;padding:9px 13px;border:3px solid #07152e;border-radius:9px;box-shadow:4px 4px 0 #07152e;color:#101931;transform:rotate(.7deg)}.xgLegend>span:nth-child(even){transform:rotate(-.7deg)}.xgLegend b{font-size:17px}.xgLegend small{font-size:9px;font-weight:900;background:rgba(255,255,255,.55);padding:4px 6px;border-radius:6px}.xgLegend .red{background:#ff3d50}.xgLegend .yellow{background:#ffe23b}.xgLegend .blue{background:#47caff}.xgLegend .purple{background:#ad54f5;color:#fff}
+.xgControls{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px 12px;position:relative;z-index:2}.xgStatTabs{display:grid;grid-template-columns:repeat(4,minmax(115px,1fr));gap:8px;flex:1}.xgStatTabs button{border:3px solid #06152e;border-radius:12px;padding:9px 12px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:6px;color:#101931;font-family:'Mitr',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #020b1b;opacity:.73;transition:.16s}.xgStatTabs button.active{opacity:1;transform:translateY(-2px);box-shadow:0 6px 0 #020b1b}.xgStatTabs button.red{background:#ff4053}.xgStatTabs button.yellow{background:#ffe13b}.xgStatTabs button.blue{background:#54cfff}.xgStatTabs button.purple{background:#a64be8;color:#fff}.xgStatTabs button span{font-size:18px}.xgStatTabs button b{font-size:15px}.xgStatTabs button small{font-size:8px;background:rgba(255,255,255,.45);padding:3px 5px;border-radius:5px;color:inherit}
+.xgPositionTabs{display:flex;align-items:center;gap:6px;background:#fff;border:3px solid #06152e;border-radius:12px;padding:5px;box-shadow:0 4px 0 #020b1b}.xgPositionTabs>span{font-size:8px;font-weight:900;color:#6f7b94;padding:0 4px}.xgPositionTabs button{border:0;background:#edf2f8;color:#1c3157;border-radius:8px;padding:8px 10px;font-size:10px;font-weight:900;cursor:pointer}.xgPositionTabs button.active{background:#071f49;color:#fff}
+.xgRankingPanel{margin:0 20px 18px;background:#fff;color:#14213e;border-radius:18px;border:4px solid #06152e;overflow:hidden;box-shadow:0 7px 0 #020b1b;position:relative;z-index:2}.xgRankingTitle{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 16px;color:#fff}.xgRankingPanel.red .xgRankingTitle{background:linear-gradient(90deg,#e6233a,#ff5262)}.xgRankingPanel.yellow .xgRankingTitle{background:linear-gradient(90deg,#dca800,#ffdc2d);color:#17203b}.xgRankingPanel.blue .xgRankingTitle{background:linear-gradient(90deg,#0876c9,#31baf3)}.xgRankingPanel.purple .xgRankingTitle{background:linear-gradient(90deg,#7020a9,#a446e1)}.xgRankingTitle small{font-size:8px;font-weight:900;letter-spacing:.13em;opacity:.78}.xgRankingTitle h3{font-family:'Mitr',sans-serif;font-size:25px;margin:1px 0 0;font-weight:700;letter-spacing:-.04em}.xgRankingTitle>span{font-size:9px;font-weight:900;background:rgba(255,255,255,.18);padding:6px 8px;border-radius:999px;white-space:nowrap}
+.xgTableHead,.xgRow{display:grid;grid-template-columns:42px minmax(170px,1.5fr) 82px 100px 78px 95px;gap:8px;align-items:center}.xgTableHead{padding:9px 14px;background:#eff3f8;color:#6e7b91;font-size:8px;font-weight:900;letter-spacing:.04em}.xgRow{min-height:46px;padding:7px 14px;border-top:1px solid #e9edf3}.xgRow:nth-child(odd){background:#fbfcfe}.xgRow:hover{background:#fff8cf}.xgRank{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:#e9eef6;color:#40516f;font-size:10px;font-weight:900}.xgRow:nth-child(1) .xgRank{background:#ffe043;color:#1c2130;box-shadow:0 2px 0 #d3a900}.xgPlayer{display:flex;flex-direction:column;min-width:0}.xgPlayer b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xgPlayer small{font-size:7px;color:#8a96a7}.xgTeam{font-size:9px;font-weight:900;color:#52627d}.xgRow>strong{font-family:'Lilita One','Mitr',sans-serif;font-size:18px;color:#e62c42}.xgRanking.yellow .xgRow>strong{color:#b27d00}.xgRanking.blue .xgRow>strong{color:#087bbb}.xgRanking.purple .xgRow>strong{color:#7f26bd}.xgPer90,.xgActual{font-size:11px;font-weight:800}.xgLoading{padding:44px 20px;text-align:center;color:#6c7c96;font-weight:700}
+.labStatusBlock{margin:24px 20px 0;position:relative;z-index:2}.labStatusTitle{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:10px}.labStatusTitle small{font-size:8px;letter-spacing:.13em;color:#79b8ff;font-weight:900}.labStatusTitle h3{font-size:25px;margin:2px 0 0}.labStatusTitle>span{font-size:8px;color:#9ab4d8}.labStatusGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.labStatusCard{min-height:125px;border:3px solid #06152e;border-radius:15px;padding:12px;display:grid;grid-template-columns:38px 1fr;grid-template-rows:1fr auto;gap:5px 8px;color:#101931;box-shadow:0 5px 0 #020b1b;position:relative;overflow:hidden}.labStatusCard:after{content:"";position:absolute;right:-28px;bottom:-33px;width:85px;height:85px;border-radius:50%;background:rgba(255,255,255,.23)}.labStatusIcon{font-size:28px;grid-row:1/3}.labStatusCard small{font-size:7px;opacity:.72;font-weight:700}.labStatusCard h4{font-family:'Mitr',sans-serif;font-size:20px;line-height:1;margin:3px 0}.labStatusCard b{font-size:11px}.labStatusNumbers{grid-column:2;display:flex;align-items:baseline;gap:5px}.labStatusNumbers strong{font-family:'Lilita One','Mitr',sans-serif;font-size:19px}.labStatusNumbers small{font-size:7px}.labStatusCard.king{background:#ffe039}.labStatusCard.walk{background:#42e57b}.labStatusCard.fake{background:#ff5d85}.labStatusCard.tui{background:#60c8ff}.labStatusCard.hurt{background:#f1f4f8;color:#243552}.xgFootnote{margin:16px 20px 0;color:#89a5c9;font-size:8px;text-align:center}
+
+/* Lightbox for rule art. */
+.imageLightbox{position:fixed;inset:0;z-index:999;background:rgba(2,11,28,.92);display:grid;place-items:center;padding:22px}.imageLightbox img{max-width:min(1100px,96vw);max-height:90vh;width:auto;height:auto;object-fit:contain;border:4px solid #fff;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.45)}.imageLightbox>button{position:fixed;right:18px;top:18px;width:44px;height:44px;border-radius:50%;border:2px solid #fff;background:#ef3345;color:#fff;font-size:28px;line-height:1;cursor:pointer;z-index:2}
+
+@media(max-width:1100px){
+  .secondaryStrip{grid-template-columns:repeat(2,1fr)}
+  .playerNameCloud{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .xgHero{grid-template-columns:250px minmax(0,1fr);padding-right:22px}.xgLegend{grid-column:1/3;grid-template-columns:repeat(4,1fr)}.xgHost{height:245px}.xgHost>img{width:190px;height:240px}.speechBubble{left:135px;width:165px}.xgBrand h2{font-size:72px}.xgControls{align-items:stretch;flex-direction:column}.xgPositionTabs{align-self:flex-start}.labStatusGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3{border-radius:20px;border-width:1px;box-shadow:0 7px 0 rgba(15,47,95,.04),0 16px 30px rgba(30,62,104,.07)}
+  .sectionTitle p{font-size:9px;padding:4px 8px}.sectionTitle h2{font-size:31px}
+  .secondaryStrip{grid-template-columns:1fr 1fr}.secondaryCard{min-height:84px;padding:11px 12px;grid-template-columns:40px 1fr 18px}.secondaryCard>span{font-size:27px}.secondaryCard b{font-size:12px}.secondaryCard small{font-size:8px}
+  .compactRule{grid-template-columns:1fr}.compactRule .ruleImageButton{padding:6px}.compactRule>div{padding:14px}.compactRule b{font-size:15px}.compactRule span{font-size:10px}
+  .chanceBody{grid-template-columns:1fr}.chanceRuleWrap{grid-template-rows:auto auto}.chanceRules{padding:12px}.chanceRules span{font-size:8px}
+  .playerNameCloud{grid-template-columns:repeat(3,minmax(0,1fr));padding:10px;gap:5px}.playerNameCloud span{padding:7px 8px;font-size:9px}.lastPlayersHead{padding:13px}.lastPlayersHead h3{font-size:16px}.lastPlayersHead>strong{font-size:23px}.lastPlayersHead>strong em{display:block;text-align:right}
+  .xgLabSection{border-width:3px;border-radius:22px;margin:16px 12px 28px;padding-bottom:20px!important}.xgHero{grid-template-columns:1fr;min-height:0;padding:16px 14px 14px;background:radial-gradient(circle at 82% 10%,rgba(255,224,39,.20),transparent 24%),linear-gradient(145deg,#0b75cd,#071a3e 58%)}.xgHost{height:215px;display:flex;justify-content:center;align-items:flex-end}.xgHost>img{width:155px;height:205px;object-position:54% 25%;border-width:4px;box-shadow:6px 6px 0 #07162f,-5px 5px 0 #ffd928}.speechBubble{left:calc(50% + 45px);top:8px;width:135px;font-size:10px;padding:9px;box-shadow:4px 4px 0 #ffd928}.speechBubble b{font-size:14px}.xgBrand{margin-top:2px}.xgBrand>small{font-size:7px}.xgBrand h2{font-size:62px;margin-top:12px}.xgBrand>strong{font-size:18px;padding:7px 17px}.xgBrand p{font-size:8px}.xgLegend{grid-column:auto;grid-template-columns:1fr 1fr;gap:6px}.xgLegend>span{min-height:44px;padding:7px 10px;border-width:2px}.xgLegend b{font-size:14px}
+  .xgControls{padding:12px 10px 10px;gap:10px}.xgStatTabs{grid-template-columns:1fr 1fr;gap:6px}.xgStatTabs button{padding:8px;border-width:2px;box-shadow:0 3px 0 #020b1b}.xgStatTabs button.active{box-shadow:0 4px 0 #020b1b}.xgStatTabs button b{font-size:13px}.xgPositionTabs{width:100%;justify-content:center;border-width:2px;box-shadow:0 3px 0 #020b1b}.xgPositionTabs>span{margin-right:auto}
+  .xgRankingPanel{margin:0 10px 16px;border-width:3px;box-shadow:0 5px 0 #020b1b}.xgRankingTitle{padding:11px 12px}.xgRankingTitle h3{font-size:21px}.xgTableHead{display:none}.xgRow{grid-template-columns:30px minmax(0,1fr) 62px 52px;grid-template-areas:"rank player main main" ". team per actual";gap:4px 7px;padding:8px 10px;min-height:58px}.xgRank{grid-area:rank;width:26px;height:26px}.xgPlayer{grid-area:player}.xgPlayer b{font-size:10px}.xgTeam{grid-area:team;font-size:8px}.xgRow>strong{grid-area:main;justify-self:end;font-size:19px}.xgPer90{grid-area:per;font-size:9px}.xgPer90:before{content:"/90 ";font-size:7px;color:#8b96a8}.xgActual{grid-area:actual;font-size:9px;text-align:right}.xgActual:before{content:"จริง ";font-size:7px;color:#8b96a8}
+  .labStatusBlock{margin:20px 10px 0}.labStatusTitle h3{font-size:21px}.labStatusGrid{grid-template-columns:1fr 1fr;gap:7px}.labStatusCard{min-height:105px;padding:10px;grid-template-columns:32px 1fr}.labStatusIcon{font-size:23px}.labStatusCard h4{font-size:17px}.labStatusNumbers strong{font-size:17px}.xgFootnote{margin-left:12px;margin-right:12px}
+}
+@media(max-width:480px){
+  .secondaryStrip{grid-template-columns:1fr}.playerNameCloud{grid-template-columns:1fr 1fr}.lastPlayersHead{align-items:flex-start;flex-direction:column}.lastPlayersHead>strong em{display:inline}.statsSubDivider h3{font-size:18px}
+  .xgLabSection{margin-left:7px;margin-right:7px}.speechBubble{left:calc(50% + 33px);width:122px}.xgBrand h2{font-size:54px}.xgLegend>span{grid-template-columns:1fr auto}.xgStatTabs button{grid-template-columns:auto 1fr auto}.labStatusGrid{grid-template-columns:1fr}.xgRankingTitle>span{display:none}
 }

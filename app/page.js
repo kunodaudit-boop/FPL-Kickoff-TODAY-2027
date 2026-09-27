@@ -102,6 +102,41 @@ function stdev(nums){
   return Math.sqrt(avg(nums.map(x=>(x-a)**2)))
 }
 
+const XG_META={
+  xg:{label:'ซีเล็ง',tech:'xG',icon:'🎯',per90:'xg90',actual:'goals',actualLabel:'ยิงจริง',tone:'red'},
+  xa:{label:'หัวจ่าย',tech:'xA',icon:'🎁',per90:'xa90',actual:'assists',actualLabel:'แอสซิสต์จริง',tone:'yellow'},
+  xgi:{label:'xGI',tech:'xGI',icon:'⚡',per90:'xgi90',actual:'goalInvolvements',actualLabel:'G+A จริง',tone:'blue'},
+  xgc:{label:'สลิ้งแตก',tech:'xGC',icon:'💥',per90:'xgc90',actual:'goalsConceded',actualLabel:'เสียจริง',tone:'purple'},
+}
+
+function XgRanking({rows,stat}){
+  const meta=XG_META[stat]
+  return <div className={`xgRanking ${meta.tone}`}>
+    <div className="xgTableHead"><span>#</span><span>นักเตะ</span><span>ทีม</span><span>ค่า{meta.label}</span><span>/90</span><span>{meta.actualLabel}</span></div>
+    <div className="xgRows">{rows.map((player,i)=>{
+      const actual=stat==='xgi'?(player.goals+player.assists):player[meta.actual]
+      return <div className="xgRow" key={player.id}>
+        <span className="xgRank">{i+1}</span>
+        <span className="xgPlayer"><b>{player.name}</b><small>{player.position} • £{player.price.toFixed(1)}m</small></span>
+        <span className="xgTeam">{player.team}</span>
+        <strong>{Number(player[stat]||0).toFixed(2)}</strong>
+        <span className="xgPer90">{Number(player[meta.per90]||0).toFixed(2)}</span>
+        <span className="xgActual">{actual??0}</span>
+      </div>
+    })}</div>
+  </div>
+}
+
+function LastGwPlayers({data,loading}){
+  if(loading) return <div className="statsEmpty big">กำลังรวมรายชื่อนักเตะจาก Last Gameweek…</div>
+  if(!data?.available) return <div className="statsEmpty big">ยังดึงรายชื่อนักเตะ Last Gameweek ไม่ได้</div>
+  if(data.managerCount!==members.length) return <div className="statsEmpty big">กำลังรอข้อมูล Squad ให้ครบ {members.length}/11 Manager</div>
+  return <div className="lastPlayersPanel">
+    <div className="lastPlayersHead"><div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3></div><strong>{data.allPlayers?.length||0}<em> UNIQUE PLAYERS</em></strong></div>
+    <div className="playerNameCloud">{(data.allPlayers||[]).map(player=><span key={player.id}>{player.name}</span>)}</div>
+  </div>
+}
+
 export default function Home(){
   const [fplSummary,setFplSummary]=useState(null)
   const [fplStatus,setFplStatus]=useState('loading')
@@ -113,6 +148,13 @@ export default function Home(){
   const [statsGw,setStatsGw]=useState(league.latestGw)
   const [gwStats,setGwStats]=useState(null)
   const [statsLoading,setStatsLoading]=useState(false)
+  const [lastGwData,setLastGwData]=useState(null)
+  const [lastGwLoading,setLastGwLoading]=useState(false)
+  const [xgData,setXgData]=useState(null)
+  const [xgLoading,setXgLoading]=useState(true)
+  const [xgStat,setXgStat]=useState('xg')
+  const [xgPosition,setXgPosition]=useState('FWD')
+  const [lightbox,setLightbox]=useState(null)
 
   useEffect(()=>{
     let active=true
@@ -138,6 +180,27 @@ export default function Home(){
     }).catch(()=>active&&setGwStats(null)).finally(()=>active&&setStatsLoading(false))
     return()=>{active=false}
   },[statsMode,statsGw])
+
+
+  useEffect(()=>{
+    const lastGw=fplSummary?.latestFinishedGw
+    if(!lastGw) return
+    let active=true
+    setLastGwLoading(true)
+    fetch(`/api/fpl?gw=${lastGw}`,{cache:'no-store'}).then(r=>r.json()).then(data=>{
+      if(active)setLastGwData(data)
+    }).catch(()=>active&&setLastGwData(null)).finally(()=>active&&setLastGwLoading(false))
+    return()=>{active=false}
+  },[fplSummary?.latestFinishedGw])
+
+  useEffect(()=>{
+    let active=true
+    setXgLoading(true)
+    fetch('/api/fpl?mode=xg',{cache:'no-store'}).then(r=>r.json()).then(data=>{
+      if(active)setXgData(data)
+    }).catch(()=>active&&setXgData(null)).finally(()=>active&&setXgLoading(false))
+    return()=>{active=false}
+  },[])
 
   const selected=effectiveGameweeks[gw]||effectiveGameweeks[league.latestGw]
   const latestGalleryGw=galleryGws.at(-1)
@@ -183,11 +246,28 @@ export default function Home(){
   }).sort((a,b)=>b.total-a.total)
   const mostConsistent=[...seasonStats].filter(x=>league.gwNumbers.length>=3).sort((a,b)=>a.consistency-b.consistency)[0]
 
+  const expectedPlayers=xgData?.players||[]
+  const xgTop20=useMemo(()=>expectedPlayers
+    .filter(p=>p.position===xgPosition)
+    .sort((a,b)=>(b[xgStat]||0)-(a[xgStat]||0) || (b.minutes||0)-(a.minutes||0))
+    .slice(0,20),[expectedPlayers,xgPosition,xgStat])
+  const labCards=useMemo(()=>{
+    const eligible=expectedPlayers.filter(p=>p.minutes>=180)
+    const pick=(arr,sorter)=>[...arr].sort(sorter)[0]
+    return [
+      {key:'king',label:'ระดับสมเด็จ',icon:'👑',tone:'king',player:pick(eligible.filter(p=>p.price>=9&&p.ppg>=5),(a,b)=>b.ppg-a.ppg)},
+      {key:'walk',label:'เดินแรง',icon:'🔥',tone:'walk',player:pick(eligible.filter(p=>p.price<=6&&p.ppg>=4.5),(a,b)=>b.ppg-a.ppg)},
+      {key:'fake',label:'ตีเก๊',icon:'📉',tone:'fake',player:pick(eligible.filter(p=>p.price>=9&&p.ppg<=3.5),(a,b)=>b.price-a.price)},
+      {key:'tui',label:'ตุ่ยดุ้ย',icon:'🫠',tone:'tui',player:pick(eligible.filter(p=>p.price<=6&&p.ppg<=2.5),(a,b)=>b.minutes-a.minutes)},
+      {key:'hurt',label:'สะหง่อง',icon:'🤕',tone:'hurt',player:pick(expectedPlayers.filter(p=>['i','d'].includes(p.status)),(a,b)=>(a.chanceNext??100)-(b.chanceNext??100))},
+    ].filter(x=>x.player)
+  },[expectedPlayers])
+
   return <main id="top" className="siteV3">
     <header className="siteHeader v3Header">
       <a className="logo v3Logo" href="#top"><span>♛</span><b>FPL KICKOFF <em>TODAY</em> 2027</b></a>
       <nav className="v3Nav">
-        <a className="active" href="#top">⌂ Home</a><a href="#gameweek">📅 GW</a><a href="#full-season">🏆 League</a><a href="#mini-game">🎮 Mini Game</a><a href="#statistics">▥ Statistics</a><a href="#gallery">▧ Gallery</a><a href="#rules">▤ Rules</a><a href="#finance">••• More</a>
+        <a className="active" href="#top">⌂ Home</a><a href="#gameweek">📅 GW</a><a href="#full-season">🏆 League</a><a href="#mini-game">🎮 Mini Game</a><a href="#statistics">▥ Statistics</a><a className="labNav" href="#xg-lab">🧪 xG LAB</a><a href="#gallery">▧ Gallery</a><a href="#rules">▤ Rules</a><a href="#finance">••• More</a>
       </nav>
     </header>
 
@@ -216,7 +296,8 @@ export default function Home(){
 
       <div className="competitionStrip" id="competitions">{competitions.map(item=><AccentCard item={item} key={item.id}/>)}</div>
       <div className="secondaryStrip">
-        <a className="secondaryCard stats" href="#statistics"><span>▥</span><div><b>STATS & INSIGHTS</b><small>Gameweek + Season Overview</small></div><i>→</i></a>
+        <a className="secondaryCard stats" href="#statistics"><span>▥</span><div><b>STATS & INSIGHTS</b><small>Gameweek + Season + Last GW players</small></div><i>→</i></a>
+        <a className="secondaryCard lab" href="#xg-lab"><span>🧪</span><div><b>xG LAB</b><small>by กัญ วัดเล็ก</small></div><i>→</i></a>
         <a className="secondaryCard gallery" href="#gallery"><span>▧</span><div><b>GALLERY</b><small>GW1–GW{latestGalleryGw} stories</small></div><i>→</i></a>
         <a className="secondaryCard rules" href="#rules"><span>▤</span><div><b>RULES & INFO</b><small>Official rules + prize system</small></div><i>→</i></a>
       </div>
@@ -224,7 +305,7 @@ export default function Home(){
 
     <section className="section detailSection toneGold" id="full-season">
       <div className="sectionTitle"><div><p>🏆 FULL SEASON</p><h2>ศึกใหญ่ทั้งฤดูกาล</h2><span>คะแนน GW1–GW5 ล็อกตามข้อมูลที่กำหนดไว้ • ตั้งแต่ GW6 ต่อด้วย FPL อัตโนมัติ</span></div><strong>฿4,200</strong></div>
-      <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><img src="/rules/full-season.jpeg" alt="Full season rules"/><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
+      <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/full-season.jpeg',alt:'Full season rules'})}><img className="ruleMedia" src="/rules/full-season.jpeg" alt="Full season rules"/></button><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
     </section>
 
     <section className="section detailSection toneBlue" id="gameweek">
@@ -232,18 +313,18 @@ export default function Home(){
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
         <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small></div><strong>{pts}</strong></div>)}</div>
-        <div className="compactRule"><img src="/rules/gameweek.jpeg" alt="Gameweek rules"/><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ FPL score'}</span></div></div>
+        <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.jpeg',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.jpeg" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ FPL score'}</span></div></div>
       </div>
     </section>
 
     <section className="section chanceSection">
       <article className="chanceV3 first" id="first-chance">
         <div className="chanceHead"><span>🎯</span><div><small>FIRST CHANCE</small><h2>GW1–GW19</h2></div><b>฿700</b></div>
-        <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><img src="/rules/first-second-chance.jpeg" alt="First Chance rules" className="firstCrop"/><RuleChips phase="first"/></div></div>
+        <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="First Chance rules"/></button><RuleChips phase="first"/></div></div>
       </article>
       <article className="chanceV3 second" id="second-chance">
         <div className="chanceHead"><span>🔥</span><div><small>SECOND CHANCE</small><h2>GW20–GW38</h2></div><b>฿700</b></div>
-        <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><img src="/rules/first-second-chance.jpeg" alt="Second Chance rules" className="secondCrop"/><RuleChips phase="second"/></div></div>
+        <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="Second Chance rules"/></button><RuleChips phase="second"/></div></div>
       </article>
     </section>
 
@@ -317,6 +398,38 @@ export default function Home(){
         </div>
         <p className="statsNote">Score-based stats ใช้ GW1–GW5 ที่ล็อกไว้ และ GW6+ จาก FPL; Transfers / Hits / Chips ดึงจาก FPL โดยตรงเมื่อเชื่อมได้</p>
       </>}
+
+      <div className="statsSubDivider"><span>👥</span><div><small>LAST GW PLAYER LIST</small><h3>รายชื่อนักเตะทั้งหมดที่ 11 Manager มี</h3></div></div>
+      <LastGwPlayers data={lastGwData} loading={lastGwLoading}/>
+    </section>
+
+    <section className="section xgLabSection" id="xg-lab">
+      <div className="xgHero">
+        <div className="xgHost"><img src="/xg-lab/kun-host.jpeg" alt="Kun — xG LAB host"/><div className="speechBubble">ก่อนทรานส์เฟอร์<br/><b>อย่าเผลอใจ</b></div></div>
+        <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>xG</span> LAB</h2><strong>by กัญ วัดเล็ก</strong><p>ข้อมูลจริงจาก FPL • คำเรียกฉบับวัดเล็ก</p></div>
+        <div className="xgLegend">
+          <span className="red">🎯 <b>ซีเล็ง</b><small>xG</small></span>
+          <span className="yellow">🎁 <b>หัวจ่าย</b><small>xA</small></span>
+          <span className="blue">⚡ <b>xGI</b><small>xGI</small></span>
+          <span className="purple">💥 <b>สลิ้งแตก</b><small>xGC</small></span>
+        </div>
+      </div>
+
+      <div className="xgControls">
+        <div className="xgStatTabs">{Object.entries(XG_META).map(([key,meta])=><button key={key} className={`${meta.tone} ${xgStat===key?'active':''}`} onClick={()=>setXgStat(key)}><span>{meta.icon}</span><b>{meta.label}</b><small>{meta.tech}</small></button>)}</div>
+        <div className="xgPositionTabs"><span>POSITION</span>{['FWD','MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>
+      </div>
+
+      <div className={`xgRankingPanel ${XG_META[xgStat].tone}`}>
+        <div className="xgRankingTitle"><div><small>TOP 20 • {xgPosition}</small><h3>{XG_META[xgStat].icon} {XG_META[xgStat].label}</h3></div><span>{XG_META[xgStat].tech} + /90</span></div>
+        {xgLoading?<div className="xgLoading">กำลังโหลด Expected Stats จาก FPL…</div>:xgData?.ok?<XgRanking rows={xgTop20} stat={xgStat}/>:<div className="xgLoading">ตอนนี้ดึงข้อมูล xG จาก FPL ไม่ได้</div>}
+      </div>
+
+      <div className="labStatusBlock">
+        <div className="labStatusTitle"><div><small>WAT LEK STATUS</small><h3>ศัพท์ประจำ LAB</h3></div><span>อัปเดตตามข้อมูล FPL</span></div>
+        <div className="labStatusGrid">{labCards.map(card=><article className={`labStatusCard ${card.tone}`} key={card.key}><span className="labStatusIcon">{card.icon}</span><div><small>{card.player.team} • {card.player.position} • £{card.player.price.toFixed(1)}m</small><h4>{card.label}</h4><b>{card.player.name}</b></div><div className="labStatusNumbers">{card.key==='hurt'?<><strong>{card.player.chanceNext??'—'}%</strong><small>chance to play</small></>:<><strong>{card.player.ppg.toFixed(1)}</strong><small>pts/game</small></>}</div></article>)}</div>
+      </div>
+      <p className="xgFootnote">Expected Stats เป็น Season-to-date จาก FPL • ค่า /90 คำนวณจากนาทีที่ลงเล่น • ไม่รวม GK</p>
     </section>
 
     <section className="section gallerySectionV3" id="gallery">
@@ -339,5 +452,6 @@ export default function Home(){
     </section>
 
     <footer><div className="footerLogo">FPL <b>KICKOFF TODAY</b> 2027</div><p>SAME GAME. DIFFERENT STORIES. ONE LEAGUE.</p><a href="#top">Back to top ↑</a></footer>
+    {lightbox&&<div className="imageLightbox" role="dialog" aria-modal="true" aria-label={lightbox.alt} onClick={()=>setLightbox(null)}><button aria-label="Close" onClick={()=>setLightbox(null)}>×</button><img src={lightbox.src} alt={lightbox.alt} onClick={e=>e.stopPropagation()}/></div>}
   </main>
 }
