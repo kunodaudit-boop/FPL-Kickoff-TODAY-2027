@@ -103,16 +103,37 @@ function stdev(nums){
 }
 
 const XG_META={
-  xg:{label:'ซีเล็ง',tech:'xG',icon:'🎯',per90:'xg90',actual:'goals',actualLabel:'ยิงจริง',tone:'red'},
-  xa:{label:'หัวจ่าย',tech:'xA',icon:'🎁',per90:'xa90',actual:'assists',actualLabel:'แอสซิสต์จริง',tone:'yellow'},
-  xgi:{label:'xGI',tech:'xGI',icon:'⚡',per90:'xgi90',actual:'goalInvolvements',actualLabel:'G+A จริง',tone:'blue'},
-  xgc:{label:'สลิ้งแตก',tech:'xGC',icon:'💥',per90:'xgc90',actual:'goalsConceded',actualLabel:'เสียจริง',tone:'purple'},
+  xg:{
+    label:'ซีเล็ง',valueLabel:'ค่าซีเล็ง',tech:'xG',icon:'🎯',per90:'xg90',actual:'goals',actualLabel:'ยิงจริง',tone:'red',
+    explain:'โอกาสที่จังหวะยิงจะกลายเป็นประตู'
+  },
+  xa:{
+    label:'หัวจ่าย',valueLabel:'ค่าหัวจ่าย',tech:'xA',icon:'🎁',per90:'xa90',actual:'assists',actualLabel:'แอสซิสต์จริง',tone:'yellow',
+    explain:'โอกาสที่การจ่ายบอลจะนำไปสู่ประตู'
+  },
+  xgi:{
+    label:'xGI',valueLabel:'ค่า xGI',tech:'xGI',icon:'⚡',per90:'xgi90',actual:'goalInvolvements',actualLabel:'G+A จริง',tone:'blue',
+    explain:'โอกาสมีส่วนร่วมกับประตูรวมจาก xG + xA'
+  },
+  xgc:{
+    label:'สลิ้งแตก',valueLabel:'ค่าสลิ้งแตก',tech:'xGC',icon:'💥',per90:'xgc90',actual:'goalsConceded',actualLabel:'เสียจริง',tone:'purple',
+    explain:'โอกาสที่ทีมจะเสียประตู'
+  },
+}
+
+const LAB_COPY={
+  king:{label:'ระดับสมเด็จ',icon:'👑',tone:'king',desc:'แพง + ดี'},
+  walk:{label:'เดินแรง',icon:'🔥',tone:'walk',desc:'ถูก + ดี'},
+  fake:{label:'ตีเก๊',icon:'📉',tone:'fake',desc:'แพง + ไม่ดี'},
+  tui:{label:'ตุ่ยดุ้ย',icon:'🫠',tone:'tui',desc:'ถูก + ไม่ดี'},
+  hurt:{label:'สะหง่อง',icon:'🤕',tone:'hurt',desc:'ความพร้อมมีปัญหา'},
+  xavier:{label:'ซาเวียร์',icon:'🟨',tone:'xavier',desc:'ใบเหลืองสะสม'},
 }
 
 function XgRanking({rows,stat}){
   const meta=XG_META[stat]
   return <div className={`xgRanking ${meta.tone}`}>
-    <div className="xgTableHead"><span>#</span><span>นักเตะ</span><span>ทีม</span><span>ค่า{meta.label}</span><span>/90</span><span>{meta.actualLabel}</span></div>
+    <div className="xgTableHead"><span>#</span><span>นักเตะ</span><span>ทีม</span><span>{meta.valueLabel}</span><span>/90</span><span>{meta.actualLabel}</span></div>
     <div className="xgRows">{rows.map((player,i)=>{
       const actual=stat==='xgi'?(player.goals+player.assists):player[meta.actual]
       return <div className="xgRow" key={player.id}>
@@ -132,9 +153,65 @@ function LastGwPlayers({data,loading}){
   if(!data?.available) return <div className="statsEmpty big">ยังดึงรายชื่อนักเตะ Last Gameweek ไม่ได้</div>
   if(data.managerCount!==members.length) return <div className="statsEmpty big">กำลังรอข้อมูล Squad ให้ครบ {members.length}/11 Manager</div>
   return <div className="lastPlayersPanel">
-    <div className="lastPlayersHead"><div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3></div><strong>{data.allPlayers?.length||0}<em> UNIQUE PLAYERS</em></strong></div>
-    <div className="playerNameCloud">{(data.allPlayers||[]).map(player=><span key={player.id}>{player.name}</span>)}</div>
+    <div className="lastPlayersHead">
+      <div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3><p>Unique squad list จาก Manager ทั้ง 11 คน</p></div>
+      <strong>{data.allPlayers?.length||0}<em> UNIQUE PLAYERS</em></strong>
+    </div>
+    <div className="playerPoolGrid">{(data.allPlayers||[]).map(player=><article className="playerPoolCard" key={player.id}>
+      <div className="playerPoolTop">
+        <b>{player.name}</b>
+        <span className={`positionTag ${String(player.position||'').toLowerCase()}`}>{player.position}</span>
+      </div>
+      <small>{player.team}</small>
+      <div className="playerOwners"><em>MANAGERS</em><span>{(player.managers||[]).join(' · ') || '—'}</span></div>
+    </article>)}</div>
   </div>
+}
+
+function LabPlayerRow({player,index,mode='ppg'}){
+  const value = mode==='yellow' ? player.yellowCards : player.ppg
+  const suffix = mode==='yellow' ? 'ใบ' : 'pts/game'
+  return <div className="labMiniRow">
+    <span>{index+1}</span>
+    <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
+    <strong>{mode==='yellow'?'🟨 ':''}{Number(value||0).toFixed(mode==='yellow'?0:1)} <em>{suffix}</em></strong>
+  </div>
+}
+
+function LabRankCard({type,players}){
+  const copy=LAB_COPY[type]
+  return <article className={`labRankCard ${copy.tone}`}>
+    <div className="labRankHead"><span>{copy.icon}</span><div><h4>{copy.label}</h4><small>{copy.desc}</small></div></div>
+    <div className="labMiniList">{players?.length?players.map((player,i)=><LabPlayerRow player={player} index={i} key={player.id}/>):<div className="labMiniEmpty">ยังไม่มีนักเตะเข้าเงื่อนไข</div>}</div>
+  </article>
+}
+
+function HurtCard({players}){
+  const copy=LAB_COPY.hurt
+  return <article className={`labRankCard ${copy.tone} labWideCard`}>
+    <div className="labRankHead"><span>{copy.icon}</span><div><h4>{copy.label}</h4><small>{copy.desc}</small></div></div>
+    <div className="hurtList">{players?.length?players.map(player=><div className="hurtRow" key={player.id}>
+      <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
+      <span className={player.flagTone==='red'?'flagRed':'flagYellow'}>{player.flagTone==='red'?'🔴':'🟡'} {player.chanceNext==null?'Flagged':`${player.chanceNext}%`}</span>
+      {player.news&&<em>{player.news}</em>}
+    </div>):<div className="labMiniEmpty">ไม่มีนักเตะเข้าเงื่อนไขสะหง่องตอนนี้</div>}</div>
+  </article>
+}
+
+function XavierCard({players}){
+  const copy=LAB_COPY.xavier
+  return <article className={`labRankCard ${copy.tone} labWideCard`}>
+    <div className="labRankHead"><span>{copy.icon}</span><div><h4>{copy.label}</h4><small>{copy.desc}</small></div></div>
+    <div className="labMiniList xavierList">{players?.length?players.map((player,i)=><LabPlayerRow player={player} index={i} mode="yellow" key={player.id}/>):<div className="labMiniEmpty">ยังไม่มีข้อมูลใบเหลือง</div>}</div>
+    <div className="yellowRules">
+      <b>กติกา Premier League</b>
+      <span>5 ใบ ภายใน 19 นัดแรกของทีม → แบน 1 นัด</span>
+      <span>10 ใบ ภายใน 32 นัดแรกของทีม → แบน 2 นัด</span>
+      <span>15 ใบ ภายในฤดูกาล → แบน 3 นัด</span>
+      <span>20 ใบ → คณะกรรมการพิจารณาโทษ</span>
+      <small>หลังนัดที่ 19 เกณฑ์ 5 ใบหมดผล และหลังนัดที่ 32 เกณฑ์ 10 ใบหมดผล — จำนวนใบเหลืองไม่ได้รีเซ็ตเป็น 0</small>
+    </div>
+  </article>
 }
 
 export default function Home(){
@@ -247,21 +324,35 @@ export default function Home(){
   const mostConsistent=[...seasonStats].filter(x=>league.gwNumbers.length>=3).sort((a,b)=>a.consistency-b.consistency)[0]
 
   const expectedPlayers=xgData?.players||[]
+  const effectiveXgPosition=xgStat==='xgc'?'DEF':xgPosition
   const xgTop20=useMemo(()=>expectedPlayers
-    .filter(p=>p.position===xgPosition)
+    .filter(p=>p.position===effectiveXgPosition)
     .sort((a,b)=>(b[xgStat]||0)-(a[xgStat]||0) || (b.minutes||0)-(a.minutes||0))
-    .slice(0,20),[expectedPlayers,xgPosition,xgStat])
-  const labCards=useMemo(()=>{
-    const eligible=expectedPlayers.filter(p=>p.minutes>=180)
-    const pick=(arr,sorter)=>[...arr].sort(sorter)[0]
-    return [
-      {key:'king',label:'ระดับสมเด็จ',icon:'👑',tone:'king',player:pick(eligible.filter(p=>p.price>=9&&p.ppg>=5),(a,b)=>b.ppg-a.ppg)},
-      {key:'walk',label:'เดินแรง',icon:'🔥',tone:'walk',player:pick(eligible.filter(p=>p.price<=6&&p.ppg>=4.5),(a,b)=>b.ppg-a.ppg)},
-      {key:'fake',label:'ตีเก๊',icon:'📉',tone:'fake',player:pick(eligible.filter(p=>p.price>=9&&p.ppg<=3.5),(a,b)=>b.price-a.price)},
-      {key:'tui',label:'ตุ่ยดุ้ย',icon:'🫠',tone:'tui',player:pick(eligible.filter(p=>p.price<=6&&p.ppg<=2.5),(a,b)=>b.minutes-a.minutes)},
-      {key:'hurt',label:'สะหง่อง',icon:'🤕',tone:'hurt',player:pick(expectedPlayers.filter(p=>['i','d'].includes(p.status)),(a,b)=>(a.chanceNext??100)-(b.chanceNext??100))},
-    ].filter(x=>x.player)
-  },[expectedPlayers])
+    .slice(0,20),[expectedPlayers,effectiveXgPosition,xgStat])
+
+  const labRankings=useMemo(()=>{
+    const finishedGw=xgData?.latestFinishedGw||league.latestGw||1
+    const regularMinutes=Math.max(180,Math.floor(finishedGw*90*.65))
+    const regular=expectedPlayers.filter(p=>p.minutes>=regularMinutes)
+    const isExpensive=(p)=>p.position==='DEF'?p.price>5.5:['MID','FWD'].includes(p.position)?p.price>7.5:false
+    const expensive=regular.filter(isExpensive)
+    const cheap=regular.filter(p=>!isExpensive(p))
+    const best=(arr)=>[...arr].sort((a,b)=>b.ppg-a.ppg || b.points-a.points || b.xgi90-a.xgi90).slice(0,3)
+    const worst=(arr)=>[...arr].sort((a,b)=>a.ppg-b.ppg || a.points-b.points || b.minutes-a.minutes).slice(0,3)
+    const hurt=expectedPlayers
+      .filter(p=>{
+        const red=['i','s','u','n'].includes(p.status)||p.chanceNext===0
+        const yellow=p.status==='d'&&p.chanceNext!=null&&p.chanceNext<50
+        return red||yellow
+      })
+      .map(p=>({...p,flagTone:((['i','s','u','n'].includes(p.status)||p.chanceNext===0)?'red':'yellow')}))
+      .sort((a,b)=>(a.chanceNext??-1)-(b.chanceNext??-1) || a.name.localeCompare(b.name))
+    const xavier=[...expectedPlayers]
+      .filter(p=>(p.yellowCards||0)>0)
+      .sort((a,b)=>b.yellowCards-a.yellowCards || b.minutes-a.minutes || a.name.localeCompare(b.name))
+      .slice(0,3)
+    return {regularMinutes,king:best(expensive),walk:best(cheap),fake:worst(expensive),tui:worst(cheap),hurt,xavier}
+  },[expectedPlayers,xgData?.latestFinishedGw,league.latestGw])
 
   return <main id="top" className="siteV3">
     <header className="siteHeader v3Header">
@@ -405,7 +496,10 @@ export default function Home(){
 
     <section className="section xgLabSection" id="xg-lab">
       <div className="xgHero">
-        <div className="xgHost"><img src="/xg-lab/kun-host.jpeg" alt="Kun — xG LAB host"/><div className="speechBubble">ก่อนทรานส์เฟอร์<br/><b>อย่าเผลอใจ</b></div></div>
+        <div className="xgHost">
+          <div className="kunPhotoFrame"><img src="/xg-lab/kun-host.jpeg" alt="Kun — xG LAB host"/></div>
+          <div className="speechBubble">ก่อน <b>Transfer</b><br/>อย่าเผลอใจ</div>
+        </div>
         <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>xG</span> LAB</h2><strong>by กัญ วัดเล็ก</strong><p>ข้อมูลจริงจาก FPL • คำเรียกฉบับวัดเล็ก</p></div>
         <div className="xgLegend">
           <span className="red">🎯 <b>ซีเล็ง</b><small>xG</small></span>
@@ -416,20 +510,29 @@ export default function Home(){
       </div>
 
       <div className="xgControls">
-        <div className="xgStatTabs">{Object.entries(XG_META).map(([key,meta])=><button key={key} className={`${meta.tone} ${xgStat===key?'active':''}`} onClick={()=>setXgStat(key)}><span>{meta.icon}</span><b>{meta.label}</b><small>{meta.tech}</small></button>)}</div>
-        <div className="xgPositionTabs"><span>POSITION</span>{['FWD','MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>
+        <div className="xgStatTabs">{Object.entries(XG_META).map(([key,meta])=><button key={key} className={`${meta.tone} ${xgStat===key?'active':''}`} onClick={()=>{setXgStat(key);if(key==='xgc')setXgPosition('DEF')}}><span>{meta.icon}</span><b>{meta.label}</b><small>{meta.tech}</small></button>)}</div>
+        {xgStat==='xgc'?<div className="xgPositionTabs defOnly"><span>POSITION</span><b>DEF ONLY</b></div>:<div className="xgPositionTabs"><span>POSITION</span>{['FWD','MID','DEF'].map(pos=><button key={pos} className={xgPosition===pos?'active':''} onClick={()=>setXgPosition(pos)}>{pos}</button>)}</div>}
       </div>
 
+      <div className={`xgExplain ${XG_META[xgStat].tone}`}><span>{XG_META[xgStat].icon}</span><div><b>{XG_META[xgStat].valueLabel} ({XG_META[xgStat].tech})</b><p>{XG_META[xgStat].explain}</p></div></div>
+
       <div className={`xgRankingPanel ${XG_META[xgStat].tone}`}>
-        <div className="xgRankingTitle"><div><small>TOP 20 • {xgPosition}</small><h3>{XG_META[xgStat].icon} {XG_META[xgStat].label}</h3></div><span>{XG_META[xgStat].tech} + /90</span></div>
+        <div className="xgRankingTitle"><div><small>TOP 20 • {effectiveXgPosition}</small><h3>{XG_META[xgStat].icon} {XG_META[xgStat].label}</h3></div><span>{XG_META[xgStat].tech} + /90</span></div>
         {xgLoading?<div className="xgLoading">กำลังโหลด Expected Stats จาก FPL…</div>:xgData?.ok?<XgRanking rows={xgTop20} stat={xgStat}/>:<div className="xgLoading">ตอนนี้ดึงข้อมูล xG จาก FPL ไม่ได้</div>}
       </div>
 
       <div className="labStatusBlock">
         <div className="labStatusTitle"><div><small>WAT LEK STATUS</small><h3>ศัพท์ประจำ LAB</h3></div><span>อัปเดตตามข้อมูล FPL</span></div>
-        <div className="labStatusGrid">{labCards.map(card=><article className={`labStatusCard ${card.tone}`} key={card.key}><span className="labStatusIcon">{card.icon}</span><div><small>{card.player.team} • {card.player.position} • £{card.player.price.toFixed(1)}m</small><h4>{card.label}</h4><b>{card.player.name}</b></div><div className="labStatusNumbers">{card.key==='hurt'?<><strong>{card.player.chanceNext??'—'}%</strong><small>chance to play</small></>:<><strong>{card.player.ppg.toFixed(1)}</strong><small>pts/game</small></>}</div></article>)}</div>
+        <div className="labRankGrid">
+          <LabRankCard type="king" players={labRankings.king}/>
+          <LabRankCard type="walk" players={labRankings.walk}/>
+          <LabRankCard type="fake" players={labRankings.fake}/>
+          <LabRankCard type="tui" players={labRankings.tui}/>
+          <HurtCard players={labRankings.hurt}/>
+          <XavierCard players={labRankings.xavier}/>
+        </div>
       </div>
-      <p className="xgFootnote">Expected Stats เป็น Season-to-date จาก FPL • ค่า /90 คำนวณจากนาทีที่ลงเล่น • ไม่รวม GK</p>
+      <p className="xgFootnote">Expected Stats เป็น Season-to-date จาก FPL • ค่า /90 คำนวณจากนาทีที่ลงเล่น • ไม่รวม GK • กลุ่ม ตุ่ยดุ้ย ใช้เฉพาะนักเตะที่มีนาทีลงเล่นเพียงพอ</p>
     </section>
 
     <section className="section gallerySectionV3" id="gallery">

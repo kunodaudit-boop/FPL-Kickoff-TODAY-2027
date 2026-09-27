@@ -190,6 +190,7 @@ async function buildGameweek(gw){
 
   const livePoints=new Map((live.elements||[]).map(x=>[x.id,x.stats?.total_points||0]))
   const owned=new Map()
+  const ownerManagers=new Map()
   const captains=new Map()
   const managerStats=[]
 
@@ -197,6 +198,8 @@ async function buildGameweek(gw){
     if(!picks?.picks?.length) continue
     for(const pick of picks.picks){
       owned.set(pick.element,(owned.get(pick.element)||0)+1)
+      if(!ownerManagers.has(pick.element)) ownerManagers.set(pick.element,new Set())
+      ownerManagers.get(pick.element).add(m.name)
       if(pick.is_captain) captains.set(pick.element,(captains.get(pick.element)||0)+1)
     }
     const captain=picks.picks.find(p=>p.is_captain)
@@ -242,6 +245,7 @@ async function buildGameweek(gw){
       name:playerName(id,elementMap),
       position:POSITION[p?.element_type]||'',
       team:team?.short_name || team?.name || '',
+      managers:[...(ownerManagers.get(id)||[])].sort((a,b)=>CANONICAL.findIndex(m=>m.name===a)-CANONICAL.findIndex(m=>m.name===b)),
     }
   }).sort((a,b)=>a.name.localeCompare(b.name,'en'))
 
@@ -295,6 +299,7 @@ async function buildExpectedStats(){
         goals:Number(p.goals_scored)||0,
         assists:Number(p.assists)||0,
         goalsConceded:Number(p.goals_conceded)||0,
+        yellowCards:Number(p.yellow_cards)||0,
         xg:round2(xg),
         xg90:per90(xg,minutes),
         xa:round2(xa),

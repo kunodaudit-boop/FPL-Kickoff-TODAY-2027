@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Mitr:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Mitr:wght@400;500;600;700&family=Titan+One&display=swap');
 
 /* ============================================================
    FPL KICKOFF TODAY 2027 — V3 MASTER UI
@@ -181,4 +181,152 @@
 @media(max-width:480px){
   .secondaryStrip{grid-template-columns:1fr}.playerNameCloud{grid-template-columns:1fr 1fr}.lastPlayersHead{align-items:flex-start;flex-direction:column}.lastPlayersHead>strong em{display:inline}.statsSubDivider h3{font-size:18px}
   .xgLabSection{margin-left:7px;margin-right:7px}.speechBubble{left:calc(50% + 33px);width:122px}.xgBrand h2{font-size:54px}.xgLegend>span{grid-template-columns:1fr auto}.xgStatTabs button{grid-template-columns:auto 1fr auto}.labStatusGrid{grid-template-columns:1fr}.xgRankingTitle>span{display:none}
+}
+
+
+/* ============================================================
+   V3.3 — FUN CHUNKY FINAL PASS
+   More playful colour, stronger hierarchy, mobile-first xG LAB,
+   richer Last GW player pool and Wat Lek status rankings.
+   ============================================================ */
+
+:root{
+  --fun-blue:#1688ee;
+  --fun-blue-deep:#06275d;
+  --fun-yellow:#ffd735;
+  --fun-red:#ff4b52;
+  --fun-orange:#ff7b32;
+  --fun-green:#4bd977;
+  --fun-pink:#ff78bd;
+  --fun-purple:#a34ce6;
+  --fun-cream:#fff8e9;
+  --fun-ink:#0a214c;
+}
+
+.siteV3{
+  background-color:#eaf4ff;
+  background-image:
+    radial-gradient(circle at 9% 4%,rgba(255,215,53,.58) 0 4.5%,transparent 4.7%),
+    radial-gradient(circle at 91% 11%,rgba(255,120,189,.34) 0 5.5%,transparent 5.7%),
+    radial-gradient(circle at 86% 42%,rgba(75,217,119,.25) 0 7%,transparent 7.2%),
+    radial-gradient(circle at 10% 66%,rgba(163,76,230,.18) 0 8%,transparent 8.2%),
+    linear-gradient(115deg,rgba(255,255,255,.68) 0 13%,transparent 13% 88%,rgba(255,255,255,.55) 88%),
+    repeating-linear-gradient(0deg,rgba(8,39,93,.025) 0 1px,transparent 1px 28px),
+    linear-gradient(180deg,#e8f5ff 0%,#f8f5ed 48%,#eef8ff 100%);
+}
+
+.v3Header{border-bottom:4px solid var(--fun-yellow)}
+.v3Logo b,.xgBrand h2,.sectionTitle h2,.labStatusTitle h3,.lastPlayersHead h3,.xgRankingTitle h3,.labRankHead h4{
+  font-family:'Titan One','Lilita One','Mitr',sans-serif;
+}
+.v3Logo b{letter-spacing:.01em}
+.sectionTitle h2{font-weight:400;letter-spacing:-.02em}
+
+.homeDashboard{position:relative}
+.homeDashboard:before,.homeDashboard:after{content:"";position:absolute;z-index:-1;border-radius:34px;transform:rotate(-3deg)}
+.homeDashboard:before{left:-30px;top:70px;width:180px;height:72px;background:var(--fun-yellow);opacity:.62}
+.homeDashboard:after{right:-24px;bottom:40px;width:170px;height:86px;background:var(--fun-pink);opacity:.26;transform:rotate(5deg)}
+
+.detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3{
+  position:relative;overflow:hidden;
+  box-shadow:0 9px 0 rgba(8,39,93,.07),0 24px 48px rgba(19,52,94,.10);
+}
+.detailSection:after,.statsSectionV3:after,.gallerySectionV3:after,.rulesSectionV3:after{
+  content:"";position:absolute;right:-52px;top:-52px;width:138px;height:138px;border:22px solid rgba(255,255,255,.42);border-radius:50%;pointer-events:none;
+}
+.toneGold{background:linear-gradient(135deg,#fffdf3 0 58%,#ffe77d 100%)}
+.toneBlue{background:linear-gradient(135deg,#f7fbff 0 58%,#b9e2ff 100%)}
+.toneGreen{background:linear-gradient(135deg,#f7fff9 0 58%,#bdf2cb 100%)}
+.tonePurple{background:linear-gradient(135deg,#fbf7ff 0 58%,#ddc5ff 100%)}
+.statsSectionV3{background:linear-gradient(145deg,#faf8ff 0 66%,#dbc9ff 100%)}
+.gallerySectionV3{background:linear-gradient(145deg,#fffaf4 0 66%,#ffd1a9 100%)}
+.rulesSectionV3{background:linear-gradient(145deg,#f7ffff 0 66%,#bbefe9 100%)}
+
+.v3Competition,.secondaryCard,.featureCard,.compactRule,.chanceV3{border-radius:19px}
+.v3Competition b,.secondaryCard b,.featureHead b{font-family:'Mitr',sans-serif;font-weight:700}
+
+/* Last GW player pool — full context without duplicate player names. */
+.lastPlayersPanel{overflow:hidden;border:3px solid #0a316c;border-radius:22px;background:#fff;box-shadow:0 7px 0 rgba(6,39,93,.11)}
+.lastPlayersHead{background:linear-gradient(100deg,#0a3579,#1d5fb1);padding:22px 24px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:18px;position:relative;overflow:hidden}
+.lastPlayersHead:after{content:"";position:absolute;right:24%;top:-58px;width:130px;height:130px;border:20px solid rgba(255,215,53,.22);border-radius:50%}
+.lastPlayersHead small{font-size:9px;letter-spacing:.13em;font-weight:900;color:#bcd7ff}
+.lastPlayersHead h3{margin:4px 0 1px;font-size:28px;font-weight:400;position:relative;z-index:1}
+.lastPlayersHead p{margin:3px 0 0;font-size:10px;color:#d6e7ff;font-weight:600}
+.lastPlayersHead>strong{font-family:'Titan One','Mitr',sans-serif;font-size:35px;color:#ffe033;white-space:nowrap;position:relative;z-index:1}
+.lastPlayersHead>strong em{font-family:'Mitr',sans-serif;font-style:normal;font-size:8px;color:#fff;letter-spacing:.06em}
+.playerPoolGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;padding:14px;background:linear-gradient(180deg,#f7fbff,#eef5ff)}
+.playerPoolCard{min-width:0;border:2px solid #dce7f5;border-radius:14px;background:#fff;padding:11px 12px;box-shadow:0 4px 0 rgba(14,57,108,.05);display:flex;flex-direction:column;gap:4px}
+.playerPoolTop{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}.playerPoolTop b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.playerPoolCard>small{font-size:8px;color:#738198;font-weight:800}
+.positionTag{flex:0 0 auto;border-radius:999px;padding:4px 7px;font-size:7px;font-weight:900;color:#fff}.positionTag.fwd{background:#ef4554}.positionTag.mid{background:#7651dd}.positionTag.def{background:#1884d1}.positionTag.gk{background:#2a9a67}
+.playerOwners{border-top:1px dashed #dbe5f2;padding-top:6px;margin-top:2px;display:flex;flex-direction:column;gap:2px}.playerOwners em{font-style:normal;font-size:6px;letter-spacing:.1em;color:#9ca8ba;font-weight:900}.playerOwners span{font-size:8px;line-height:1.35;color:#223a65;font-weight:700}
+
+/* xG LAB hero — exact Kun photo, but composed as part of the design rather than a pasted rectangle. */
+.xgLabSection{background:
+  radial-gradient(circle at 93% 12%,rgba(255,215,53,.28),transparent 21%),
+  radial-gradient(circle at 9% 88%,rgba(255,79,82,.18),transparent 24%),
+  repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 16px),
+  #061d48!important;
+}
+.xgHero{overflow:hidden}
+.xgHost{position:relative;isolation:isolate}
+.xgHost:before{content:"";position:absolute;left:4%;bottom:4%;width:76%;height:76%;background:var(--fun-yellow);clip-path:polygon(5% 12%,88% 0,100% 86%,18% 100%);transform:rotate(-4deg);z-index:-1;opacity:.96}
+.xgHost:after{content:"";position:absolute;left:11%;bottom:1%;width:68%;height:68%;background:#1f93eb;clip-path:polygon(0 8%,100% 0,92% 100%,7% 87%);transform:rotate(3deg);z-index:-2}
+.kunPhotoFrame{position:absolute;left:16px;bottom:0;width:235px;height:275px;overflow:hidden;clip-path:polygon(8% 4%,93% 0,100% 91%,12% 100%,0 22%);filter:drop-shadow(7px 9px 0 #06152e)}
+.kunPhotoFrame img{width:100%;height:100%;object-fit:cover;object-position:50% 19%;transform:scale(1.04)}
+.xgHost>img{display:none!important}
+.speechBubble{z-index:3}
+.xgBrand h2{font-weight:400;letter-spacing:-.025em;text-shadow:5px 5px 0 #07152e}
+.xgBrand h2 span{color:#ffda2f;-webkit-text-stroke:2px #07152e;text-shadow:5px 5px 0 #ef3344}
+.xgBrand>strong{font-family:'Titan One','Mitr',sans-serif;font-weight:400}
+
+/* Expected-stat explanation stays short and only explains the active tab. */
+.xgExplain{margin:0 20px 12px;border:3px solid #06152e;border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:11px;color:#10213d;box-shadow:0 4px 0 #020b1b;position:relative;z-index:2}
+.xgExplain>span{font-size:25px}.xgExplain>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.xgExplain b{font-size:13px}.xgExplain p{margin:0;font-size:10px;font-weight:600;color:#32486b}
+.xgExplain.red{background:#ffd9de}.xgExplain.yellow{background:#fff2a6}.xgExplain.blue{background:#d2f0ff}.xgExplain.purple{background:#ead5ff}
+.xgPositionTabs.defOnly{min-width:145px;justify-content:space-between}.xgPositionTabs.defOnly b{background:#08275d;color:#fff;border-radius:8px;padding:8px 12px;font-size:10px;letter-spacing:.04em}
+
+/* Stronger readability for expected-stat tables. */
+.xgRankingTitle h3{font-weight:400;font-size:29px}.xgRankingTitle small{font-size:9px}.xgTableHead{font-size:9px;color:#52617a}.xgRow{min-height:52px}.xgPlayer b{font-size:13px}.xgPlayer small{font-size:8px}.xgTeam{font-size:10px}.xgRow>strong{font-size:20px}.xgPer90,.xgActual{font-size:12px}
+
+/* Wat Lek status — four Top 3 rankings + injury list + Xavier. */
+.labRankGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.labRankCard{border:3px solid #06152e;border-radius:18px;overflow:hidden;color:#10213b;box-shadow:0 6px 0 #020b1b;background:#fff}
+.labRankHead{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:2px solid rgba(6,21,46,.13)}.labRankHead>span{font-size:28px}.labRankHead h4{font-size:23px;font-weight:400;line-height:1;margin:0}.labRankHead small{font-size:9px;font-weight:800;color:#3f4d67}
+.labRankCard.king .labRankHead{background:#ffe03e}.labRankCard.walk .labRankHead{background:#51df82}.labRankCard.fake .labRankHead{background:#ff729a}.labRankCard.tui .labRankHead{background:#64ccff}.labRankCard.hurt .labRankHead{background:#f0f3f7}.labRankCard.xavier .labRankHead{background:#ffd83b}
+.labMiniList{padding:8px 10px;background:#fff}.labMiniRow{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:9px;align-items:center;padding:8px 6px;border-bottom:1px solid #ebeff5}.labMiniRow:last-child{border-bottom:0}.labMiniRow>span{width:25px;height:25px;border-radius:8px;background:#eaf0f7;display:grid;place-items:center;font-size:9px;font-weight:900}.labMiniRow>div{display:flex;flex-direction:column;min-width:0}.labMiniRow b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.labMiniRow small{font-size:7px;color:#8894a7}.labMiniRow>strong{font-size:15px;color:#0c2f68;white-space:nowrap}.labMiniRow>strong em{font-style:normal;font-size:7px;color:#8995a7}.labMiniEmpty{padding:18px 10px;text-align:center;color:#8190a7;font-size:9px;font-weight:700}
+.labWideCard{grid-column:span 1}.hurtList{background:#fff;padding:8px 10px;max-height:330px;overflow:auto}.hurtRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:9px 6px;border-bottom:1px solid #ebeff5}.hurtRow:last-child{border-bottom:0}.hurtRow>div{display:flex;flex-direction:column;min-width:0}.hurtRow b{font-size:11px}.hurtRow small{font-size:7px;color:#8793a4}.hurtRow>span{align-self:center;border-radius:999px;padding:5px 8px;font-size:8px;font-weight:900}.flagRed{background:#ffd7dc;color:#ae1326}.flagYellow{background:#fff1a8;color:#765a00}.hurtRow>em{grid-column:1/3;font-style:normal;font-size:7px;color:#6e7b91;line-height:1.35}
+.xavierList{padding-bottom:5px}.yellowRules{margin:0 10px 10px;padding:10px 11px;border-radius:12px;background:#fff7c9;border:2px dashed #d6ad00;display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}.yellowRules b{grid-column:1/3;font-size:10px;color:#5a4900}.yellowRules span{font-size:8px;font-weight:700;color:#675600}.yellowRules small{grid-column:1/3;font-size:7px;line-height:1.4;color:#756b45;border-top:1px solid rgba(117,107,69,.2);padding-top:6px;margin-top:2px}
+
+/* Keep technical copy secondary; funny vocabulary stays visually dominant. */
+.xgFootnote{font-size:9px;line-height:1.5;color:#adc5e6}
+
+@media(max-width:1100px){
+  .playerPoolGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kunPhotoFrame{width:205px;height:250px}
+}
+
+@media(max-width:760px){
+  .siteV3{background-image:
+    radial-gradient(circle at 10% 3%,rgba(255,215,53,.48) 0 3.5%,transparent 3.8%),
+    radial-gradient(circle at 94% 23%,rgba(255,120,189,.26) 0 4%,transparent 4.3%),
+    repeating-linear-gradient(0deg,rgba(8,39,93,.025) 0 1px,transparent 1px 24px),
+    linear-gradient(180deg,#e8f5ff,#fbf7ef 52%,#edf7ff)}
+  .detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3{border-width:2px}
+  .sectionTitle h2{font-size:34px}
+
+  .lastPlayersHead{padding:15px 14px}.lastPlayersHead h3{font-size:21px}.lastPlayersHead p{font-size:9px}.lastPlayersHead>strong{font-size:28px}.playerPoolGrid{grid-template-columns:repeat(2,minmax(0,1fr));padding:9px;gap:7px}.playerPoolCard{padding:10px}.playerPoolTop b{font-size:11px}.playerOwners span{font-size:8px}
+
+  .xgHero{padding-top:12px}.xgHost{height:228px}.kunPhotoFrame{left:50%;bottom:0;transform:translateX(-50%);width:170px;height:220px;filter:drop-shadow(5px 7px 0 #06152e)}.xgHost:before{left:18%;width:64%}.xgHost:after{left:22%;width:60%}.speechBubble{left:calc(50% + 50px);top:6px;width:130px;font-size:10px;padding:9px 10px}.speechBubble b{font-size:12px}
+  .xgBrand h2{font-size:62px}.xgLegend b{font-size:15px}
+  .xgExplain{margin:0 10px 10px;padding:10px 11px}.xgExplain>div{display:block}.xgExplain b{font-size:12px}.xgExplain p{font-size:9px;margin-top:2px;line-height:1.4}
+  .xgPositionTabs.defOnly{width:100%}
+
+  .xgRankingTitle h3{font-size:24px}.xgRow{grid-template-columns:30px minmax(0,1fr) 72px 62px;grid-template-areas:"rank player main main" ". team per actual";min-height:68px;padding:10px}.xgPlayer b{font-size:12px}.xgPlayer small{font-size:8px}.xgTeam{font-size:9px}.xgRow>strong{font-size:22px}.xgPer90,.xgActual{font-size:10px}.xgPer90:before,.xgActual:before{font-size:8px}
+
+  .labRankGrid{grid-template-columns:1fr}.labRankHead h4{font-size:22px}.labMiniRow{grid-template-columns:28px minmax(0,1fr) auto;padding:9px 6px}.labMiniRow b{font-size:12px}.labMiniRow small{font-size:8px}.labMiniRow>strong{font-size:15px}.hurtList{max-height:none}.hurtRow b{font-size:12px}.hurtRow small{font-size:8px}.hurtRow>em{font-size:8px}.yellowRules{grid-template-columns:1fr}.yellowRules b,.yellowRules small{grid-column:1}.yellowRules span{font-size:9px}.yellowRules small{font-size:8px}
+}
+
+@media(max-width:480px){
+  .playerPoolGrid{grid-template-columns:1fr}.lastPlayersHead>strong em{display:inline}.playerPoolCard{border-radius:12px}.playerOwners span{line-height:1.45}
+  .xgLabSection{margin-left:6px;margin-right:6px}.xgHost{height:218px}.kunPhotoFrame{width:165px;height:212px}.speechBubble{left:calc(50% + 38px);width:118px}.xgBrand h2{font-size:56px}.xgStatTabs button b{font-size:14px}.xgRankingPanel{margin-left:7px;margin-right:7px}.xgRow{grid-template-columns:28px minmax(0,1fr) 68px 56px}.xgPlayer b{font-size:11px}.xgRow>strong{font-size:20px}.labStatusBlock{margin-left:7px;margin-right:7px}.labRankHead{padding:12px}.labRankHead>span{font-size:25px}.labRankHead h4{font-size:21px}
 }
