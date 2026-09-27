@@ -120,82 +120,29 @@ function ToyAccent({type,compact=false}){
 }
 
 function ToyScene({type,compact=false,banner=false}){
-  const cls=`toyScene toyScene-${type} ${compact?'compact':''} ${banner?'banner':''}`
-  const common={viewBox:'0 0 360 180',role:'presentation','aria-hidden':'true'}
-  if(type==='woody') return <div className={cls}><svg {...common}>
-    <rect x="0" y="0" width="360" height="180" rx="24" fill="#f8df9d"/>
-    <path d="M0 132 C74 104 142 116 208 94 C270 74 318 84 360 66 V180 H0Z" fill="#d59a43" opacity=".52"/>
-    <path d="M230 27 C255 12 301 17 325 37 C312 44 300 48 281 49 C256 50 238 43 230 27Z" fill="#7c421f"/>
-    <path d="M251 29 C263 0 300 1 313 31 C296 38 269 38 251 29Z" fill="#9d5c2e"/>
-    <circle cx="285" cy="94" r="38" fill="none" stroke="#a96b2c" strokeWidth="8"/>
-    <path d="M285 56 C314 70 329 102 311 126" fill="none" stroke="#a96b2c" strokeWidth="7" strokeLinecap="round"/>
-    <g transform="translate(60 35)"><path d="M43 0 L54 25 L82 28 L61 47 L67 75 L43 61 L19 75 L25 47 L4 28 L32 25Z" fill="#ffd64e" stroke="#9a6700" strokeWidth="5"/><text x="43" y="43" textAnchor="middle" fontSize="12" fontWeight="900" fill="#7b5100">SHERIFF</text></g>
-    <g transform="translate(20 118)"><rect width="118" height="30" rx="8" fill="#fff1c9" stroke="#8a5321" strokeWidth="3"/><text x="59" y="20" textAnchor="middle" fontSize="13" fontWeight="900" fill="#6b3c18">SEASON TRAIL</text></g>
-  </svg></div>
-  if(type==='buzz') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#dff6ff"/><circle cx="300" cy="40" r="22" fill="#a874ef" opacity=".9"/>
-    <g opacity=".7" fill="#fff"><circle cx="56" cy="35" r="4"/><circle cx="94" cy="24" r="3"/><circle cx="329" cy="88" r="3"/><circle cx="265" cy="19" r="2"/></g>
-    <g transform="translate(95 18)"><path d="M84 8 C120 42 123 92 84 137 C45 92 48 42 84 8Z" fill="#fff" stroke="#7147c8" strokeWidth="6"/><path d="M84 13 C106 44 106 72 84 97 C62 72 62 44 84 13Z" fill="#91efb2"/><circle cx="84" cy="54" r="16" fill="#4b8bf6"/><path d="M57 70 L15 104 L61 105Z" fill="#8b5be0"/><path d="M111 70 L153 104 L107 105Z" fill="#8b5be0"/><path d="M67 134 L54 160 L78 149Z" fill="#59d978"/><path d="M101 134 L114 160 L90 149Z" fill="#59d978"/></g>
-    <path d="M25 140 C90 91 145 89 205 108 C250 122 298 116 338 81" fill="none" stroke="#7147c8" strokeWidth="4" strokeDasharray="8 8" opacity=".55"/>
-    <text x="24" y="38" fontSize="13" fontWeight="900" fill="#31587d">WEEKLY MISSION</text>
-  </svg></div>
-  if(type==='jessie') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="22" fill="#0c789c"/>
-    <path d="M208 35 C229 13 277 15 307 37 C292 49 266 57 231 51 C220 49 211 43 208 35Z" fill="#e53e37"/>
-    <path d="M230 37 C242 10 278 9 292 39 C273 46 248 47 230 37Z" fill="#f35b50"/>
-    <circle cx="280" cy="112" r="39" fill="none" stroke="#f7d36c" strokeWidth="7"/><path d="M280 73 C314 94 319 125 298 149" fill="none" stroke="#f7d36c" strokeWidth="6" strokeLinecap="round"/>
-    <g fill="#fff" opacity=".9"><path d="M22 33 h36 l-9 11 9 11H22Z"/><path d="M69 112 h44 l-9 12 9 12H69Z"/></g><text x="28" y="48" fontSize="13" fontWeight="900" fill="#082f44">FIRST RUN</text>
-  </svg></div>
-  if(type==='bopeep') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="22" fill="#5b2f87"/>
-    <g fill="#f6ecff"><circle cx="244" cy="100" r="26"/><circle cx="270" cy="93" r="24"/><circle cx="293" cy="106" r="25"/><circle cx="267" cy="116" r="28"/></g><circle cx="302" cy="113" r="15" fill="#d9baf7"/><circle cx="298" cy="109" r="2.8" fill="#523169"/><circle cx="307" cy="109" r="2.8" fill="#523169"/>
-    <path d="M85 31 V140 C85 154 70 158 59 148" fill="none" stroke="#d9baf7" strokeWidth="10" strokeLinecap="round"/><path d="M84 31 C114 31 112 57 93 64" fill="none" stroke="#d9baf7" strokeWidth="10" strokeLinecap="round"/>
-    <text x="127" y="47" fontSize="13" fontWeight="900" fill="#fff">SECOND JOURNEY</text>
-  </svg></div>
-  if(type==='potato') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#e8fff0"/>
-    <ellipse cx="238" cy="91" rx="68" ry="60" fill="#b9783f" stroke="#70451f" strokeWidth="5"/><ellipse cx="212" cy="72" rx="13" ry="16" fill="#fff"/><ellipse cx="258" cy="72" rx="13" ry="16" fill="#fff"/><circle cx="214" cy="76" r="5"/><circle cx="256" cy="76" r="5"/><path d="M212 112 C229 126 248 126 265 112" fill="none" stroke="#4b2b18" strokeWidth="7" strokeLinecap="round"/><path d="M222 98 C232 91 243 91 253 98" fill="none" stroke="#4b2b18" strokeWidth="8" strokeLinecap="round"/><path d="M182 72 C166 62 160 70 166 82" fill="#f0a27e"/><path d="M294 72 C310 62 316 70 310 82" fill="#f0a27e"/>
-    <g transform="translate(25 40)"><circle cx="32" cy="20" r="20" fill="#ffd83f"/><path d="M22 18 h20 M32 8 v20" stroke="#c49700" strokeWidth="4"/><text x="0" y="76" fontSize="13" fontWeight="900" fill="#17663b">LUCKY PARTS</text></g>
-  </svg></div>
-  if(type==='pizza') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#efe5ff"/>
-    <g transform="translate(80 28)"><path d="M95 9 V35" stroke="#3e8e40" strokeWidth="7" strokeLinecap="round"/><circle cx="95" cy="7" r="7" fill="#6ee56b"/><path d="M42 75 C42 31 148 31 148 75 C148 115 126 139 95 139 C64 139 42 115 42 75Z" fill="#76e06f" stroke="#3e8e40" strokeWidth="5"/><g fill="#fff" stroke="#3e8e40" strokeWidth="3"><circle cx="72" cy="77" r="13"/><circle cx="95" cy="67" r="13"/><circle cx="118" cy="77" r="13"/></g><g fill="#17461e"><circle cx="72" cy="77" r="5"/><circle cx="95" cy="67" r="5"/><circle cx="118" cy="77" r="5"/></g><path d="M78 106 C88 116 102 116 112 106" fill="none" stroke="#17461e" strokeWidth="5" strokeLinecap="round"/></g>
-    <g transform="translate(250 20)" stroke="#6b3bb7" strokeWidth="8" fill="none" strokeLinecap="round"><path d="M30 0 V60"/><path d="M8 54 C11 87 49 87 52 54"/><path d="M8 54 l-8 25 M52 54 l8 25"/></g>
-    <path d="M30 138 H118" stroke="#f4b125" strokeWidth="8" strokeLinecap="round"/><text x="32" y="125" fontSize="13" fontWeight="900" fill="#6532a8">THE CLAW</text>
-  </svg></div>
-  if(type==='army') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#efe4c8"/>
-    <path d="M0 146 C70 118 138 137 190 114 C242 92 312 109 360 83 V180 H0Z" fill="#b9c59c"/>
-    <g stroke="#bd4d35" strokeWidth="3" fill="none" opacity=".75"><path d="M35 50 C94 30 128 42 169 24 C220 5 269 22 318 14"/><path d="M64 92 C102 76 123 77 157 59"/></g>
-    <g transform="translate(132 24)"><ellipse cx="54" cy="22" rx="30" ry="12" fill="#456f3f"/><circle cx="54" cy="38" r="24" fill="#5f8956"/><rect x="41" y="58" width="26" height="58" rx="8" fill="#5f8956"/><path d="M45 67 L18 86 M63 67 L90 86" stroke="#4c7646" strokeWidth="10" strokeLinecap="round"/><path d="M47 114 L33 153 M61 114 L77 153" stroke="#4c7646" strokeWidth="10" strokeLinecap="round"/><rect x="7" y="151" width="88" height="11" rx="6" fill="#456f3f"/><g fill="#264829"><circle cx="39" cy="38" r="10"/><circle cx="69" cy="38" r="10"/></g><rect x="38" y="31" width="32" height="14" rx="5" fill="#284e2c"/></g>
-    <g transform="translate(33 85) scale(.72)"><circle cx="32" cy="20" r="18" fill="#648f59"/><rect x="24" y="36" width="16" height="42" rx="6" fill="#648f59"/><rect x="10" y="78" width="45" height="8" rx="4" fill="#456f3f"/></g>
-    <g transform="translate(278 85) scale(.72)"><circle cx="32" cy="20" r="18" fill="#648f59"/><rect x="24" y="36" width="16" height="42" rx="6" fill="#648f59"/><rect x="10" y="78" width="45" height="8" rx="4" fill="#456f3f"/></g>
-    <text x="20" y="28" fontSize="13" fontWeight="900" fill="#385a37">BATTLEFIELD INTELLIGENCE</text>
-  </svg></div>
-  if(type==='sid') return <div className={cls}><svg {...common}>
-    <defs><linearGradient id="sidBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#3b241c"/><stop offset="1" stopColor="#15151b"/></linearGradient></defs><rect width="360" height="180" rx="24" fill="url(#sidBg)"/>
-    <path d="M18 25 H342 M25 58 H333 M34 146 H326" stroke="#6d4535" strokeWidth="3" opacity=".55"/>
-    <text x="255" y="34" fontSize="27" fontWeight="900" fill="#a04a3f" transform="rotate(-5 255 34)">SID</text>
-    <g transform="translate(176 48)"><circle cx="52" cy="32" r="24" fill="#e8c5a8"/><circle cx="44" cy="29" r="4" fill="#38261e"/><circle cx="60" cy="29" r="4" fill="#38261e"/><path d="M44 44 C50 48 56 48 62 44" fill="none" stroke="#6a382b" strokeWidth="3"/><circle cx="52" cy="32" r="31" fill="none" stroke="#6f6f74" strokeWidth="5"/><g stroke="#77777e" strokeWidth="6" strokeLinecap="round"><path d="M29 55 L2 89"/><path d="M38 61 L22 105"/><path d="M65 61 L82 105"/><path d="M75 55 L103 89"/></g></g>
-    <g transform="translate(40 83)"><rect x="30" y="31" width="73" height="24" rx="8" fill="#d8513f"/><circle cx="41" cy="60" r="12" fill="#1f2026"/><circle cx="92" cy="60" r="12" fill="#1f2026"/><path d="M55 30 C48 8 69 0 81 17 C95 3 109 10 108 28" fill="none" stroke="#d7b54a" strokeWidth="8" strokeLinecap="round"/></g>
-    <path d="M18 157 h110" stroke="#f0c448" strokeWidth="6" strokeDasharray="10 8"/><text x="20" y="44" fontSize="12" fontWeight="900" fill="#f0c448">DATA WORKSHOP</text>
-  </svg></div>
-  if(type==='rex') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#fff0cf"/><path d="M0 150 C48 117 88 128 128 100 C181 62 233 88 278 61 C311 42 340 44 360 31 V180 H0Z" fill="#a9cf78"/>
-    <path d="M50 118 L88 49 L126 118Z" fill="#8e5e42"/><path d="M73 79 L88 49 L103 79Z" fill="#ef7948"/><path d="M87 49 C79 33 96 25 102 38 C108 24 126 34 117 49" fill="#f2aa49"/>
-    <g transform="translate(183 44)"><ellipse cx="63" cy="58" rx="58" ry="43" fill="#69b95d"/><circle cx="103" cy="43" r="29" fill="#69b95d"/><circle cx="112" cy="37" r="5" fill="#fff"/><circle cx="114" cy="38" r="2"/><path d="M104 55 C117 63 126 62 135 56" fill="none" stroke="#2f6e38" strokeWidth="4"/><path d="M13 57 C-18 51 -24 79 5 86" fill="none" stroke="#69b95d" strokeWidth="18" strokeLinecap="round"/><path d="M43 96 L34 133 M80 96 L88 133" stroke="#4e9b4f" strokeWidth="13" strokeLinecap="round"/></g>
-    <path d="M18 146 H322" stroke="#d3713e" strokeWidth="4" strokeDasharray="10 8"/><text x="20" y="33" fontSize="13" fontWeight="900" fill="#4f7d45">GW1 → NOW → FUTURE</text>
-  </svg></div>
-  if(type==='zurg') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#15122b"/><g opacity=".35" stroke="#8d6ac9"><path d="M20 35 H340 M20 72 H340 M20 109 H340 M20 146 H340"/></g>
-    <g transform="translate(185 17)"><path d="M75 0 L116 40 L107 133 H43 L34 40Z" fill="#5e37a1" stroke="#9d73e5" strokeWidth="5"/><path d="M49 57 H102 L92 86 H58Z" fill="#210f42"/><path d="M62 67 H74 M82 67 H94" stroke="#ff4054" strokeWidth="7" strokeLinecap="round"/><path d="M34 40 L12 21 M116 40 L138 21" stroke="#7b4fbd" strokeWidth="12" strokeLinecap="round"/></g><path d="M28 131 C91 110 133 103 180 82" fill="none" stroke="#ff4054" strokeWidth="5" strokeDasharray="7 8"/><text x="22" y="34" fontSize="13" fontWeight="900" fill="#c4a8ff">OFFICIAL ARCHIVE</text>
-  </svg></div>
-  if(type==='hamm') return <div className={cls}><svg {...common}>
-    <rect width="360" height="180" rx="24" fill="#102b5e"/>
-    <g transform="translate(135 32)"><ellipse cx="80" cy="71" rx="72" ry="52" fill="#f59abc" stroke="#c9618a" strokeWidth="5"/><circle cx="139" cy="63" r="20" fill="#f9a8c5"/><circle cx="146" cy="58" r="3.5" fill="#663146"/><circle cx="133" cy="58" r="3.5" fill="#663146"/><path d="M59 23 H104" stroke="#8f4664" strokeWidth="7" strokeLinecap="round"/><path d="M38 112 V135 M113 112 V135" stroke="#c9618a" strokeWidth="12" strokeLinecap="round"/><path d="M14 65 C-3 57 -7 73 7 80" fill="none" stroke="#c9618a" strokeWidth="7" strokeLinecap="round"/></g>
-    <g transform="translate(25 85)"><circle cx="24" cy="24" r="22" fill="#ffd04b" stroke="#bd8d16" strokeWidth="4"/><circle cx="58" cy="41" r="19" fill="#f0b72f" stroke="#bd8d16" strokeWidth="4"/><text x="24" y="30" textAnchor="middle" fontSize="15" fontWeight="900" fill="#815700">฿</text></g><text x="24" y="35" fontSize="13" fontWeight="900" fill="#ffb6d2">PIGGY BANK ZONE</text>
-  </svg></div>
-  return null
+  const SCENES={
+    woody:{images:['/toy-story/woody-season.png'],eyebrow:'WOODY COLLECTION',title:'Season Trail',note:'Full Season • Western toy-room'},
+    buzz:{images:['/toy-story/buzz-gameweek.png'],eyebrow:'SPACE RANGER',title:'Weekly Mission',note:'Gameweek • To infinity and beyond'},
+    jessie:{images:['/toy-story/jessie-first.png'],eyebrow:'JESSIE + BULLSEYE',title:'First Chance',note:'GW1–GW19'},
+    bopeep:{images:['/toy-story/bopeep-second.png'],eyebrow:'BO PEEP + SHEEP',title:'Second Chance',note:'Reset after GW19'},
+    potato:{images:['/toy-story/potato-lucky.png'],eyebrow:'MR. POTATO HEAD',title:'Lucky Game',note:'Weird luck. Weird results.'},
+    pizza:{images:['/toy-story/pizza-planet-clean.jpeg','/toy-story/aliens-clean.jpeg'],eyebrow:'PIZZA PLANET',title:'Mini Game Arcade',note:'Alien • The Claw • Arcade'},
+    army:{images:['/toy-story/army-room.png','/toy-story/army-radio.png'],eyebrow:'GREEN ARMY MEN',title:'Battlefield Intelligence',note:'Scout • Analyze • Plan'},
+    sid:{images:['/toy-story/sid-admin.png'],eyebrow:'SID PHILLIPS',title:'Data Workshop',note:'Break the data before Transfer'},
+    rex:{images:['/toy-story/rex-gallery.png'],eyebrow:'REX',title:'Journey Through The Gameweeks',note:'Past → Now → Future'},
+    zurg:{images:['/toy-story/zurg-rules.png'],eyebrow:'EMPEROR ZURG',title:'Rule Enforcer',note:'Official Rules Archive'},
+    hamm:{images:['/toy-story/hamm-finance.png'],eyebrow:'HAMM',title:'Piggy Bank Zone',note:'Cash Flow • Prize • Balance'},
+  }
+  const item=SCENES[type]
+  if(!item) return null
+  return <div className={`toyScene toyScene-${type} ${compact?'compact':''} ${banner?'banner':''} ${item.images.length>1?'multi':''}`} aria-hidden="true">
+    <div className="toySceneMedia">
+      <img className="toyScenePrimary" src={item.images[0]} alt=""/>
+      {item.images[1]&&<img className="toySceneSecondary" src={item.images[1]} alt=""/>}
+      <div className="toySceneShade"/>
+    </div>
+    <div className="toySceneCaption"><small>{item.eyebrow}</small><b>{item.title}</b><span>{item.note}</span></div>
+  </div>
 }
 
 function avg(nums){return nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:0}

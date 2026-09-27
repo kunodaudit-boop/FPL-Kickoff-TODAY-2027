@@ -712,3 +712,214 @@
   .toyHammSection>.toyScene{width:126px;height:68px;top:98px}
 }
 .toyHammSection:after{display:none!important}
+
+/* =========================================================
+   V3.6 — REFERENCE-DRIVEN TOY STORY WORLDS
+   Uses the actual visual references supplied for each section.
+   Data stays readable; the scene establishes the world.
+   ========================================================= */
+
+.detailSection,.statsSectionV3,.gallerySectionV3,.rulesSectionV3,.financeSection,.chanceV3,.xgLabSection{
+  position:relative;
+  overflow:hidden;
+}
+
+/* Real scene frame — replaces the old CSS/vector icon illustration. */
+.toyScene{
+  position:absolute!important;
+  right:22px!important;
+  top:20px!important;
+  width:min(47%,560px)!important;
+  height:215px!important;
+  border-radius:26px!important;
+  overflow:hidden!important;
+  background:#111!important;
+  border:4px solid rgba(255,255,255,.92)!important;
+  box-shadow:0 12px 0 rgba(13,37,72,.11),0 24px 38px rgba(14,38,73,.19)!important;
+  filter:none!important;
+  transform:none!important;
+  opacity:1!important;
+  isolation:isolate;
+}
+.toyScene:before{display:none!important}
+.toySceneMedia{position:absolute;inset:0;overflow:hidden;background:#111}
+.toyScenePrimary{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border:0}
+.toySceneShade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 46%,rgba(6,13,27,.08) 58%,rgba(6,13,27,.78) 100%);pointer-events:none}
+.toySceneCaption{position:absolute;left:17px;right:17px;bottom:14px;z-index:3;color:#fff;text-shadow:0 2px 9px rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:flex-start;line-height:1.04}
+.toySceneCaption small{font-size:8px;font-weight:1000;letter-spacing:.19em;color:#ffe36b;margin-bottom:4px}
+.toySceneCaption b{font-family:'Titan One','Lilita One','Mitr',sans-serif;font-size:25px;letter-spacing:.01em}
+.toySceneCaption span{margin-top:5px;font-size:9px;font-weight:800;color:rgba(255,255,255,.86)}
+.toySceneSecondary{position:absolute;right:13px;top:13px;width:37%;height:48%;object-fit:cover;object-position:center;border-radius:17px;border:4px solid rgba(255,255,255,.95);box-shadow:0 8px 20px rgba(0,0,0,.32);z-index:2}
+
+/* Create a real visual intro: story world on the right, competition info on the left. */
+.toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{
+  width:52%;
+  min-height:215px;
+  box-sizing:border-box;
+  padding:24px 22px;
+  margin-bottom:24px!important;
+  border-radius:24px;
+  align-items:flex-start!important;
+  flex-direction:column!important;
+  justify-content:center;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(7px);
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 10px 24px rgba(14,41,78,.08);
+}
+.toyWoodySection>.sectionTitle>strong,.toyBuzzSection>.sectionTitle>strong,.toyPotatoSection>.sectionTitle>strong,.toyPizzaSection>.sectionTitle>strong,.toyRexSection>.sectionTitle>strong,.toyZurgSection>.sectionTitle>strong{margin-top:10px}
+.toyWoodySection>.sectionTitle h2,.toyBuzzSection>.sectionTitle h2,.toyPotatoSection>.sectionTitle h2,.toyPizzaSection>.sectionTitle h2,.toyRexSection>.sectionTitle h2,.toyZurgSection>.sectionTitle h2{font-size:42px!important;line-height:.95!important}
+.toyWoodySection>.sectionTitle span,.toyBuzzSection>.sectionTitle span,.toyPotatoSection>.sectionTitle span,.toyPizzaSection>.sectionTitle span,.toyRexSection>.sectionTitle span,.toyZurgSection>.sectionTitle span{font-size:12px!important;line-height:1.5}
+
+/* FULL SEASON — Woody collection / western toy room */
+.toyWoodySection{background:
+  linear-gradient(90deg,rgba(255,250,237,.96) 0 55%,rgba(238,192,108,.20) 100%),
+  repeating-linear-gradient(0deg,rgba(130,77,28,.035) 0 1px,transparent 1px 24px),
+  #fff8ea!important;border-color:#ddb85c!important}
+.toyWoodySection>.toyScene{border-color:#f5c94d!important}
+.toyWoodySection>.toyScene .toyScenePrimary{object-position:center 45%}
+.toyWoodySection>.sectionTitle{background:linear-gradient(145deg,rgba(255,252,241,.94),rgba(255,242,200,.88));border-color:#f0d58c}
+.toyWoodySection>.sectionTitle p{color:#9f6104!important}
+
+/* GAMEWEEK — Buzz / clean space-ranger mission control */
+.toyBuzzSection{background:
+  radial-gradient(circle at 88% 10%,rgba(117,73,196,.20),transparent 26%),
+  radial-gradient(circle at 74% 34%,rgba(78,218,118,.14),transparent 23%),
+  linear-gradient(145deg,#f5fbff 0 58%,#e7e0ff 100%)!important;border-color:#86bfe4!important}
+.toyBuzzSection:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,#7f6db7 1px,transparent 1.2px);background-size:29px 29px;opacity:.12}
+.toyBuzzSection>.toyScene{border-color:#7dd680!important}
+.toyBuzzSection>.toyScene .toyScenePrimary{object-position:center 50%}
+.toyBuzzSection>.sectionTitle{background:linear-gradient(145deg,rgba(247,253,255,.95),rgba(235,244,255,.88));border-color:#b7d9ef}
+.toyBuzzSection>.sectionTitle p{color:#6336a3!important}
+
+/* FIRST / SECOND CHANCE — matching heroine + companion pair. */
+.chanceV3>.toyScene.compact{
+  width:46%!important;
+  height:150px!important;
+  right:14px!important;
+  top:14px!important;
+  border-radius:20px!important;
+  border-width:3px!important;
+  box-shadow:0 8px 0 rgba(0,0,0,.10),0 16px 24px rgba(0,0,0,.15)!important;
+}
+.chanceV3>.toyScene.compact .toySceneCaption{left:11px;right:11px;bottom:9px}
+.chanceV3>.toyScene.compact .toySceneCaption small{font-size:6px}.chanceV3>.toyScene.compact .toySceneCaption b{font-size:18px}.chanceV3>.toyScene.compact .toySceneCaption span{font-size:7px}
+.toyJessieSection .chanceHead,.toyBoPeepSection .chanceHead{min-height:150px;padding-right:49%;box-sizing:border-box;align-items:center}
+.toyJessieSection{background:linear-gradient(145deg,#0c6f8d,#12627b)!important}
+.toyJessieSection>.toyScene{border-color:#f3c94f!important}.toyJessieSection>.toyScene .toyScenePrimary{object-position:center 45%}
+.toyBoPeepSection{background:linear-gradient(145deg,#5b3482,#7451a0)!important}
+.toyBoPeepSection>.toyScene{border-color:#e6c6ff!important}.toyBoPeepSection>.toyScene .toyScenePrimary{object-position:center 38%}
+
+/* LUCKY GAME — Potato Head, playful and chaotic. */
+.toyPotatoSection{background:linear-gradient(145deg,#f8fff7 0 58%,#e2f5dc 100%)!important;border-color:#b6d998!important}
+.toyPotatoSection>.toyScene{border-color:#f4cd52!important}
+.toyPotatoSection>.sectionTitle{background:linear-gradient(145deg,rgba(255,255,246,.95),rgba(239,253,226,.9));border-color:#cce2af}
+.toyPotatoSection>.sectionTitle p{color:#34734a!important}
+
+/* MINI GAME — Pizza Planet / Alien / arcade zone. */
+.toyPizzaSection{background:
+  radial-gradient(circle at 90% 18%,rgba(117,255,83,.18),transparent 22%),
+  radial-gradient(circle at 79% 34%,rgba(148,80,255,.18),transparent 25%),
+  linear-gradient(145deg,#f8f4ff 0 58%,#e1d5ff 100%)!important;border-color:#b392e8!important}
+.toyPizzaSection>.toyScene{border-color:#78d25c!important;background:#120d29!important}
+.toyPizzaSection>.toyScene .toyScenePrimary{object-position:center 47%}
+.toyPizzaSection>.toyScene .toySceneSecondary{object-position:center 25%;border-color:#c7ff87}
+.toyPizzaSection>.sectionTitle{background:linear-gradient(145deg,rgba(254,252,255,.96),rgba(238,229,255,.9));border-color:#cbb3ef}
+.toyPizzaSection>.sectionTitle p{color:#673fae!important}
+.toyPizzaSection>.toyScene:after{content:"THE CLAW";position:absolute;top:13px;left:13px;z-index:4;padding:5px 8px;border-radius:999px;background:#7bea5d;color:#17391b;font-size:7px;font-weight:1000;letter-spacing:.12em;border:2px solid rgba(255,255,255,.9)}
+
+/* STATISTICS — Green Army war room / battlefield intelligence. */
+.statsSectionV3{background:
+  linear-gradient(145deg,rgba(245,243,226,.98),rgba(225,233,209,.98)),
+  repeating-linear-gradient(32deg,transparent 0 30px,rgba(67,91,58,.035) 30px 32px)!important;border-color:#879d7d!important}
+.statsBattlefieldBanner{min-height:235px!important;background:#d9dfca!important;border-color:#5e7756!important;box-shadow:0 8px 0 rgba(55,75,50,.12)!important}
+.statsBattlefieldBanner:before{background:linear-gradient(90deg,rgba(247,244,224,.96) 0 38%,rgba(247,244,224,.52) 52%,transparent 72%)!important}
+.statsBattlefieldBanner .toyScene.banner{position:absolute!important;right:0!important;top:0!important;width:62%!important;height:100%!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.statsBattlefieldBanner .toyScene.banner .toySceneCaption{display:none}
+.statsBattlefieldBanner .toyScene.banner .toyScenePrimary{object-position:center}
+.statsBattlefieldBanner .toyScene.banner .toySceneSecondary{width:39%;height:43%;right:18px;top:18px;border-radius:18px;border-color:#e9ead8}
+.statsBattlefieldCopy{padding:38px 0 30px 28px!important;width:min(430px,42%)!important}
+.statsBattlefieldCopy:before{content:"🔭  RECON";display:inline-flex;width:max-content;margin-bottom:4px;padding:5px 8px;border-radius:999px;background:#405b3b;color:#fff;font-size:8px;font-weight:1000;letter-spacing:.12em}
+.statsBattlefieldCopy b{font-size:32px!important}.statsBattlefieldCopy span{font-size:11px!important}
+
+/* ADMIN INSIDE — Sid's real workshop reference becomes the environment. */
+.sidWorkshopScene{height:270px!important;overflow:hidden!important;border-radius:24px!important;border:3px solid #575966;background:#161419;box-shadow:0 10px 0 rgba(0,0,0,.22)}
+.sidWorkshopScene .toyScene{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.sidWorkshopScene .toyScenePrimary{object-position:center 42%}
+.sidWorkshopScene .toySceneCaption{left:18px;bottom:16px}
+.sidWorkshopScene .toySceneCaption small{color:#ffd647}.sidWorkshopScene .toySceneCaption b{font-size:27px}
+.sidWorkshopScene:after{display:none!important}
+.xgHero{background:linear-gradient(105deg,#128cdc 0 21%,#0d315a 21.3% 49%,#17151b 49.3% 100%)!important}
+
+/* GALLERY — Rex as the guide through time. */
+.toyRexSection{background:
+  radial-gradient(circle at 11% 85%,rgba(239,111,65,.20),transparent 21%),
+  linear-gradient(145deg,#fff9ef 0 58%,#dff3c9 100%)!important;border-color:#9cc482!important}
+.toyRexSection>.toyScene{border-color:#7ebf6f!important}
+.toyRexSection>.toyScene .toyScenePrimary{object-position:center 44%}
+.toyRexSection>.sectionTitle{background:linear-gradient(145deg,rgba(255,252,242,.96),rgba(237,248,224,.9));border-color:#bed8a8}
+.toyRexSection>.sectionTitle p{color:#4f8449!important}
+.rexJourney:before{content:"🌋";font-size:28px;margin-right:5px}
+
+/* RULES — Zurg as rule enforcer. */
+.toyZurgSection{background:
+  radial-gradient(circle at 88% 13%,rgba(116,68,184,.28),transparent 24%),
+  linear-gradient(145deg,#fbf9ff 0 58%,#d8c7f1 100%)!important;border-color:#8b64bb!important}
+.toyZurgSection>.toyScene{border-color:#8e5ed0!important;background:#120d22!important}
+.toyZurgSection>.toyScene .toyScenePrimary{object-position:center 34%}
+.toyZurgSection>.sectionTitle{background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(239,230,255,.90));border-color:#c5afe7}
+.toyZurgSection>.sectionTitle p{color:#693a9f!important}
+
+/* FINANCE — Hamm / piggy bank / money zone. */
+.toyHammSection{background:
+  radial-gradient(circle at 88% 11%,rgba(255,143,187,.18),transparent 24%),
+  radial-gradient(circle at 75% 24%,rgba(255,211,75,.10),transparent 19%),
+  linear-gradient(180deg,#0b244e,#06182f)!important}
+.toyHammSection>.toyScene{top:22px!important;right:max(22px,calc((100vw - 1320px)/2 + 22px))!important;width:min(45%,540px)!important;height:205px!important;border-color:#f2b3cc!important}
+.toyHammSection>.toyScene .toyScenePrimary{object-position:center 42%}
+.toyHammSection .sectionIntroRow{min-height:210px;padding-right:49%!important;display:flex;align-items:flex-start;justify-content:center;flex-direction:column;box-sizing:border-box}
+.toyHammSection .sectionIntroRow p{max-width:620px!important}
+.toyHammSection .sectionIntroRow h2{font-size:40px!important}
+
+/* Keep all actual data above atmospheric backgrounds. */
+.detailSection>*:not(.toyScene),.gallerySectionV3>*:not(.toyScene),.rulesSectionV3>*:not(.toyScene),.financeSection>*:not(.toyScene),.chanceV3>*:not(.toyScene){position:relative;z-index:3}
+
+@media(max-width:1050px){
+  .toyScene{width:43%!important;height:188px!important}
+  .toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{width:55%;min-height:188px;padding:18px}
+  .toyWoodySection>.sectionTitle h2,.toyBuzzSection>.sectionTitle h2,.toyPotatoSection>.sectionTitle h2,.toyPizzaSection>.sectionTitle h2,.toyRexSection>.sectionTitle h2,.toyZurgSection>.sectionTitle h2{font-size:34px!important}
+  .statsBattlefieldBanner{min-height:210px!important}.statsBattlefieldCopy{width:46%!important;padding:28px 0 24px 22px!important}.statsBattlefieldCopy b{font-size:27px!important}
+  .toyHammSection>.toyScene{width:43%!important;height:185px!important}.toyHammSection .sectionIntroRow{padding-right:46%!important;min-height:190px}
+}
+
+@media(max-width:760px){
+  /* Mobile becomes a stacked story card: full visual first, data second. */
+  .toyScene{position:relative!important;inset:auto!important;width:100%!important;height:190px!important;margin:0 0 14px!important;border-radius:20px!important;border-width:3px!important;box-shadow:0 7px 0 rgba(13,37,72,.10),0 15px 25px rgba(14,38,73,.15)!important}
+  .toySceneCaption{left:13px;right:13px;bottom:11px}.toySceneCaption b{font-size:22px}.toySceneCaption span{font-size:8px}
+  .toyWoodySection>.sectionTitle,.toyBuzzSection>.sectionTitle,.toyPotatoSection>.sectionTitle,.toyPizzaSection>.sectionTitle,.toyRexSection>.sectionTitle,.toyZurgSection>.sectionTitle{width:100%;min-height:0;padding:16px!important;margin-bottom:16px!important}
+  .toyWoodySection>.sectionTitle h2,.toyBuzzSection>.sectionTitle h2,.toyPotatoSection>.sectionTitle h2,.toyPizzaSection>.sectionTitle h2,.toyRexSection>.sectionTitle h2,.toyZurgSection>.sectionTitle h2{font-size:30px!important}
+  .toyWoodySection>.sectionTitle span,.toyBuzzSection>.sectionTitle span,.toyPotatoSection>.sectionTitle span,.toyPizzaSection>.sectionTitle span,.toyRexSection>.sectionTitle span,.toyZurgSection>.sectionTitle span{display:block!important;max-width:none!important}
+
+  .chanceV3>.toyScene.compact{position:relative!important;inset:auto!important;width:100%!important;height:165px!important;margin:0 0 12px!important}
+  .toyJessieSection .chanceHead,.toyBoPeepSection .chanceHead{min-height:0;padding-right:0!important}
+
+  .statsBattlefieldBanner{min-height:360px!important;display:flex;flex-direction:column;background:#eef0e3!important}
+  .statsBattlefieldBanner:before{display:none}
+  .statsBattlefieldBanner .toyScene.banner{position:relative!important;inset:auto!important;order:1;width:100%!important;height:205px!important;margin:0!important;border-radius:0!important}
+  .statsBattlefieldCopy{order:2;width:100%!important;padding:15px!important;box-sizing:border-box}.statsBattlefieldCopy b{font-size:24px!important}.statsBattlefieldCopy span{font-size:10px!important}
+
+  .xgHero{grid-template-columns:1fr!important}
+  .sidWorkshopScene{height:205px!important;margin-top:8px!important}
+  .sidWorkshopScene .toyScene{position:absolute!important;inset:0!important;margin:0!important;height:100%!important;border-radius:0!important}
+
+  .toyHammSection>.toyScene{position:relative!important;inset:auto!important;width:100%!important;height:190px!important;margin:0 0 14px!important}
+  .toyHammSection .sectionIntroRow{min-height:0;padding-right:0!important}.toyHammSection .sectionIntroRow h2{font-size:32px!important}
+}
+
+@media(max-width:480px){
+  .toyScene{height:170px!important}.toySceneSecondary{width:39%;height:44%;right:9px;top:9px;border-width:3px;border-radius:13px}
+  .toySceneCaption b{font-size:20px}.toySceneCaption small{font-size:7px}.toySceneCaption span{font-size:7px}
+  .chanceV3>.toyScene.compact{height:150px!important}
+  .statsBattlefieldBanner{min-height:335px!important}.statsBattlefieldBanner .toyScene.banner{height:185px!important}
+  .sidWorkshopScene{height:185px!important}
+}
