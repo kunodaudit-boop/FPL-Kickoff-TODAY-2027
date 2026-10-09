@@ -930,7 +930,7 @@
    - 3-match FDR for every player shown inside ADMIN INSIDE
    - Position filter for Last GW player pool
    - Larger typography without changing the established layout
-   - Injury-only "สะหง่อง" is handled by the FPL API layer
+   - Flag/status handling is supplied by the FPL API layer
    ============================================================ */
 
 /* --- Compact next-3 fixture difficulty chips --- */
@@ -993,4 +993,56 @@ footer p,footer a{font-size:12px}
   .playerPositionFilter button{min-width:auto}.playerPositionFilter button b{font-size:10px}.playerPositionFilter button span{width:21px;height:21px}
   .playerPoolRow .playerOwners span{font-size:10px}
   .fdrMini>i b,.fdrMini>i em{font-size:6px!important;padding:3px 4px}.fdrMini>i{min-height:17px}
+}
+
+/* ============================================================
+   V3.8 — player badges + live availability flags
+   - Club crest beside every live player-name surface
+   - ADMIN INSIDE shows yellow/red FPL flags beside names
+   - "สะหง่อง" position tabs: FWD / MID / DEF / GK
+   - Last GW player pool removes ALL and starts at FWD
+   ============================================================ */
+
+.playerNameWithClub{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%;vertical-align:middle}
+.playerNameText{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.clubLogo{position:relative;flex:0 0 22px;width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;background:#f3f6fa;border:1px solid rgba(14,40,78,.12);overflow:hidden;box-shadow:0 1px 2px rgba(14,40,78,.08)}
+.clubLogo img{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);object-fit:contain;display:block}
+.clubLogoFallback{font-size:5.5px;line-height:1;font-weight:1000;color:#607089;letter-spacing:-.03em;text-align:center}
+.clubLogo.fallback{font-size:5.5px;line-height:1;font-weight:1000;color:#607089;letter-spacing:-.03em;text-align:center}
+.availabilityFlag{flex:0 0 auto;font-size:10px;line-height:1;filter:saturate(1.08)}
+.availabilityFlag.red{filter:saturate(1.2)}
+.availabilityFlag.yellow{filter:saturate(1.05)}
+
+/* Live statistics surfaces */
+.barName>b{min-width:0;display:block}.barName .playerNameWithClub{max-width:100%}.barName .clubLogo{width:19px;height:19px;flex-basis:19px}
+.captainMetric>b{display:flex;align-items:center;min-width:0}.captainMetric .clubLogo{width:20px;height:20px;flex-basis:20px}
+.playerPoolIdentity>b{display:flex;align-items:center;min-width:0}.playerPoolIdentity .clubLogo{width:23px;height:23px;flex-basis:23px}
+
+/* ADMIN INSIDE */
+.xgPlayer>b,.labPlayerCore>b,.hurtRow>div>b{display:flex;align-items:center;min-width:0;max-width:100%}
+.xgPlayer .clubLogo{width:23px;height:23px;flex-basis:23px}
+.labPlayerCore .clubLogo,.hurtRow .clubLogo{width:22px;height:22px;flex-basis:22px}
+.xgPlayer .availabilityFlag,.labPlayerCore .availabilityFlag,.hurtRow .availabilityFlag{font-size:10px}
+.hurtPositionFilter{padding:9px 10px;background:#fff8dc;border-top:1px solid #f1e5a7;border-bottom:1px solid #eadc91}
+.hurtPositionFilter button{min-height:34px;padding:5px 9px;border-width:1px}
+.hurtPositionFilter button.active{background:#7a5a00;border-color:#7a5a00;box-shadow:none}
+.hurtPositionFilter button.active span{background:#fff2a8;color:#715500}
+.hurtRow>span{white-space:nowrap}
+
+@media(max-width:760px){
+  .playerNameWithClub{gap:5px}
+  .clubLogo{width:20px;height:20px;flex-basis:20px}
+  .barName .clubLogo{width:18px;height:18px;flex-basis:18px}
+  .playerPoolIdentity .clubLogo{width:21px;height:21px;flex-basis:21px}
+  .xgPlayer .clubLogo,.labPlayerCore .clubLogo,.hurtRow .clubLogo{width:20px;height:20px;flex-basis:20px}
+  .availabilityFlag{font-size:9px}
+  .hurtPositionFilter{padding:8px 7px;gap:5px}
+  .hurtPositionFilter button{padding:5px 8px;min-height:32px}
+}
+
+@media(max-width:480px){
+  .clubLogo{width:19px;height:19px;flex-basis:19px}
+  .playerNameWithClub{gap:4px}
+  .hurtPositionFilter button b{font-size:9px}
+  .hurtPositionFilter button span{width:20px;height:20px;min-width:20px;font-size:8px}
 }

@@ -49,6 +49,29 @@ function Money({value}){
   return <span className={cls}>{value>0?'+':''}{value}</span>
 }
 
+function ClubLogo({teamCode,team='',className=''}){
+  const fallback=(team||'?').slice(0,3).toUpperCase()
+  if(teamCode==null) return <span className={`clubLogo fallback ${className}`} aria-label={team||'Club'}>{fallback}</span>
+  const src=`https://resources.premierleague.com/premierleague/badges/50/t${teamCode}.png`
+  return <span className={`clubLogo ${className}`} title={team||'Club'}>
+    <span className="clubLogoFallback">{fallback}</span>
+    <img loading="lazy" src={src} alt={`${team||'Club'} logo`} onError={e=>{e.currentTarget.style.display='none'}}/>
+  </span>
+}
+
+function AvailabilityFlag({tone}){
+  if(!tone) return null
+  return <span className={`availabilityFlag ${tone}`} title={tone==='red'?'FPL red flag':'FPL yellow flag'} aria-label={tone==='red'?'Red flag':'Yellow flag'}>{tone==='red'?'🔴':'🟡'}</span>
+}
+
+function PlayerNameWithClub({name,team,teamCode,flagTone=null,showFlag=false,className=''}){
+  return <span className={`playerNameWithClub ${className}`}>
+    <ClubLogo team={team} teamCode={teamCode}/>
+    <span className="playerNameText">{name}</span>
+    {showFlag&&<AvailabilityFlag tone={flagTone}/>} 
+  </span>
+}
+
 function MiniTable({rows,limit=4,title='Overall'}){
   return <div className="miniTable v3Table">
     <div className="miniTableHead"><span>{title}</span><span>PTS</span></div>
@@ -73,7 +96,7 @@ function BarList({items,mode='ownership',total=11}){
     return <div className="barRow" key={`${item.id}-${i}`}>
       <span className="barRank">{i+1}</span>
       <div className="barMain">
-        <div className="barName"><b>{item.player}</b><small>{item.count}/{total} managers</small></div>
+        <div className="barName"><b><PlayerNameWithClub name={item.player} team={item.team} teamCode={item.teamCode}/></b><small>{item.count}/{total} managers</small></div>
         <div className="barTrack"><span style={{width:`${width}%`}}/></div>
       </div>
       <strong>{mode==='points'?`${value} pts`:`${value}%`}</strong>
@@ -180,7 +203,7 @@ const LAB_COPY={
   walk:{label:'เดินแรง',icon:'🔥',tone:'walk',desc:'ถูก + ดี'},
   fake:{label:'ตีเก๊',icon:'📉',tone:'fake',desc:'แพง + ไม่ดี'},
   tui:{label:'ตุ่ยดุ้ย',icon:'🫠',tone:'tui',desc:'ถูก + ไม่ดี'},
-  hurt:{label:'สะหง่อง',icon:'🤕',tone:'hurt',desc:'ความพร้อมมีปัญหา'},
+  hurt:{label:'สะหง่อง',icon:'🤕',tone:'hurt',desc:'ธงเหลือง / ธงแดงจาก FPL'},
   xavier:{label:'ซาเวียร์',icon:'🟨',tone:'xavier',desc:'ใบเหลืองสะสม'},
 }
 
@@ -203,7 +226,7 @@ function XgRanking({rows,stat}){
       const actual=stat==='xgi'?(player.goals+player.assists):player[meta.actual]
       return <div className="xgRow" key={player.id}>
         <span className="xgRank">{i+1}</span>
-        <span className="xgPlayer"><b>{player.name}</b><small>{player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></span>
+        <span className="xgPlayer"><b><PlayerNameWithClub name={player.name} team={player.team} teamCode={player.teamCode} flagTone={player.flagTone} showFlag/></b><small>{player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></span>
         <span className="xgTeam">{player.team}</span>
         <strong>{Number(player[stat]||0).toFixed(2)}</strong>
         <span className="xgPer90">{Number(player[meta.per90]||0).toFixed(2)}</span>
@@ -214,25 +237,25 @@ function XgRanking({rows,stat}){
 }
 
 function LastGwPlayers({data,loading}){
-  const [position,setPosition]=useState('ALL')
+  const [position,setPosition]=useState('FWD')
   if(loading) return <div className="statsEmpty big">กำลังรวมรายชื่อนักเตะจาก Last Gameweek…</div>
   if(!data?.available) return <div className="statsEmpty big">ยังดึงรายชื่อนักเตะ Last Gameweek ไม่ได้</div>
   if(data.managerCount!==members.length) return <div className="statsEmpty big">กำลังรอข้อมูล Squad ให้ครบ {members.length}/11 Manager</div>
   const allPlayers=data.allPlayers||[]
-  const positions=['ALL','GK','DEF','MID','FWD']
-  const counts=Object.fromEntries(positions.map(pos=>[pos,pos==='ALL'?allPlayers.length:allPlayers.filter(player=>player.position===pos).length]))
-  const filteredPlayers=position==='ALL'?allPlayers:allPlayers.filter(player=>player.position===position)
+  const positions=['FWD','MID','DEF','GK']
+  const counts=Object.fromEntries(positions.map(pos=>[pos,allPlayers.filter(player=>player.position===pos).length]))
+  const filteredPlayers=allPlayers.filter(player=>player.position===position)
   return <div className="lastPlayersPanel">
     <div className="lastPlayersHead">
-      <div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3><p>Unique squad list จาก Manager ทั้ง 11 คน</p></div>
-      <strong>{filteredPlayers.length}<em>{position==='ALL'?' UNIQUE PLAYERS':` ${position} • ${allPlayers.length} TOTAL`}</em></strong>
+      <div><small>LAST GAMEWEEK</small><h3>PLAYER POOL — GW{data.gw}</h3><p>เลือกดูตามตำแหน่ง • Unique squad list จาก Manager ทั้ง 11 คน</p></div>
+      <strong>{filteredPlayers.length}<em> {position} • {allPlayers.length} TOTAL</em></strong>
     </div>
     <div className="playerPositionFilter" role="group" aria-label="Filter players by position">
       {positions.map(pos=><button type="button" key={pos} className={position===pos?'active':''} onClick={()=>setPosition(pos)}><b>{pos}</b><span>{counts[pos]}</span></button>)}
     </div>
     <div className="playerPoolList">{filteredPlayers.map((player,index)=><div className="playerPoolRow" key={player.id}>
       <span className="playerPoolIndex">{index+1}</span>
-      <div className="playerPoolIdentity"><b>{player.name}</b><small>{player.team}</small></div>
+      <div className="playerPoolIdentity"><b><PlayerNameWithClub name={player.name} team={player.team} teamCode={player.teamCode}/></b><small>{player.team}</small></div>
       <span className={`positionTag ${String(player.position||'').toLowerCase()}`}>{player.position}</span>
       <div className="playerOwners"><em>{player.managers?.length||0} MANAGER{player.managers?.length===1?'':'S'}</em><span>{(player.managers||[]).join(' · ') || '—'}</span></div>
     </div>)}</div>
@@ -243,7 +266,7 @@ function LabPlayerRow({player,index,mode='ppg'}){
   if(mode==='yellow'){
     return <div className="labMiniRow yellowRow">
       <span>{index+1}</span>
-      <div className="labPlayerCore"><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
+      <div className="labPlayerCore"><b><PlayerNameWithClub name={player.name} team={player.team} teamCode={player.teamCode} flagTone={player.flagTone} showFlag/></b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
       <strong>🟨 {Number(player.yellowCards||0).toFixed(0)} <em>ใบ</em></strong>
     </div>
   }
@@ -253,7 +276,7 @@ function LabPlayerRow({player,index,mode='ppg'}){
   return <div className="labMiniRow labEvidenceRow">
     <span>{index+1}</span>
     <div className="labPlayerCore">
-      <b>{player.name}</b>
+      <b><PlayerNameWithClub name={player.name} team={player.team} teamCode={player.teamCode} flagTone={player.flagTone} showFlag/></b>
       <small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small>
       <FdrMini fixtures={player.nextFixtures}/>
       <div className="labEvidence">
@@ -279,13 +302,20 @@ function LabRankCard({type,players}){
 
 function HurtCard({players}){
   const copy=LAB_COPY.hurt
+  const [position,setPosition]=useState('FWD')
+  const positions=['FWD','MID','DEF','GK']
+  const counts=Object.fromEntries(positions.map(pos=>[pos,(players||[]).filter(player=>player.position===pos).length]))
+  const filtered=(players||[]).filter(player=>player.position===position)
   return <article className={`labRankCard ${copy.tone} labWideCard`}>
     <div className="labRankHead"><span>{copy.icon}</span><div><h4>{copy.label}</h4><small>{copy.desc}</small></div></div>
-    <div className="hurtList">{players?.length?players.map(player=><div className="hurtRow" key={player.id}>
-      <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
+    <div className="hurtPositionFilter playerPositionFilter" role="group" aria-label="Filter flagged players by position">
+      {positions.map(pos=><button type="button" key={pos} className={position===pos?'active':''} onClick={()=>setPosition(pos)}><b>{pos}</b><span>{counts[pos]}</span></button>)}
+    </div>
+    <div className="hurtList">{filtered.length?filtered.map(player=><div className="hurtRow" key={player.id}>
+      <div><b><PlayerNameWithClub name={player.name} team={player.team} teamCode={player.teamCode} flagTone={player.flagTone} showFlag/></b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
       <span className={player.flagTone==='red'?'flagRed':'flagYellow'}>{player.flagTone==='red'?'🔴':'🟡'} {player.chanceNext==null?'Flagged':`${player.chanceNext}%`}</span>
       {player.news&&<em>{player.news}</em>}
-    </div>):<div className="labMiniEmpty">ไม่มีนักเตะเข้าเงื่อนไขสะหง่องตอนนี้</div>}</div>
+    </div>):<div className="labMiniEmpty">ไม่มีนักเตะ {position} ติดธงเหลืองหรือแดงตอนนี้</div>}</div>
   </article>
 }
 
@@ -424,7 +454,7 @@ export default function Home(){
   const labRankings=useMemo(()=>{
     const finishedGw=xgData?.latestFinishedGw||league.latestGw||1
     const regularMinutes=Math.max(180,Math.floor(finishedGw*90*.65))
-    const regular=expectedPlayers.filter(p=>p.minutes>=regularMinutes)
+    const regular=expectedPlayers.filter(p=>p.position!=='GK' && p.minutes>=regularMinutes)
     const isExpensive=(p)=>p.position==='DEF'?p.price>5.5:['MID','FWD'].includes(p.position)?p.price>7.5:false
     const expensive=regular.filter(isExpensive)
     const cheap=regular.filter(p=>!isExpensive(p))
@@ -436,9 +466,8 @@ export default function Home(){
     const best=(arr)=>[...arr].sort((a,b)=>impactScore(b)-impactScore(a) || b.ppg-a.ppg || b.minutes-a.minutes).slice(0,5)
     const worst=(arr)=>[...arr].sort((a,b)=>impactScore(a)-impactScore(b) || a.ppg-b.ppg || b.minutes-a.minutes).slice(0,5)
     const hurt=expectedPlayers
-      .filter(p=>p.injuryAvailability===true)
-      .map(p=>({...p,flagTone:p.status==='i'?'red':'yellow'}))
-      .sort((a,b)=>(a.chanceNext??-1)-(b.chanceNext??-1) || a.name.localeCompare(b.name))
+      .filter(p=>p.flagTone==='yellow' || (p.flagTone==='red' && p.inCurrentLeague!==false))
+      .sort((a,b)=>(a.flagTone==='red'?0:1)-(b.flagTone==='red'?0:1) || (a.chanceNext??101)-(b.chanceNext??101) || a.name.localeCompare(b.name))
     const xavier=[...expectedPlayers]
       .filter(p=>(p.yellowCards||0)>0)
       .sort((a,b)=>b.yellowCards-a.yellowCards || b.minutes-a.minutes || a.name.localeCompare(b.name))
@@ -574,7 +603,7 @@ export default function Home(){
               {displayManagerStats.map((row,i)=><div className="managerStatsRow" key={row.name}>
                 <div className="managerIdentity"><i>{i+1}</i><div><b>{row.name}</b><small>{row.team}</small></div></div>
                 <strong className="managerPoints">{row.points}<small>PTS</small></strong>
-                <span className="managerMetric captainMetric"><em>Captain</em><b>{row.captain||'—'}</b><small>{row.captainPoints?`${row.captainPoints} pts`:''}</small></span>
+                <span className="managerMetric captainMetric"><em>Captain</em><b>{row.captain&&row.captain!=='—'?<PlayerNameWithClub name={row.captain} team={row.captainTeam} teamCode={row.captainTeamCode}/>: '—'}</b><small>{row.captainPoints?`${row.captainPoints} pts`:''}</small></span>
                 <span className="managerMetric"><em>Bench</em><b>{row.benchPoints??'—'}</b><small>pts</small></span>
                 <span className="managerMetric"><em>Transfers</em><b>{row.transfers??'—'}</b><small>{row.transferCost?`−${row.transferCost} hit`:'No hit'}</small></span>
                 <span className={`chipBadge ${row.chip?'chipOn':'chipOff'}`}><em>Chip</em><b>{row.chip||'—'}</b></span>

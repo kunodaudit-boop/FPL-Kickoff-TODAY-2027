@@ -120,14 +120,36 @@ function buildNextFixtures(fixtures,teamMap){
   return byTeam
 }
 
-function isInjuryAvailability(player){
+function getAvailabilityFlag(player){
   const status=String(player?.status||'').toLowerCase()
   const chance=player?.chance_of_playing_next_round
-  // Keep only injury / doubtful availability flags. Explicitly exclude
-  // suspension, unavailable / transferred-out and other non-injury states.
-  if(status==='i') return true
-  if(status==='d' && chance!=null && Number(chance)<50) return true
-  return false
+  // Mirror the visible FPL warning logic: doubtful players are yellow,
+  // while 0%-chance / injured / suspended / unavailable states are red.
+  if(chance!=null && Number(chance)===0) return 'red'
+  if(['i','s','u','n'].includes(status)) return 'red'
+  if(status==='d') return 'yellow'
+  return null
+}
+
+function isCurrentLeaguePlayer(player){
+  if(player?.can_select===false || player?.removed===true) return false
+  const news=String(player?.news||'').toLowerCase()
+  // FPL can retain departed players in bootstrap-static for historical data.
+  // Remove obvious transfer/loan/departure records from the red-flag list.
+  const departed=/\b(transferred to|transferred out|loaned to|joined [^.;]+ on loan|left the club|has left|departed|released by|contract terminated|moved to [^.;]+ permanently)\b/i
+  return !departed.test(news)
+}
+
+function teamInfoForElement(element,elementMap,teamMap){
+  const p=elementMap.get(element)
+  const team=teamMap.get(p?.team)
+  return {
+    id:element,
+    player:playerName(element,elementMap),
+    team:team?.short_name || team?.name || '',
+    teamCode:team?.code ?? null,
+    position:POSITION[p?.element_type]||'',
+  }
 }
 
 async function getBase(){
@@ -245,6 +267,7 @@ async function buildGameweek(gw){
       if(pick.is_captain) captains.set(pick.element,(captains.get(pick.element)||0)+1)
     }
     const captain=picks.picks.find(p=>p.is_captain)
+    const captainMeta=captain ? teamInfoForElement(captain.element,elementMap,teamMap) : null
     const bench=picks.picks.filter(p=>p.position>11)
     const benchPoints=bench.reduce((sum,p)=>sum+(livePoints.get(p.element)||0),0)
     const captainRaw=captain ? (livePoints.get(captain.element)||0) : 0
@@ -253,7 +276,11 @@ async function buildGameweek(gw){
       name:m.name,
       team:m.team,
       points:picks.entry_history?.points ?? null,
-      captain:captain ? playerName(captain.element,elementMap) : '—',
+      captain:captainMeta?.player || '—',
+      captainId:captainMeta?.id || null,
+      captainTeam:captainMeta?.team || '',
+      captainTeamCode:captainMeta?.teamCode ?? null,
+      captainPosition:captainMeta?.position || '',
       captainPoints:captainReturn,
       captainRaw,
       benchPoints,
@@ -266,16 +293,16 @@ async function buildGameweek(gw){
 
   const managerCount=managerStats.length
   const mostOwned=[...owned.entries()]
-    .map(([id,count])=>({id,player:playerName(id,elementMap),count,pct:pct(count,managerCount)}))
+    .map(([id,count])=>({...teamInfoForElement(id,elementMap,teamMap),count,pct:pct(count,managerCount)}))
     .sort((a,b)=>b.count-a.count || a.player.localeCompare(b.player))
     .slice(0,6)
   const captainPopularity=[...captains.entries()]
-    .map(([id,count])=>({id,player:playerName(id,elementMap),count,pct:pct(count,managerCount)}))
+    .map(([id,count])=>({...teamInfoForElement(id,elementMap,teamMap),count,pct:pct(count,managerCount)}))
     .sort((a,b)=>b.count-a.count || a.player.localeCompare(b.player))
     .slice(0,6)
   const differentials=[...owned.entries()]
     .filter(([,count])=>count<=2)
-    .map(([id,count])=>({id,player:playerName(id,elementMap),count,points:livePoints.get(id)||0}))
+    .map(([id,count])=>({...teamInfoForElement(id,elementMap,teamMap),count,points:livePoints.get(id)||0}))
     .sort((a,b)=>b.points-a.points || a.count-b.count)
     .slice(0,8)
 
@@ -287,6 +314,7 @@ async function buildGameweek(gw){
       name:playerName(id,elementMap),
       position:POSITION[p?.element_type]||'',
       team:team?.short_name || team?.name || '',
+      teamCode:team?.code ?? null,
       managers:[...(ownerManagers.get(id)||[])].sort((a,b)=>CANONICAL.findIndex(m=>m.name===a)-CANONICAL.findIndex(m=>m.name===b)),
     }
   }).sort((a,b)=>a.name.localeCompare(b.name,'en'))
@@ -324,7 +352,7 @@ async function buildExpectedStats(){
   const teamMap=new Map((bootstrap?.teams||[]).map(t=>[t.id,t]))
   const nextFixtures=buildNextFixtures(fixtures,teamMap)
   const players=(bootstrap?.elements||[])
-    .filter(p=>[2,3,4].includes(p.element_type))
+    .filter(p=>[1,2,3,4].includes(p.element_type))
     .map(p=>{
       const minutes=Number(p.minutes)||0
       const xg=num(p.expected_goals)
@@ -337,6 +365,7 @@ async function buildExpectedStats(){
         name:p.web_name || p.second_name || `Player ${p.id}`,
         team:team?.short_name || team?.name || '',
         teamName:team?.name || '',
+        teamCode:team?.code ?? null,
         position:POSITION[p.element_type],
         price:round2((Number(p.now_cost)||0)/10),
         minutes,
@@ -361,7 +390,8 @@ async function buildExpectedStats(){
         status:p.status || 'a',
         chanceNext:p.chance_of_playing_next_round,
         news:p.news || '',
-        injuryAvailability:isInjuryAvailability(p),
+        flagTone:getAvailabilityFlag(p),
+        inCurrentLeague:isCurrentLeaguePlayer(p),
         nextFixtures:nextFixtures.get(p.team)||[],
       }
     })
