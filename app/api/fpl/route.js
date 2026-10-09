@@ -88,6 +88,48 @@ function getLatestFinishedGw(bootstrap){
   return Math.max(0,...(bootstrap?.events||[]).filter(e=>e.finished).map(e=>e.id||0))
 }
 
+function buildNextFixtures(fixtures,teamMap){
+  const byTeam=new Map()
+  const add=(teamId,item)=>{
+    if(!byTeam.has(teamId)) byTeam.set(teamId,[])
+    byTeam.get(teamId).push(item)
+  }
+  for(const fixture of fixtures||[]){
+    if(fixture.finished || fixture.started || !fixture.kickoff_time) continue
+    const home=teamMap.get(fixture.team_h)
+    const away=teamMap.get(fixture.team_a)
+    add(fixture.team_h,{
+      event:fixture.event,
+      opponent:away?.short_name || away?.name || '',
+      difficulty:Number(fixture.team_h_difficulty)||0,
+      home:true,
+      kickoff:fixture.kickoff_time,
+    })
+    add(fixture.team_a,{
+      event:fixture.event,
+      opponent:home?.short_name || home?.name || '',
+      difficulty:Number(fixture.team_a_difficulty)||0,
+      home:false,
+      kickoff:fixture.kickoff_time,
+    })
+  }
+  for(const [teamId,rows] of byTeam){
+    rows.sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff))
+    byTeam.set(teamId,rows.slice(0,3))
+  }
+  return byTeam
+}
+
+function isInjuryAvailability(player){
+  const status=String(player?.status||'').toLowerCase()
+  const chance=player?.chance_of_playing_next_round
+  // Keep only injury / doubtful availability flags. Explicitly exclude
+  // suspension, unavailable / transferred-out and other non-injury states.
+  if(status==='i') return true
+  if(status==='d' && chance!=null && Number(chance)<50) return true
+  return false
+}
+
 async function getBase(){
   const [standings,bootstrap] = await Promise.all([
     fplFetch(`/leagues-classic/${FPL_LEAGUE_ID}/standings/?page_standings=1`,120),
@@ -275,8 +317,12 @@ async function buildGameweek(gw){
 }
 
 async function buildExpectedStats(){
-  const bootstrap=await fplFetch('/bootstrap-static/',900)
+  const [bootstrap,fixtures]=await Promise.all([
+    fplFetch('/bootstrap-static/',900),
+    fplFetch('/fixtures/',900).catch(()=>[]),
+  ])
   const teamMap=new Map((bootstrap?.teams||[]).map(t=>[t.id,t]))
+  const nextFixtures=buildNextFixtures(fixtures,teamMap)
   const players=(bootstrap?.elements||[])
     .filter(p=>[2,3,4].includes(p.element_type))
     .map(p=>{
@@ -315,6 +361,8 @@ async function buildExpectedStats(){
         status:p.status || 'a',
         chanceNext:p.chance_of_playing_next_round,
         news:p.news || '',
+        injuryAvailability:isInjuryAvailability(p),
+        nextFixtures:nextFixtures.get(p.team)||[],
       }
     })
 

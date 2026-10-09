@@ -184,6 +184,17 @@ const LAB_COPY={
   xavier:{label:'ซาเวียร์',icon:'🟨',tone:'xavier',desc:'ใบเหลืองสะสม'},
 }
 
+function FdrMini({fixtures=[]}){
+  const rows=(fixtures||[]).slice(0,3)
+  if(!rows.length) return <div className="fdrMini empty"><span>FDR</span><i>—</i></div>
+  return <div className="fdrMini" aria-label="Next 3 fixtures">
+    <span>FDR</span>
+    {rows.map((fixture,index)=><i className={`fdr${Math.min(5,Math.max(1,Number(fixture.difficulty)||3))}`} key={`${fixture.event||'x'}-${fixture.opponent}-${index}`}>
+      <b>{fixture.opponent||'—'}</b><em>{fixture.difficulty||'—'}</em>
+    </i>)}
+  </div>
+}
+
 function XgRanking({rows,stat}){
   const meta=XG_META[stat]
   return <div className={`xgRanking ${meta.tone}`}>
@@ -192,7 +203,7 @@ function XgRanking({rows,stat}){
       const actual=stat==='xgi'?(player.goals+player.assists):player[meta.actual]
       return <div className="xgRow" key={player.id}>
         <span className="xgRank">{i+1}</span>
-        <span className="xgPlayer"><b>{player.name}</b><small>{player.position} • £{player.price.toFixed(1)}m</small></span>
+        <span className="xgPlayer"><b>{player.name}</b><small>{player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></span>
         <span className="xgTeam">{player.team}</span>
         <strong>{Number(player[stat]||0).toFixed(2)}</strong>
         <span className="xgPer90">{Number(player[meta.per90]||0).toFixed(2)}</span>
@@ -203,15 +214,23 @@ function XgRanking({rows,stat}){
 }
 
 function LastGwPlayers({data,loading}){
+  const [position,setPosition]=useState('ALL')
   if(loading) return <div className="statsEmpty big">กำลังรวมรายชื่อนักเตะจาก Last Gameweek…</div>
   if(!data?.available) return <div className="statsEmpty big">ยังดึงรายชื่อนักเตะ Last Gameweek ไม่ได้</div>
   if(data.managerCount!==members.length) return <div className="statsEmpty big">กำลังรอข้อมูล Squad ให้ครบ {members.length}/11 Manager</div>
+  const allPlayers=data.allPlayers||[]
+  const positions=['ALL','GK','DEF','MID','FWD']
+  const counts=Object.fromEntries(positions.map(pos=>[pos,pos==='ALL'?allPlayers.length:allPlayers.filter(player=>player.position===pos).length]))
+  const filteredPlayers=position==='ALL'?allPlayers:allPlayers.filter(player=>player.position===position)
   return <div className="lastPlayersPanel">
     <div className="lastPlayersHead">
       <div><small>LAST GAMEWEEK</small><h3>ALL PLAYERS — GW{data.gw}</h3><p>Unique squad list จาก Manager ทั้ง 11 คน</p></div>
-      <strong>{data.allPlayers?.length||0}<em> UNIQUE PLAYERS</em></strong>
+      <strong>{filteredPlayers.length}<em>{position==='ALL'?' UNIQUE PLAYERS':` ${position} • ${allPlayers.length} TOTAL`}</em></strong>
     </div>
-    <div className="playerPoolList">{(data.allPlayers||[]).map((player,index)=><div className="playerPoolRow" key={player.id}>
+    <div className="playerPositionFilter" role="group" aria-label="Filter players by position">
+      {positions.map(pos=><button type="button" key={pos} className={position===pos?'active':''} onClick={()=>setPosition(pos)}><b>{pos}</b><span>{counts[pos]}</span></button>)}
+    </div>
+    <div className="playerPoolList">{filteredPlayers.map((player,index)=><div className="playerPoolRow" key={player.id}>
       <span className="playerPoolIndex">{index+1}</span>
       <div className="playerPoolIdentity"><b>{player.name}</b><small>{player.team}</small></div>
       <span className={`positionTag ${String(player.position||'').toLowerCase()}`}>{player.position}</span>
@@ -224,7 +243,7 @@ function LabPlayerRow({player,index,mode='ppg'}){
   if(mode==='yellow'){
     return <div className="labMiniRow yellowRow">
       <span>{index+1}</span>
-      <div className="labPlayerCore"><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
+      <div className="labPlayerCore"><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
       <strong>🟨 {Number(player.yellowCards||0).toFixed(0)} <em>ใบ</em></strong>
     </div>
   }
@@ -236,6 +255,7 @@ function LabPlayerRow({player,index,mode='ppg'}){
     <div className="labPlayerCore">
       <b>{player.name}</b>
       <small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small>
+      <FdrMini fixtures={player.nextFixtures}/>
       <div className="labEvidence">
         <i><em>MIN</em><b>{player.minutes||0}</b></i>
         <i><em>PPG</em><b>{Number(player.ppg||0).toFixed(1)}</b></i>
@@ -262,7 +282,7 @@ function HurtCard({players}){
   return <article className={`labRankCard ${copy.tone} labWideCard`}>
     <div className="labRankHead"><span>{copy.icon}</span><div><h4>{copy.label}</h4><small>{copy.desc}</small></div></div>
     <div className="hurtList">{players?.length?players.map(player=><div className="hurtRow" key={player.id}>
-      <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small></div>
+      <div><b>{player.name}</b><small>{player.team} • {player.position} • £{player.price.toFixed(1)}m</small><FdrMini fixtures={player.nextFixtures}/></div>
       <span className={player.flagTone==='red'?'flagRed':'flagYellow'}>{player.flagTone==='red'?'🔴':'🟡'} {player.chanceNext==null?'Flagged':`${player.chanceNext}%`}</span>
       {player.news&&<em>{player.news}</em>}
     </div>):<div className="labMiniEmpty">ไม่มีนักเตะเข้าเงื่อนไขสะหง่องตอนนี้</div>}</div>
@@ -413,15 +433,11 @@ export default function Home(){
       const defensive=p.position==='DEF'?((p.defcon90||0)*.055 + (p.cleanSheets||0)*.12):p.position==='MID'?((p.defcon90||0)*.035):0
       return (p.ppg||0)+attacking+defensive
     }
-    const best=(arr)=>[...arr].sort((a,b)=>impactScore(b)-impactScore(a) || b.ppg-a.ppg || b.minutes-a.minutes).slice(0,3)
-    const worst=(arr)=>[...arr].sort((a,b)=>impactScore(a)-impactScore(b) || a.ppg-b.ppg || b.minutes-a.minutes).slice(0,3)
+    const best=(arr)=>[...arr].sort((a,b)=>impactScore(b)-impactScore(a) || b.ppg-a.ppg || b.minutes-a.minutes).slice(0,5)
+    const worst=(arr)=>[...arr].sort((a,b)=>impactScore(a)-impactScore(b) || a.ppg-b.ppg || b.minutes-a.minutes).slice(0,5)
     const hurt=expectedPlayers
-      .filter(p=>{
-        const red=['i','s','u','n'].includes(p.status)||p.chanceNext===0
-        const yellow=p.status==='d'&&p.chanceNext!=null&&p.chanceNext<50
-        return red||yellow
-      })
-      .map(p=>({...p,flagTone:((['i','s','u','n'].includes(p.status)||p.chanceNext===0)?'red':'yellow')}))
+      .filter(p=>p.injuryAvailability===true)
+      .map(p=>({...p,flagTone:p.status==='i'?'red':'yellow'}))
       .sort((a,b)=>(a.chanceNext??-1)-(b.chanceNext??-1) || a.name.localeCompare(b.name))
     const xavier=[...expectedPlayers]
       .filter(p=>(p.yellowCards||0)>0)
