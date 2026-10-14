@@ -1046,3 +1046,6 @@ footer p,footer a{font-size:12px}
   .hurtPositionFilter button b{font-size:9px}
   .hurtPositionFilter button span{width:20px;height:20px;min-width:20px;font-size:8px}
 }
+
+/* V3.9 — show transfer-hit arithmetic next to the net Gameweek score */
+.weeklyRow>strong .hitScore{font-size:.72em;font-weight:800;opacity:.82;white-space:nowrap;margin-left:2px}

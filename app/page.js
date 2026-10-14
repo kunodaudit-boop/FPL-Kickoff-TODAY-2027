@@ -11,7 +11,8 @@ const memberOrder = members.map(([name])=>name)
 const memberTeam = Object.fromEntries(members)
 const galleryGws = Object.keys(gallery).map(Number).sort((a,b)=>a-b)
 const totalGallery = Object.values(gallery).reduce((sum,items)=>sum+items.length,0)
-const topFinancial = [...financial].sort((a,b)=>b.cash-a.cash)
+const financialWithCash = financial.map(p=>({...p,cash:(p.luckyPool||0)+(p.gwWon||0)+(p.gwLost||0)+(p.mini||0)+(p.lucky||0)+(p.special||0)}))
+const topFinancial = [...financialWithCash].sort((a,b)=>b.cash-a.cash)
 
 function mergeGameweeks(futureGameweeks){
   const merged={...lockedGameweeks}
@@ -528,8 +529,8 @@ export default function Home(){
       <div className="sectionTitle"><div><p>⚽ GAMEWEEK</p><h2>Weekly Battle</h2><span>เลือกดูผลราย Gameweek ได้ทุกสัปดาห์</span></div><strong>1st +120</strong></div>
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
-        <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small></div><strong>{pts}</strong></div>)}</div>
-        <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.jpeg',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.jpeg" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ FPL score'}</span></div></div>
+        <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts,meta],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small></div><strong>{pts}{meta?.transferCost>0&&<small className="hitScore"> ({meta.rawPoints}−{meta.transferCost})</small>}</strong></div>)}</div>
+        <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.jpeg',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.jpeg" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ Net score after Transfer Hit'}</span></div></div>
       </div>
     </section>
 

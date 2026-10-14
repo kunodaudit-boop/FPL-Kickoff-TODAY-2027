@@ -202,7 +202,12 @@ async function buildSummary(){
     const missing=[]
     for(const {m,history} of histories){
       const row=(history.current||[]).find(x=>x.event===gw)
-      if(row) rows.push([m.name,m.team,row.points])
+      if(row){
+        const rawPoints=Number(row.points)||0
+        const transferCost=Number(row.event_transfers_cost)||0
+        const netPoints=rawPoints-transferCost
+        rows.push([m.name,m.team,netPoints,{rawPoints,transferCost}])
+      }
       else missing.push(m.name)
     }
     if(rows.length===CANONICAL.length){
@@ -275,7 +280,8 @@ async function buildGameweek(gw){
     managerStats.push({
       name:m.name,
       team:m.team,
-      points:picks.entry_history?.points ?? null,
+      points:(picks.entry_history?.points ?? null)==null ? null : (Number(picks.entry_history.points)||0)-(Number(picks.entry_history?.event_transfers_cost)||0),
+      rawPoints:picks.entry_history?.points ?? null,
       captain:captainMeta?.player || '—',
       captainId:captainMeta?.id || null,
       captainTeam:captainMeta?.team || '',
