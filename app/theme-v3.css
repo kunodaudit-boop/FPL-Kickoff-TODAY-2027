@@ -25,7 +25,7 @@
 .v3Logo{min-width:max-content;gap:8px}.v3Logo>span{font-size:27px;color:#fff}.v3Logo b{font-size:16px}.v3Logo em{font-style:normal;color:#ffd22e}
 .v3Nav{display:flex;gap:3px;align-items:center;justify-content:flex-end;flex:1;overflow:auto;scrollbar-width:none}.v3Nav::-webkit-scrollbar{display:none}.v3Nav a{white-space:nowrap;color:#fff;font-weight:800;font-size:12px;padding:9px 11px;border-radius:8px;opacity:.9}.v3Nav a:hover,.v3Nav a.active{background:#ef3442;opacity:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 
-.masterHero{height:390px;background:url('/brand/hero-master.jpg') center center/cover no-repeat;position:relative;border-bottom:5px solid #fff;box-shadow:0 16px 34px rgba(9,61,115,.12)}
+.masterHero{height:390px;background:url('/brand/hero-master.webp') center center/cover no-repeat;position:relative;border-bottom:5px solid #fff;box-shadow:0 16px 34px rgba(9,61,115,.12)}
 .heroStatus{position:absolute;right:max(24px,calc((100vw - 1320px)/2));bottom:20px;display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.heroStatus span{background:rgba(4,34,78,.9);color:#fff;border:1px solid rgba(255,255,255,.35);padding:7px 10px;border-radius:999px;font-size:9px;font-weight:1000;letter-spacing:.06em;box-shadow:0 7px 18px rgba(0,0,0,.14)}
 
 .homeDashboard{max-width:1320px;margin:-18px auto 0;padding:0 24px 48px;position:relative;z-index:3}
@@ -1049,3 +1049,11 @@ footer p,footer a{font-size:12px}
 
 /* V3.9 — show transfer-hit arithmetic next to the net Gameweek score */
 .weeklyRow>strong .hitScore{font-size:.72em;font-weight:800;opacity:.82;white-space:nowrap;margin-left:2px}
+
+/* GW8 update: visible, responsive weekly statement */
+.statementDetails { display:block; margin-top:22px; }
+.statementDetails > h3 { font-size:1.12rem; margin:0 0 12px; font-weight:800; }
+.statementScroll { overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:14px; }
+.statementScroll .statementTable { min-width:920px; }
+.luckyConditions > .claimed { opacity:.82; }
+.luckyConditions > .claimed > div > b { text-decoration:line-through; text-decoration-thickness:2px; }

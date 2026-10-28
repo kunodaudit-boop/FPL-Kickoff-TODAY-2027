@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { financial, financialThroughGw, gameweeks as lockedGameweeks, members, miniGameSaves } from './league-data'
 import { competitions, gallery, miniWinners, luckyConditions } from './content-data'
 
-const LOCKED_THROUGH_GW = 5
+const LOCKED_THROUGH_GW = 8
 const FPL_LEAGUE_ID = 606037
 const payout = [120,60,30,0,-30,-30,-30,-30,-30,-30,-30]
 const memberOrder = members.map(([name])=>name)
@@ -145,17 +145,17 @@ function ToyAccent({type,compact=false}){
 
 function ToyScene({type,compact=false,banner=false}){
   const SCENES={
-    woody:{images:['/toy-story/woody-season.png'],eyebrow:'WOODY COLLECTION',title:'Season Trail',note:'Full Season • Western toy-room'},
-    buzz:{images:['/toy-story/buzz-gameweek.png'],eyebrow:'SPACE RANGER',title:'Weekly Mission',note:'Gameweek • To infinity and beyond'},
-    jessie:{images:['/toy-story/jessie-first.png'],eyebrow:'JESSIE + BULLSEYE',title:'First Chance',note:'GW1–GW19'},
-    bopeep:{images:['/toy-story/bopeep-second.png'],eyebrow:'BO PEEP + SHEEP',title:'Second Chance',note:'Reset after GW19'},
-    potato:{images:['/toy-story/potato-lucky.png'],eyebrow:'MR. POTATO HEAD',title:'Lucky Game',note:'Weird luck. Weird results.'},
-    pizza:{images:['/toy-story/pizza-planet-clean.jpeg','/toy-story/aliens-clean.jpeg'],eyebrow:'PIZZA PLANET',title:'Mini Game Arcade',note:'Alien • The Claw • Arcade'},
-    army:{images:['/toy-story/army-room.png','/toy-story/army-radio.png'],eyebrow:'GREEN ARMY MEN',title:'Battlefield Intelligence',note:'Scout • Analyze • Plan'},
-    sid:{images:['/toy-story/sid-admin.png'],eyebrow:'SID PHILLIPS',title:'Data Workshop',note:'Break the data before Transfer'},
-    rex:{images:['/toy-story/rex-gallery.png'],eyebrow:'REX',title:'Journey Through The Gameweeks',note:'Past → Now → Future'},
-    zurg:{images:['/toy-story/zurg-rules.png'],eyebrow:'EMPEROR ZURG',title:'Rule Enforcer',note:'Official Rules Archive'},
-    hamm:{images:['/toy-story/hamm-finance.png'],eyebrow:'HAMM',title:'Piggy Bank Zone',note:'Cash Flow • Prize • Balance'},
+    woody:{images:['/toy-story/woody-season.webp'],eyebrow:'WOODY COLLECTION',title:'Season Trail',note:'Full Season • Western toy-room'},
+    buzz:{images:['/toy-story/buzz-gameweek.webp'],eyebrow:'SPACE RANGER',title:'Weekly Mission',note:'Gameweek • To infinity and beyond'},
+    jessie:{images:['/toy-story/jessie-first.webp'],eyebrow:'JESSIE + BULLSEYE',title:'First Chance',note:'GW1–GW19'},
+    bopeep:{images:['/toy-story/bopeep-second.webp'],eyebrow:'BO PEEP + SHEEP',title:'Second Chance',note:'Reset after GW19'},
+    potato:{images:['/toy-story/potato-lucky.webp'],eyebrow:'MR. POTATO HEAD',title:'Lucky Game',note:'Weird luck. Weird results.'},
+    pizza:{images:['/toy-story/pizza-planet-clean.webp','/toy-story/aliens-clean.webp'],eyebrow:'PIZZA PLANET',title:'Mini Game Arcade',note:'Alien • The Claw • Arcade'},
+    army:{images:['/toy-story/army-room.webp','/toy-story/army-radio.webp'],eyebrow:'GREEN ARMY MEN',title:'Battlefield Intelligence',note:'Scout • Analyze • Plan'},
+    sid:{images:['/toy-story/sid-admin.webp'],eyebrow:'SID PHILLIPS',title:'Data Workshop',note:'Break the data before Transfer'},
+    rex:{images:['/toy-story/rex-gallery.webp'],eyebrow:'REX',title:'Journey Through The Gameweeks',note:'Past → Now → Future'},
+    zurg:{images:['/toy-story/zurg-rules.webp'],eyebrow:'EMPEROR ZURG',title:'Rule Enforcer',note:'Official Rules Archive'},
+    hamm:{images:['/toy-story/hamm-finance.webp'],eyebrow:'HAMM',title:'Piggy Bank Zone',note:'Cash Flow • Prize • Balance'},
   }
   const item=SCENES[type]
   if(!item) return null
@@ -502,7 +502,7 @@ export default function Home(){
         </article>
         <article className="featureCard miniFeature">
           <div className="featureHead"><b>🎮 MINI GAME • GW5</b><a href="#mini-game">See Result →</a></div>
-          <img src="/gallery/gw5/gibbs-white-mania.jpeg" alt="GW5 Mini Game"/>
+          <img src="/gallery/gw5/gibbs-white-mania.webp" alt="GW5 Mini Game"/>
           <div className="featureOverlay"><small>THE DIFFERENTIAL</small><strong>Jimmy 🤝 Guide • 5 pts</strong><a href="#mini-game">View Mini Game →</a></div>
         </article>
       </div>
@@ -520,7 +520,7 @@ export default function Home(){
       <ToyAccent type="woody"/>
       <ToyScene type="woody"/>
       <div className="sectionTitle"><div><p>🏆 FULL SEASON</p><h2>ศึกใหญ่ทั้งฤดูกาล</h2><span>คะแนน GW1–GW5 ล็อกตามข้อมูลที่กำหนดไว้ • ตั้งแต่ GW6 ต่อด้วย FPL อัตโนมัติ</span></div><strong>฿4,200</strong></div>
-      <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/full-season.jpeg',alt:'Full season rules'})}><img className="ruleMedia" src="/rules/full-season.jpeg" alt="Full season rules"/></button><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
+      <div className="twoCol v3TwoCol"><MiniTable rows={league.cumulative} limit={11} title={`Overall after GW${league.latestGw}`}/><div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/full-season.webp',alt:'Full season rules'})}><img className="ruleMedia" src="/rules/full-season.webp" alt="Full season rules"/></button><div><b>Prize</b><span>🥇 2,000 • 🥈 1,200</span><span>🥉 600 • 4th 400</span><span>5–11 จ่ายคนละ 600 บาท</span></div></div></div>
     </section>
 
     <section className="section detailSection toneBlue toyBuzzSection" id="gameweek">
@@ -530,7 +530,7 @@ export default function Home(){
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
         <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts,meta],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small></div><strong>{pts}{meta?.transferCost>0&&<small className="hitScore"> ({meta.rawPoints}−{meta.transferCost})</small>}</strong></div>)}</div>
-        <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.jpeg',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.jpeg" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ Net score after Transfer Hit'}</span></div></div>
+        <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.webp',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.webp" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ Net score after Transfer Hit'}</span></div></div>
       </div>
     </section>
 
@@ -539,23 +539,24 @@ export default function Home(){
         <ToyAccent type="jessie" compact/>
         <ToyScene type="jessie" compact/>
         <div className="chanceHead"><span>🎯</span><div><small>FIRST CHANCE</small><h2>GW1–GW19</h2></div><b>฿700</b></div>
-        <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="First Chance rules"/></button><RuleChips phase="first"/></div></div>
+        <div className="chanceBody"><MiniTable rows={league.firstChanceRows}/><div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.webp',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.webp" alt="First Chance rules"/></button><RuleChips phase="first"/></div></div>
       </article>
       <article className="chanceV3 second toyBoPeepSection" id="second-chance">
         <ToyAccent type="bopeep" compact/>
         <ToyScene type="bopeep" compact/>
         <div className="chanceHead"><span>🔥</span><div><small>SECOND CHANCE</small><h2>GW20–GW38</h2></div><b>฿700</b></div>
-        <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.jpeg',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.jpeg" alt="Second Chance rules"/></button><RuleChips phase="second"/></div></div>
+        <div className="chanceBody">{league.secondChanceStarted?<MiniTable rows={league.secondChanceRows}/>:<div className="resetBox"><b>RESET AFTER GW19</b><span>ยังไม่เริ่มการแข่งขัน</span><small>คะแนนจะเริ่มนับใหม่ตั้งแต่ GW20</small></div>}<div className="chanceRuleWrap"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/first-second-chance.webp',alt:'First / Second Chance rules'})}><img className="ruleMedia" src="/rules/first-second-chance.webp" alt="Second Chance rules"/></button><RuleChips phase="second"/></div></div>
       </article>
     </section>
 
     <section className="section detailSection toneGreen toyPotatoSection" id="lucky-game">
       <ToyAccent type="potato"/>
       <ToyScene type="potato"/>
-      <div className="sectionTitle"><div><p>🍀 LUCKY GAME</p><h2>Fortune & Fun</h2><span>5 เงื่อนไข • ใครเข้าเงื่อนไขก่อนรับรางวัลนั้น</span></div><strong>2 / 5 claimed</strong></div>
+      <div className="sectionTitle"><div><p>🍀 LUCKY GAME</p><h2>Fortune & Fun</h2><span>5 เงื่อนไข • ใครเข้าเงื่อนไขก่อนรับรางวัลนั้น</span></div><strong>3 / 5 claimed</strong></div>
       <div className="luckyV3">
         <div className="luckyConditions">{luckyConditions.map(c=><div className={c.claimed?'claimed':''} key={c.id}><span>{c.id}</span><div><b>{c.label}</b>{c.claimed&&<small>{c.winner} • {c.detail}</small>}</div><em>{c.claimed?'CLAIMED':'AVAILABLE'}</em></div>)}</div>
-        <div className="winnerSpotlight"><img src="/games/lucky-game-gw4.png" alt="Best Lucky Game GW4 winner"/><div><small>WINNER ARCHIVE</small><h3>Best • GW4</h3><p>Matty Cash −1 pt • Lucky Reward #3</p><span>อีกเงื่อนไขที่ถูก Claim: #5 Own Goal — Oat</span></div></div>
+        <div className="winnerSpotlight"><img src="/games/lucky-game-gw4.webp" alt="Best Lucky Game GW4 winner"/><div><small>WINNER ARCHIVE</small><h3>Best • GW4</h3><p>Matty Cash −1 pt • Lucky Reward #3</p><span>อีกเงื่อนไขที่ถูก Claim: #5 Own Goal — Oat</span></div></div>
+        <div className="winnerSpotlight"><img src="/games/lucky-game-gw8-red-card.webp" alt="GW8 Red Card Jackpot — Kun, Fluk, Jimmy and Arm"/><div><small>GW8 • RED CARD JACKPOT</small><h3>Kun • Fluk • Jimmy • Arm</h3><p>Cole Palmer red card • ฿55 each • ฿220 total</p></div></div>
       </div>
     </section>
 
@@ -563,9 +564,9 @@ export default function Home(){
       <ToyAccent type="pizza"/>
       <ToyScene type="pizza"/>
       <div className="sectionTitle"><div><p>🎮 MINI GAME</p><h2>Different Game. Different Week.</h2><span>รูปแบบเปลี่ยนได้ตาม Gameweek — ไม่จำกัดว่าเป็นเกมช่วยผู้แพ้</span></div><strong>FORMAT CHANGES</strong></div>
-      <div className="miniTimeline v3Timeline"><div><b>GW1–GW4</b><span>เกมปริศนาทายภาพ</span></div><i>→</i><div><b>GW5</b><span>The Differential</span></div><i>→</i><div><b>NEXT</b><span>New Format</span></div></div>
+      <div className="miniTimeline v3Timeline"><div><b>GW1–GW4</b><span>เกมปริศนาทายภาพ</span></div><i>→</i><div><b>GW5–GW8</b><span>The Differential</span></div><i>→</i><div><b>GW9</b><span>New Format</span></div></div>
       <div className="winnerGrid">{miniWinners.map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}</div>
-      <div className="diffResult"><img src="/games/the-diff-gw5.png" alt="The Differential GW5"/><div><small>GW5 • THE DIFFERENTIAL</small><h3>Jimmy 🤝 Guide</h3><p>Iwobi 5 pts vs Mykolenko 5 pts — Tie</p></div></div>
+      <div className="diffResult"><img src="/games/the-diff-gw5.webp" alt="The Differential GW5"/><div><small>GW5 • THE DIFFERENTIAL</small><h3>Jimmy 🤝 Guide</h3><p>Iwobi 5 pts vs Mykolenko 5 pts — Tie</p></div></div>
     </section>
 
     <section className="section statsSectionV3 toyArmySection" id="statistics">
@@ -637,7 +638,7 @@ export default function Home(){
     <section className="section xgLabSection toySidSection" id="admin-inside">
       <div className="xgHero">
         <div className="xgHost">
-          <div className="kunCutoutStage"><img src="/xg-lab/kun-host-crop.jpeg" alt="Kun — ADMIN INSIDE host"/></div>
+          <div className="kunCutoutStage"><img src="/xg-lab/kun-host-crop.webp" alt="Kun — ADMIN INSIDE host"/></div>
           <div className="speechBubble">ก่อน <b>Transfer</b><br/>อย่าเผลอใจ</div>
         </div>
         <div className="xgBrand"><small>FPL DATA • FUN LANGUAGE</small><h2><span>ADMIN</span> INSIDE</h2><strong>by Kun</strong><p>หลังบ้านของ Admin • ชำแหละข้อมูลก่อน Transfer</p></div>
@@ -683,7 +684,7 @@ export default function Home(){
       <ToyAccent type="zurg"/>
       <ToyScene type="zurg"/>
       <div className="sectionTitle"><div><p>📜 RULES & INFO</p><h2>Official Rules Archive</h2><span>กติกาเต็มของการแข่งขันทั้งหมด</span></div><strong>OFFICIAL</strong></div>
-      <div className="rulesGrid"><figure><img src="/rules/official-overview.jpeg" alt="Overview"/><figcaption><b>Official Overview</b><span>ภาพรวมการแข่งขันและเงินรางวัล</span></figcaption></figure><figure><img src="/rules/gameweek.jpeg" alt="Gameweek"/><figcaption><b>Gameweek</b><span>Weekly payout</span></figcaption></figure><figure><img src="/rules/first-second-chance.jpeg" alt="Chance rules"/><figcaption><b>First / Second Chance</b><span>GW1–19 / GW20–38 + Reset</span></figcaption></figure><figure><img src="/rules/full-season.jpeg" alt="Full Season"/><figcaption><b>Full Season</b><span>End-of-season prize</span></figcaption></figure><figure><img src="/rules/mini-game-legacy.jpeg" alt="Mini Game"/><figcaption><b>Mini Game — Archive</b><span>GW1–GW4 original format</span></figcaption></figure><figure><img src="/rules/lucky-game-current.jpeg" alt="Lucky Game"/><figcaption><b>Lucky Game — Current</b><span>#3 & #5 claimed</span></figcaption></figure></div>
+      <div className="rulesGrid"><figure><img src="/rules/official-overview.webp" alt="Overview"/><figcaption><b>Official Overview</b><span>ภาพรวมการแข่งขันและเงินรางวัล</span></figcaption></figure><figure><img src="/rules/gameweek.webp" alt="Gameweek"/><figcaption><b>Gameweek</b><span>Weekly payout</span></figcaption></figure><figure><img src="/rules/first-second-chance.webp" alt="Chance rules"/><figcaption><b>First / Second Chance</b><span>GW1–19 / GW20–38 + Reset</span></figcaption></figure><figure><img src="/rules/full-season.webp" alt="Full Season"/><figcaption><b>Full Season</b><span>End-of-season prize</span></figcaption></figure><figure><img src="/rules/mini-game-legacy.webp" alt="Mini Game"/><figcaption><b>Mini Game — Archive</b><span>GW1–GW4 original format</span></figcaption></figure><figure><img src="/rules/lucky-game-current.webp" alt="Lucky Game"/><figcaption><b>Lucky Game — Current</b><span>#3 & #5 claimed</span></figcaption></figure></div>
     </section>
 
     <section className="section financeSection toyHammSection" id="finance">
@@ -692,7 +693,7 @@ export default function Home(){
       <div className="sectionIntroRow"><div><p className="sectionKicker">💰 FINANCE</p><h2>Manager Financial</h2><p>ข้อมูลการเงินของเกม แยกจาก FPL และไม่เผยข้อมูลบัญชีส่วนบุคคล</p></div><div className="officialTag greenTag">THROUGH GW{financialThroughGw}</div></div>
       <div className="financeTop">{topFinancial.slice(0,4).map((p,i)=><article key={p.name}><span>#{i+1}</span><h3>{p.name}</h3><small>{p.team}</small><Money value={p.cash}/></article>)}</div>
       <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gwWon+p.gwLost}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>
-      <details className="statementDetails"><summary>ดู Gameweek Statement GW1–GW{financialThroughGw}</summary><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/>{miniGameSaves[settlementGws[i]]===p.name&&<em>SAVE</em>}</span>)}</div>)}</div></details>
+      <div className="statementDetails"><h3>Gameweek Statement GW1–GW{financialThroughGw}</h3><div className="statementScroll"><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/>{miniGameSaves[settlementGws[i]]===p.name&&<em>SAVE</em>}</span>)}</div>)}</div></div></div>
       <p className="privacy">🔒 เว็บสาธารณะนี้ไม่แสดงเลขบัญชี ธนาคาร หรือช่องทางการชำระเงินส่วนบุคคล</p>
     </section>
 

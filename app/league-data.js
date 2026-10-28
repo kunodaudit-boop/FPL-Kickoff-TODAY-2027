@@ -54,6 +54,33 @@ export const gameweeks = {
     ['Jimmy','xROTzx',28],
   ],
 
+  7: [
+    ['Guide',"G9inez's Team",83],
+    ['Best',"USO BEST",79],
+    ['Fluk',"3ERLIN",76],
+    ['Pee',"B3RLIN",75],
+    ['Kun',"IREN & NEBIUS FC",74],
+    ['Jimmy',"xROTzx",70],
+    ['Deer',"ทีมของวิทยา",69],
+    ['Ohm',"Wasuwit's Team",66],
+    ['Arm',"Arm",64],
+    ['Amp',"amplongdo",61],
+    ['Oat',"KaisungVAT",56],
+  ],
+  8: [
+    ['Amp',"amplongdo",70],
+    ['Best',"USO BEST",61],
+    ['Jimmy',"xROTzx",59],
+    ['Deer',"ทีมของวิทยา",55],
+    ['Ohm',"Wasuwit's Team",51],
+    ['Guide',"G9inez's Team",44],
+    ['Oat',"KaisungVAT",44],
+    ['Kun',"IREN & NEBIUS FC",42],
+    ['Pee',"B3RLIN",42],
+    ['Fluk',"3ERLIN",34],
+    ['Arm',"Arm",25,{rawPoints:29,transferCost:4}],
+  ],
+
   // === NEXT UPDATE EXAMPLE ===
   // 6: [
   //   ['Manager in 1st','Team',0],
@@ -69,22 +96,23 @@ export const miniGameSaves = {
   2: 'Ohm',
   3: 'Pee',
   4: 'Deer',
+  7: 'Jimmy',
 }
 
 // Financial table is kept separately because it includes special-game money
 // that cannot be inferred safely from weekly FPL points alone.
 // When finance changes, update the relevant values here.
-export const financialThroughGw = 6
+export const financialThroughGw = 8
 export const financial = [
-  {name:'Best',team:'USO BEST',luckyPool:-100,gwWon:120,gwLost:-150,mini:30,lucky:220},
-  {name:'Amp',team:'amplongdo',luckyPool:-100,gwWon:300,gwLost:-120,mini:30,lucky:0},
-  {name:'Oat',team:'KaisungVAT',luckyPool:-100,gwWon:120,gwLost:-150,mini:0,lucky:220},
-  {name:'Guide',team:"G9inez's Team",luckyPool:-100,gwWon:150,gwLost:-90,mini:90,lucky:0},
-  {name:'Kun',team:'IREN & NEBIUS FC',luckyPool:-100,gwWon:180,gwLost:-60,mini:0,lucky:0},
-  {name:'Ohm',team:"Wasuwit's Team",luckyPool:-100,gwWon:120,gwLost:-60,mini:60,lucky:0},
-  {name:'Pee',team:'B3RLIN',luckyPool:-100,gwWon:90,gwLost:-90,mini:60,lucky:0},
-  {name:'Fluk',team:'3ERLIN',luckyPool:-100,gwWon:120,gwLost:-90,mini:30,lucky:0},
-  {name:'Deer',team:'ทีมของวิทยา',luckyPool:-100,gwWon:60,gwLost:-120,mini:60,lucky:0},
-  {name:'Arm',team:'Arm',luckyPool:-100,gwWon:0,gwLost:-120,mini:30,lucky:0},
-  {name:'Jimmy',team:'xROTzx',luckyPool:-100,gwWon:0,gwLost:-180,mini:60,lucky:0},
+  {name:'Best',team:'USO BEST',luckyPool:-100,gwWon:240,gwLost:-150,mini:30,lucky:220},
+  {name:'Amp',team:'amplongdo',luckyPool:-100,gwWon:420,gwLost:-150,mini:30,lucky:0},
+  {name:'Oat',team:'KaisungVAT',luckyPool:-100,gwWon:120,gwLost:-210,mini:0,lucky:220},
+  {name:'Guide',team:"G9inez's Team",luckyPool:-100,gwWon:270,gwLost:-120,mini:90,lucky:0},
+  {name:'Kun',team:'IREN & NEBIUS FC',luckyPool:-100,gwWon:180,gwLost:-120,mini:0,lucky:55},
+  {name:'Ohm',team:"Wasuwit's Team",luckyPool:-100,gwWon:120,gwLost:-120,mini:60,lucky:0},
+  {name:'Pee',team:'B3RLIN',luckyPool:-100,gwWon:90,gwLost:-120,mini:60,lucky:0},
+  {name:'Fluk',team:'3ERLIN',luckyPool:-100,gwWon:150,gwLost:-120,mini:30,lucky:55},
+  {name:'Deer',team:'ทีมของวิทยา',luckyPool:-100,gwWon:60,gwLost:-150,mini:60,lucky:0},
+  {name:'Arm',team:'Arm',luckyPool:-100,gwWon:0,gwLost:-180,mini:30,lucky:55},
+  {name:'Jimmy',team:'xROTzx',luckyPool:-100,gwWon:30,gwLost:-210,mini:90,lucky:55},
 ]
