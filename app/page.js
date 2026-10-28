@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { financial, financialThroughGw, gameweeks as lockedGameweeks, members, miniGameSaves } from './league-data'
+import { financial, financialThroughGw, gameweeks as lockedGameweeks, members } from './league-data'
 import { competitions, gallery, miniWinners, luckyConditions } from './content-data'
 
 const LOCKED_THROUGH_GW = 8
@@ -11,8 +11,15 @@ const memberOrder = members.map(([name])=>name)
 const memberTeam = Object.fromEntries(members)
 const galleryGws = Object.keys(gallery).map(Number).sort((a,b)=>a-b)
 const totalGallery = Object.values(gallery).reduce((sum,items)=>sum+items.length,0)
-const financialWithCash = financial.map(p=>({...p,cash:(p.luckyPool||0)+(p.gwWon||0)+(p.gwLost||0)+(p.mini||0)+(p.lucky||0)+(p.special||0)}))
-const topFinancial = [...financialWithCash].sort((a,b)=>b.cash-a.cash)
+// Gameweek payout is ALWAYS determined only by weekly ranking. No Mini Game SAVE adjustment.
+// Mini Game and Lucky Game are independent ledger columns.
+const getWeeklyPayout = (rows, name) => {
+  const rank = rows.findIndex(row => row[0] === name)
+  if (rank < 0) return 0
+  const amount = payout[rank] ?? 0
+  return amount
+}
+
 
 function mergeGameweeks(futureGameweeks){
   const merged={...lockedGameweeks}
@@ -409,14 +416,19 @@ export default function Home(){
 
   const settlementGws=league.gwNumbers.filter(g=>g<=financialThroughGw)
   const statement=useMemo(()=>memberOrder.map(name=>{
-    const values=settlementGws.map(g=>{
-      const rank=effectiveGameweeks[g].findIndex(r=>r[0]===name)
-      let value=payout[rank]??0
-      if(miniGameSaves[g]===name&&value<0)value=0
-      return value
-    })
+    const values=settlementGws.map(g=>getWeeklyPayout(effectiveGameweeks[g],name))
     return {name,team:memberTeam[name],cash:values.reduce((a,b)=>a+b,0),values}
   }).sort((a,b)=>b.cash-a.cash),[effectiveGameweeks,settlementGws.join(',')])
+
+  const financialWithCash=useMemo(()=>financial.map(p=>{
+    const gw=statement.find(row=>row.name===p.name)?.cash??0
+    const mini=p.mini||0
+    const lucky=p.lucky||0
+    const luckyPool=p.luckyPool||0
+    const special=p.special||0
+    return {...p,gw,mini,lucky,luckyPool,special,cash:gw+mini+lucky+luckyPool+special}
+  }),[statement])
+  const topFinancial=[...financialWithCash].sort((a,b)=>b.cash-a.cash)
 
   const statsGwOptions=Array.from({length:Math.max(league.latestGw,fplSummary?.latestFplGw||0,5)},(_,i)=>i+1)
   const lockedRows=effectiveGameweeks[statsGw]||[]
@@ -565,8 +577,8 @@ export default function Home(){
       <ToyScene type="pizza"/>
       <div className="sectionTitle"><div><p>🎮 MINI GAME</p><h2>Different Game. Different Week.</h2><span>รูปแบบเปลี่ยนได้ตาม Gameweek — ไม่จำกัดว่าเป็นเกมช่วยผู้แพ้</span></div><strong>FORMAT CHANGES</strong></div>
       <div className="miniTimeline v3Timeline"><div><b>GW1–GW4</b><span>เกมปริศนาทายภาพ</span></div><i>→</i><div><b>GW5–GW8</b><span>The Differential</span></div><i>→</i><div><b>GW9</b><span>New Format</span></div></div>
-      <div className="winnerGrid">{miniWinners.map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}</div>
-      <div className="diffResult"><img src="/games/the-diff-gw5.webp" alt="The Differential GW5"/><div><small>GW5 • THE DIFFERENTIAL</small><h3>Jimmy 🤝 Guide</h3><p>Iwobi 5 pts vs Mykolenko 5 pts — Tie</p></div></div>
+      <div className="winnerGrid">{miniWinners.filter(w=>w.gw<5).map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}<figure><img src="/games/the-diff-gw5.webp" alt="GW5 The Differential Jimmy and Guide"/><figcaption><b>GW5 • Jimmy &amp; Guide</b><span>Iwobi 5 pts / Mykolenko 5 pts — Tie</span></figcaption></figure>{miniWinners.filter(w=>w.gw>5).map(w=><figure key={w.gw}><img src={w.image} alt={`GW${w.gw} ${w.winner}`}/><figcaption><b>GW{w.gw} • {w.winner}</b><span>{w.answer}</span></figcaption></figure>)}</div>
+
     </section>
 
     <section className="section statsSectionV3 toyArmySection" id="statistics">
@@ -692,8 +704,8 @@ export default function Home(){
       <ToyScene type="hamm"/>
       <div className="sectionIntroRow"><div><p className="sectionKicker">💰 FINANCE</p><h2>Manager Financial</h2><p>ข้อมูลการเงินของเกม แยกจาก FPL และไม่เผยข้อมูลบัญชีส่วนบุคคล</p></div><div className="officialTag greenTag">THROUGH GW{financialThroughGw}</div></div>
       <div className="financeTop">{topFinancial.slice(0,4).map((p,i)=><article key={p.name}><span>#{i+1}</span><h3>{p.name}</h3><small>{p.team}</small><Money value={p.cash}/></article>)}</div>
-      <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gwWon+p.gwLost}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>
-      <div className="statementDetails"><h3>Gameweek Statement GW1–GW{financialThroughGw}</h3><div className="statementScroll"><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/>{miniGameSaves[settlementGws[i]]===p.name&&<em>SAVE</em>}</span>)}</div>)}</div></div></div>
+      <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gw}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>
+      <div className="statementDetails"><h3>Gameweek Statement GW1–GW{financialThroughGw}</h3><div className="statementScroll"><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/></span>)}</div>)}</div></div></div>
       <p className="privacy">🔒 เว็บสาธารณะนี้ไม่แสดงเลขบัญชี ธนาคาร หรือช่องทางการชำระเงินส่วนบุคคล</p>
     </section>
 

@@ -90,10 +90,12 @@ export const gallery = {
   ],
   7: [
     ['gw7-deadline.webp','GW7 Deadline — 17:00'],
+    ['saka-injured.webp','Saka Injured — Injury Update'],
   ],
   8: [
     ['gw8-deadline.webp','GW8 Deadline — 00:30'],
     ['gw8-differential-final-round.webp','The Differential — Final Round Promo'],
+    ['saka-injured.webp','Saka Injured — Injury Update'],
   ],
 }
 

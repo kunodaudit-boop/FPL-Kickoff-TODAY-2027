@@ -89,19 +89,11 @@ export const gameweeks = {
   // ],
 }
 
-// Mini Game Save: manager whose normal -30 weekly settlement becomes 0.
-// Add a new line only when a save is actually used, e.g. 6: 'Kun'
-export const miniGameSaves = {
-  1: 'Guide',
-  2: 'Ohm',
-  3: 'Pee',
-  4: 'Deer',
-  7: 'Jimmy',
-}
+// Mini Game prizes are tracked separately from Gameweek settlements.
+export const miniGameSaves = {}
 
-// Financial table is kept separately because it includes special-game money
-// that cannot be inferred safely from weekly FPL points alone.
-// When finance changes, update the relevant values here.
+// Mini/Lucky ledgers remain independent. Weekly GW money is calculated from gameweeks
+// in page.js and NEVER copied from the legacy gwWon/gwLost fields below.
 export const financialThroughGw = 8
 export const financial = [
   {name:'Best',team:'USO BEST',luckyPool:-100,gwWon:240,gwLost:-150,mini:30,lucky:220},
