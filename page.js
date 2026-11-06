@@ -496,7 +496,7 @@ export default function Home(){
     </header>
 
     <section className="masterHero" aria-label="FPL Kickoff Today 2027">
-      <div className="heroStatus"><span>🔒 CLOSED LEAGUE</span><span>11 MANAGERS</span><span>GW1–GW{league.latestGw}</span></div>
+      <div className="heroStatus"><span>🔒 CLOSED LEAGUE</span><span>11 MANAGERS</span><span>GW1–GW{league.latestGw}</span><span style={{background:"#ffdb4d",color:"#071b3e",padding:"5px 12px",borderRadius:12,fontWeight:900}}>GW9 UPDATE • 2026-11-07</span></div>
     </section>
 
     <section className="homeDashboard">
