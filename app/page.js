@@ -1,25 +1,24 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { financial, financialThroughGw, gameweeks as lockedGameweeks, members } from './league-data'
+import { financial, financialThroughGw, gameweeks as lockedGameweeks, members, miniGameSaves } from './league-data'
 import { competitions, gallery, miniWinners, luckyConditions } from './content-data'
 
-const LOCKED_THROUGH_GW = 8
+const LOCKED_THROUGH_GW = 9
 const FPL_LEAGUE_ID = 606037
 const payout = [120,60,30,0,-30,-30,-30,-30,-30,-30,-30]
 const memberOrder = members.map(([name])=>name)
 const memberTeam = Object.fromEntries(members)
 const galleryGws = Object.keys(gallery).map(Number).sort((a,b)=>a-b)
 const totalGallery = Object.values(gallery).reduce((sum,items)=>sum+items.length,0)
-// Gameweek payout is ALWAYS determined only by weekly ranking. No Mini Game SAVE adjustment.
-// Mini Game and Lucky Game are independent ledger columns.
-const getWeeklyPayout = (rows, name) => {
+// Only GW1–GW4 Mini Game winners have an authorized SAVE from a negative payout.
+// GW5 onward: no SAVE. Mini and Lucky cash awards remain separate ledger columns.
+const getWeeklyPayout = (gw, rows, name) => {
   const rank = rows.findIndex(row => row[0] === name)
   if (rank < 0) return 0
   const amount = payout[rank] ?? 0
-  return amount
+  return gw <= 4 && miniGameSaves[gw] === name && amount < 0 ? 0 : amount
 }
-
 
 function mergeGameweeks(futureGameweeks){
   const merged={...lockedGameweeks}
@@ -416,7 +415,7 @@ export default function Home(){
 
   const settlementGws=league.gwNumbers.filter(g=>g<=financialThroughGw)
   const statement=useMemo(()=>memberOrder.map(name=>{
-    const values=settlementGws.map(g=>getWeeklyPayout(effectiveGameweeks[g],name))
+    const values=settlementGws.map(g=>getWeeklyPayout(g,effectiveGameweeks[g],name))
     return {name,team:memberTeam[name],cash:values.reduce((a,b)=>a+b,0),values}
   }).sort((a,b)=>b.cash-a.cash),[effectiveGameweeks,settlementGws.join(',')])
 

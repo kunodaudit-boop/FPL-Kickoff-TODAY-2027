@@ -81,6 +81,20 @@ export const gameweeks = {
     ['Arm',"Arm",25,{rawPoints:29,transferCost:4}],
   ],
 
+  9: [
+    ['Arm','Arm',67,{rawPoints:71,transferCost:4}],
+    ['Jimmy','xROTzx',64], // tie at 64: Jimmy ranked 2nd by confirmed chip tie-break
+    ['Best','USO BEST',64], // 3rd: used a chip
+    ['Fluk','3ERLIN',63,{rawPoints:67,transferCost:4}],
+    ['Amp','amplongdo',62],
+    ['Guide',"G9inez's Team",59],
+    ['Pee','B3RLIN',54],
+    ['Kun','IREN & NEBIUS FC',52],
+    ['Deer','ทีมของวิทยา',52],
+    ['Ohm',"Wasuwit's Team",51],
+    ['Oat','KaisungVAT',47],
+  ],
+
   // === NEXT UPDATE EXAMPLE ===
   // 6: [
   //   ['Manager in 1st','Team',0],
@@ -90,11 +104,11 @@ export const gameweeks = {
 }
 
 // Mini Game prizes are tracked separately from Gameweek settlements.
-export const miniGameSaves = {}
+export const miniGameSaves = {1:'Guide',2:'Ohm',3:'Pee',4:'Deer'}
 
-// Mini/Lucky ledgers remain independent. Weekly GW money is calculated from gameweeks
-// in page.js and NEVER copied from the legacy gwWon/gwLost fields below.
-export const financialThroughGw = 8
+// Mini/Lucky ledgers remain independent. Weekly GW money is derived from gameweeks
+// plus the explicitly approved GW1–GW4 SAVE rule, never the legacy gwWon/gwLost fields.
+export const financialThroughGw = 9
 export const financial = [
   {name:'Best',team:'USO BEST',luckyPool:-100,gwWon:240,gwLost:-150,mini:30,lucky:220},
   {name:'Amp',team:'amplongdo',luckyPool:-100,gwWon:420,gwLost:-150,mini:30,lucky:0},
