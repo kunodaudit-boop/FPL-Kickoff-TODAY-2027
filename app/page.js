@@ -496,7 +496,7 @@ export default function Home(){
     </header>
 
     <section className="masterHero" aria-label="FPL Kickoff Today 2027">
-      <div className="heroStatus"><span>🔒 CLOSED LEAGUE</span><span>11 MANAGERS</span><span>GW1–GW{league.latestGw}</span></div>
+      <div className="heroStatus"><span>🔒 CLOSED LEAGUE</span><span>11 MANAGERS</span><span>GW1–GW{league.latestGw}</span><span style={{background:"#ffdb4d",color:"#071b3e",padding:"5px 12px",borderRadius:12,fontWeight:900}}>GW9 UPDATE • 2026-11-07</span></div>
     </section>
 
     <section className="homeDashboard">
@@ -540,7 +540,7 @@ export default function Home(){
       <div className="sectionTitle"><div><p>⚽ GAMEWEEK</p><h2>Weekly Battle</h2><span>เลือกดูผลราย Gameweek ได้ทุกสัปดาห์</span></div><strong>1st +120</strong></div>
       <div className="gwTabs v3Tabs">{league.gwNumbers.map(n=><button key={n} className={gw===n?'active':''} onClick={()=>setGw(n)}>GW{n}</button>)}</div>
       <div className="twoCol v3TwoCol">
-        <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts,meta],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small></div><strong>{pts}{meta?.transferCost>0&&<small className="hitScore"> ({meta.rawPoints}−{meta.transferCost})</small>}</strong></div>)}</div>
+        <div className="weeklyTable v3Weekly"><div className="weeklyHead"><span>#</span><span>Manager</span><span>PTS</span></div>{selected.map(([name,team,pts,meta],i)=><div className={`weeklyRow ${i<3?'podium':''}`} key={name}><span>{i+1}</span><div><b>{name}</b><small>{team}</small>{gw===9 && name==='Best' && <small style={{color:'#ffdb4d',fontWeight:800,display:'block',marginTop:4}}>อันดับ 3: คะแนนเท่า Jimmy (64) แต่ Best ใช้ชิป</small>}</div><strong>{pts}{meta?.transferCost>0&&<small className="hitScore"> ({meta.rawPoints}−{meta.transferCost})</small>}</strong></div>)}</div>
         <div className="compactRule"><button className="ruleImageButton" onClick={()=>setLightbox({src:'/rules/gameweek.webp',alt:'Gameweek rules'})}><img className="ruleMedia" src="/rules/gameweek.webp" alt="Gameweek rules"/></button><div><b>Weekly payout</b><span>🥇 +120 • 🥈 +60 • 🥉 +30</span><span>4th = 0</span><span>5–11 = −30</span><span>{gw<=5?'🔒 Locked score':'⚡ Net score after Transfer Hit'}</span></div></div>
       </div>
     </section>
@@ -704,7 +704,7 @@ export default function Home(){
       <div className="sectionIntroRow"><div><p className="sectionKicker">💰 FINANCE</p><h2>Manager Financial</h2><p>ข้อมูลการเงินของเกม แยกจาก FPL และไม่เผยข้อมูลบัญชีส่วนบุคคล</p></div><div className="officialTag greenTag">THROUGH GW{financialThroughGw}</div></div>
       <div className="financeTop">{topFinancial.slice(0,4).map((p,i)=><article key={p.name}><span>#{i+1}</span><h3>{p.name}</h3><small>{p.team}</small><Money value={p.cash}/></article>)}</div>
       <div className="financeTable"><div className="financeHead"><span>Manager</span><span>Cash Flow</span><span>Lucky Pool</span><span>GW</span><span>Mini</span><span>Lucky</span></div>{topFinancial.map(p=><div className="financeRow" key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/><Money value={p.luckyPool}/><Money value={p.gw}/><Money value={p.mini}/><Money value={p.lucky}/></div>)}</div>
-      <div className="statementDetails"><h3>Gameweek Statement GW1–GW{financialThroughGw}</h3><div className="statementScroll"><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/></span>)}</div>)}</div></div></div>
+      <div className="statementDetails"><h3>Gameweek Statement GW1–GW{financialThroughGw}</h3><div className="statementScroll"><div className="statementTable"><div className="statementHead" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}}><span>Manager</span><span>Total</span>{settlementGws.map(g=><span key={g}>GW{g}</span>)}</div>{statement.map(p=><div className="statementRow" style={{gridTemplateColumns:`1.4fr .7fr repeat(${settlementGws.length},.7fr)`}} key={p.name}><div><b>{p.name}</b><small>{p.team}</small></div><Money value={p.cash}/>{p.values.map((v,i)=><span key={i} className="statementCell"><Money value={v}/>{settlementGws[i]<=4 && miniGameSaves[settlementGws[i]]===p.name && v===0 && <small style={{display:'block',color:'#ffdb4d',fontWeight:900,fontSize:10,letterSpacing:0.5}}>SAVE</small>}</span>)}</div>)}</div></div></div>
       <p className="privacy">🔒 เว็บสาธารณะนี้ไม่แสดงเลขบัญชี ธนาคาร หรือช่องทางการชำระเงินส่วนบุคคล</p>
     </section>
 
